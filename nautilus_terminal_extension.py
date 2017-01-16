@@ -3,13 +3,28 @@
 import os
 import sys
 
-if "NAUTILUS_TERMINAL_DEBUG_PACKAGE_PATH" in os.environ:
+from gi.repository import GObject, Nautilus
+
+
+DEBUG = "NAUTILUS_TERMINAL_DEBUG_PACKAGE_PATH" in os.environ
+
+
+if DEBUG:
     sys.path.insert(0, os.environ["NAUTILUS_TERMINAL_DEBUG_PACKAGE_PATH"])
 
-if "NAUTILUS_TERMINAL_DEBUG" in os.environ:
+
+from nautilus_terminal.crowbar import Crowbar
+
+
+if DEBUG:
     print("\x1B[1;34m#### Starting Nautilus Terminal [DEBUG] ####\x1B[0m")
-    print("* PYTHON_PATH: %s" % ":".join(sys.path))
+    print("PYTHON_PATH: %s\n" % ":".join(sys.path))
 else:
     print("* Starting Nautilus Terminal")
 
-from nautilus_terminal.crowbar import Crowbar as NautilusTerminalLocationWidgetProvider
+
+class NautilusTerminalLocationWidgetProvider(GObject.GObject, Nautilus.LocationWidgetProvider):
+
+    def get_widget(self, uri, window):
+        return Crowbar(uri, window)
+
