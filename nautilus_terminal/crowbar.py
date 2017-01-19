@@ -1,4 +1,4 @@
-from gi.repository import GObject, Gtk, Gdk, Vte, GLib, Gio
+from gi.repository import Gtk
 
 from . import logger
 from . import helpers
@@ -9,10 +9,10 @@ class Crowbar(Gtk.EventBox):
     def __init__(self, uri, window):
         super(Crowbar, self).__init__()
 
-        self._uri = uri
-        self._window = window
-        self._path = helpers.gvfs_uri_to_path(uri)
-        self._app = window.get_application()
+        self.uri = uri
+        self.nautilus_window = window
+        self.nautilus_app = window.get_application()
+        self.path = helpers.gvfs_uri_to_path(uri)
 
         self.connect_after("parent-set", self._on_parent_set)
 
