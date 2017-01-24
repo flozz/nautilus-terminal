@@ -1,6 +1,7 @@
 from gi.repository import GLib, Gtk, Vte
 
 from . import logger
+from . import helpers
 
 def _find_vpanel(crowbar):
     widget = crowbar
@@ -57,12 +58,15 @@ class NautilusTerminal(object):
         self._run_shell()
 
     def change_directory(self, path=None):
-        logger.log("NautilusTerminal.change_directory: %s" % path)
         if path:
             self._cwd = path
         else:
             path = self._cwd
-        pass  # TODO
+        if not self.shell_is_busy():
+            logger.log("NautilusTerminal.change_directory: curent directory changed to %s" % path)
+            self._inject_command(" cd %s" % helpers.escape_path_for_shell(self._cwd))
+        else:
+            logger.log("NautilusTerminal.change_directory: curent directory NOT changed to %s (shell busy)" % path)
 
     def get_visible(self):
         pass  # TODO
@@ -74,7 +78,11 @@ class NautilusTerminal(object):
         pass  # TODO
 
     def shell_is_busy(self):
-        pass  # TODO
+        return helpers.process_has_child(self._shell_pid)
+
+    def _inject_command(self, command):
+        logger.log("NautilusTerminal._inject_command: %s" % command)
+        self._ui_terminal.feed_child("%s\n" % command, len(command)+1)
 
     def _build_ui(self):
         # vpanel injection
