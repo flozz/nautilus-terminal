@@ -2,6 +2,7 @@ from gi.repository import Gtk
 
 from . import logger
 from . import helpers
+from .nautilus_terminal import create_or_update_natilus_terminal
 
 
 class Crowbar(Gtk.EventBox):
@@ -20,4 +21,5 @@ class Crowbar(Gtk.EventBox):
         if old_parent:
             self.destroy()
             return
-        logger.log("Crowbar inserted at %s" % self._path)
+        logger.log("Crowbar inserted at %s" % self.path)
+        create_or_update_natilus_terminal(self)
