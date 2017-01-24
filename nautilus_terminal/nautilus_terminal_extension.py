@@ -1,5 +1,11 @@
 # This file is a part of the Nautilus Temrinal package
 
+# This file is the Nautilus extension itself, it must be placed
+# in one of the following folder to make allow the extension to work:
+#
+# * /usr/share/nautilus-python/extensions/
+# * ~/.local/share/nautilus-python/extensions/
+
 import os
 import sys
 
