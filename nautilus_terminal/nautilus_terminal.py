@@ -3,6 +3,7 @@ from gi.repository import GLib, Gtk, Vte
 from . import logger
 from . import helpers
 
+
 def _find_vpanel(crowbar):
     widget = crowbar
     while widget:

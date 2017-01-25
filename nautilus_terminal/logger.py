@@ -1,8 +1,6 @@
 import os
 
-DEBUG = False,
-if "NAUTILUS_TERMINAL_DEBUG" in os.environ:
-    DEBUG = True
+DEBUG = "NAUTILUS_TERMINAL_DEBUG" in os.environ
 
 def log(*args):
     if not DEBUG:
