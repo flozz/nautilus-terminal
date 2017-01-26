@@ -2,6 +2,7 @@ from gi.repository import GLib, Gtk, Vte
 
 from . import logger
 from . import helpers
+from . import nautilus_accels_helpers
 
 
 def _find_vpanel(crowbar):
@@ -46,6 +47,8 @@ def create_or_update_natilus_terminal(crowbar):
 class NautilusTerminal(object):
 
     def __init__(self, parent_widget, nautilus_window, nautilus_app, cwd):
+        nautilus_accels_helpers.backup_nautilus_accels(nautilus_app, nautilus_window)
+
         self._parent_widget = parent_widget
         self._nautilus_window = nautilus_window
         self._nautilus_app = nautilus_app
@@ -100,6 +103,8 @@ class NautilusTerminal(object):
         # Terminal
         self._ui_terminal = Vte.Terminal(visible=True)
         self._ui_vpanel.add1(self._ui_terminal)
+        self._ui_terminal.connect("focus-in-event", self._on_terminal_focus_in_event)
+        self._ui_terminal.connect("focus-out-event", self._on_terminal_focus_out_event)
 
     def _run_shell(self):
         shell = "/bin/zsh"  # TODO make this configurable
@@ -107,3 +112,9 @@ class NautilusTerminal(object):
                 Vte.PtyFlags.DEFAULT, self._cwd, [shell],
                 None, GLib.SpawnFlags.SEARCH_PATH, None, None)
         logger.log("Shell spawned (%s), PID: %i." % (shell, self._shell_pid))
+
+    def _on_terminal_focus_in_event(self, widget, event):
+        nautilus_accels_helpers.remove_nautilus_accels(self._nautilus_app)
+
+    def _on_terminal_focus_out_event(self, widget, event):
+        nautilus_accels_helpers.restore_nautilus_accels(self._nautilus_app)
