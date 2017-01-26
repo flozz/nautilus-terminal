@@ -50,8 +50,6 @@ def create_or_update_natilus_terminal(crowbar):
 class NautilusTerminal(object):
 
     def __init__(self, parent_widget, nautilus_window, nautilus_app, cwd):
-        nautilus_accels_helpers.backup_nautilus_accels(nautilus_app, nautilus_window)
-
         self._parent_widget = parent_widget  # NautilusWindowSlot
         self._nautilus_window = nautilus_window
         self._nautilus_app = nautilus_app
@@ -61,6 +59,7 @@ class NautilusTerminal(object):
         self._ui_terminal = None
         self._shell_pid = 0
 
+        nautilus_accels_helpers.backup_nautilus_accels(nautilus_app, nautilus_window)
         self._build_ui()
         self._spawn_shell()
 
@@ -117,7 +116,7 @@ class NautilusTerminal(object):
         self._ui_terminal = Vte.Terminal(visible=True)  # FIXME visibility
         self._ui_vpanel.add1(self._ui_terminal)
 
-        # Disabling Nautilus' accels when the temrinal is focused:
+        # Disabling Nautilus' accels when the terminal is focused:
         #
         # When the terminal is focused, we MUST remove ALL Nautilus accels to
         # be able to use properly the terminal (else we cannot type some
@@ -149,7 +148,7 @@ class NautilusTerminal(object):
 
     def _spawn_shell(self):
         if self._shell_pid:
-            logger.warn("_spawn_shell: Cannot swpawn a new shell: there is already a shell running...")
+            logger.warn("NautilusTerminal._spawn_shell: Cannot swpawn a new shell: there is already a shell running...")
             return
         shell = "/bin/zsh"  # TODO make this configurable
         _, self._shell_pid = self._ui_terminal.spawn_sync(
@@ -159,13 +158,13 @@ class NautilusTerminal(object):
 
     def _kill_shell(self):
         if not self._shell_pid:
-            logger.warn("_kill_shell: Cannot kill the shell: there is no shell to kill...")
+            logger.warn("NautilusTerminal._kill_shell: Cannot kill the shell: there is no shell to kill...")
             return
         try:
             os.kill(self._shell_pid, signal.SIGTERM)
             os.kill(self._shell_pid, signal.SIGKILL)
         except OSError:
-            logger.error("_kill_shell: An error occured when killing the shell %i" % self._shell_pid)
+            logger.error("NautilusTerminal._kill_shell: An error occured when killing the shell %i" % self._shell_pid)
             self._shell_pid = 0
         logger.log("Shell %i killed." % self._shell_pid)
         self._shell_pid = 0
