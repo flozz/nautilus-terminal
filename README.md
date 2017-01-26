@@ -20,6 +20,7 @@ Then you have to copy the `nautilus_terminal_extension.py` file in the nautilus-
 You can now hack Nautilus Terminal as you want and you can use the following script to test your code right into nautilus:
 
     ./tools/debug-in-nautilus.sh
+    ./tools/debug-in-nautilus.sh --no-bg  # keep nautilus attached to the console
 
 Happy hacking! :)
 
