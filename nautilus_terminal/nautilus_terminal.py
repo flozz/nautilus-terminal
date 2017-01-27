@@ -114,6 +114,7 @@ class NautilusTerminal(object):
         # our GtkPaned.
 
         self._ui_terminal = Vte.Terminal(visible=True)  # FIXME visibility
+        self._ui_terminal.connect("child-exited", self._on_terminal_child_existed)
         self._ui_vpanel.add1(self._ui_terminal)
 
         # Disabling Nautilus' accels when the terminal is focused:
@@ -182,3 +183,6 @@ class NautilusTerminal(object):
 
     def _on_terminal_focus_out_event(self, widget, event):
         nautilus_accels_helpers.restore_nautilus_accels(self._nautilus_app)
+
+    def _on_terminal_child_existed(self, widget, arg1):
+        self._shell_pid = 0
