@@ -58,6 +58,7 @@ class NautilusTerminal(object):
         self._ui_vpanel = None
         self._ui_terminal = None
         self._shell_pid = 0
+        self._shell_killed = False
 
         nautilus_accels_helpers.backup_nautilus_accels(nautilus_app, nautilus_window)
         self._build_ui()
@@ -155,12 +156,14 @@ class NautilusTerminal(object):
         _, self._shell_pid = self._ui_terminal.spawn_sync(
                 Vte.PtyFlags.DEFAULT, self._cwd, [shell],
                 None, GLib.SpawnFlags.SEARCH_PATH, None, None)
+        self._shell_killed = False
         logger.log("Shell spawned (%s), PID: %i." % (shell, self._shell_pid))
 
     def _kill_shell(self):
         if not self._shell_pid:
             logger.warn("NautilusTerminal._kill_shell: Cannot kill the shell: there is no shell to kill...")
             return
+        self._shell_killed = True
         try:
             os.kill(self._shell_pid, signal.SIGTERM)
             os.kill(self._shell_pid, signal.SIGKILL)
@@ -186,3 +189,5 @@ class NautilusTerminal(object):
 
     def _on_terminal_child_existed(self, widget, arg1):
         self._shell_pid = 0
+        if not self._shell_killed:
+            self._spawn_shell()
