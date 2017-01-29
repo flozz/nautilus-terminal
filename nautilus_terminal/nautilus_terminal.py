@@ -119,7 +119,14 @@ class NautilusTerminal(object):
 
         self._ui_terminal = Vte.Terminal(visible=True)  # FIXME visibility
         self._ui_terminal.connect("child-exited", self._on_terminal_child_existed)
-        self._ui_vpanel.add1(self._ui_terminal)
+        self._ui_vpanel.pack1(self._ui_terminal, resize=False, shrink=False)
+
+        TERMINAL_CHAR_HEIGHT = self._ui_terminal.get_char_height()
+        TERMINAL_BORDER_WIDTH = 1
+        TERMINAL_MIN_HEIGHT = 5  # lines  # TODO make this configurable
+
+        self._ui_terminal.set_property("height-request",
+                TERMINAL_CHAR_HEIGHT * TERMINAL_MIN_HEIGHT + TERMINAL_BORDER_WIDTH * 2)
 
         # Disabling Nautilus' accels when the terminal is focused:
         #
@@ -155,8 +162,8 @@ class NautilusTerminal(object):
         #
         # * BUT when the tab is drag & dropped outside of the window (to open
         #   it in a new window), this event is also emitted... and the
-        #   "realize" event is emitted. So we have to spawn a new shell if that
-        #   happen...
+        #   "realize" event is emitted right after. So we have to spawn a new
+        #   shell if that happen...
 
         self._parent_widget.connect("unrealize", self._on_nautilus_window_slot_unrealized)
         self._parent_widget.connect("realize", self._on_nautilus_window_slot_realized)
