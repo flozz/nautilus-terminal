@@ -1,2 +1,4 @@
 *.bak
 *.pyc
+dist
+build

@@ -1,6 +1,6 @@
 # Nautilus Terminal 3
 
-> A terminal embedded in the Nautilus file browser
+> A terminal embedded in Nautilus, the GNOME's file browser
 
 **Nautilus Terminal** is a terminal embedded into Nautilus, the GNOME's file browser. It is always opened in the current folder, and follows the navigation (the `cd` command is automatically executed when you navigate to an other folder).
 
