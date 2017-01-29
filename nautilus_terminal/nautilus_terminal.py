@@ -1,7 +1,7 @@
 import os
 import signal
 
-from gi.repository import GLib, Gtk, Vte
+from gi.repository import GLib, Gtk, Vte, Gio
 
 from . import logger
 from . import helpers
@@ -17,10 +17,9 @@ def _find_nautilus_terminal_vpanel(crowbar):
     return None
 
 
-def _find_nautilus_window_slot(crowbar):
-    widget = crowbar
+def _find_parent_widget(widget, parent_widget_name):
     while widget:
-        if widget.get_name() == "NautilusWindowSlot":
+        if widget.get_name() == parent_widget_name:
             return widget
         widget = widget.get_parent()
     return None
@@ -37,7 +36,7 @@ def create_or_update_natilus_terminal(crowbar):
 
     # New tab, a new Nautilus Temrinal instance must be created
     logger.log("No NautilusTerminal instance found (new tab): creating a new NautilusTemrinal...")
-    nautilus_window_slot = _find_nautilus_window_slot(crowbar)
+    nautilus_window_slot = _find_parent_widget(crowbar, "NautilusWindowSlot")
 
     if not nautilus_window_slot:
         logger.warn("Unable to locate the NautilusWindowSlot widget: Nautilus Temrinal will not be injected!")
@@ -57,11 +56,16 @@ class NautilusTerminal(object):
 
         self._ui_vpanel = None
         self._ui_terminal = None
+        self._nterm_action_group = None
+        self._ntermwin_action_group = None
         self._shell_pid = 0
         self._shell_killed = False
 
         nautilus_accels_helpers.backup_nautilus_accels(nautilus_app, nautilus_window)
-        self._build_ui()
+        self._build_and_inject_ui()
+        self._build_actions()
+        self._insert_ntermwin_action_group_in_current_window()
+        self._build_accels()
         self._spawn_shell()
 
     def change_directory(self, path=None):
@@ -75,14 +79,13 @@ class NautilusTerminal(object):
         else:
             logger.log("NautilusTerminal.change_directory: curent directory NOT changed to %s (shell busy)" % path)
 
-    def get_visible(self):
-        pass  # TODO
+    def get_terminal_visible(self):
+        return self._ui_terminal.get_visible()
 
-    def set_visible(self, visible):
-        pass  # TODO
-
-    def toggle_visible(self):
-        pass  # TODO
+    def set_terminal_visible(self, visible):
+        self._ui_terminal.set_visible(visible)
+        if visible:
+            self._ui_terminal.grab_focus()
 
     def shell_is_busy(self):
         return helpers.process_has_child(self._shell_pid)
@@ -91,7 +94,7 @@ class NautilusTerminal(object):
         logger.log("NautilusTerminal._inject_command: %s" % command)
         self._ui_terminal.feed_child("%s\n" % command, len(command)+1)
 
-    def _build_ui(self):
+    def _build_and_inject_ui(self):
         # GtkPaned (vpanel) injection:
         #
         # To inject our terminal in Nautilus, we first have to empty the
@@ -129,11 +132,21 @@ class NautilusTerminal(object):
         self._ui_terminal.connect("focus-in-event", self._on_terminal_focus_in_event)
         self._ui_terminal.connect("focus-out-event", self._on_terminal_focus_out_event)
 
+        # Register the window-level action group of the currently displayed
+        # terminal
+        #
+        # When the active tab changes, we have to register on the nautilus
+        # window the corresponding action group to allow related accels to work
+        # properly. The "map" event of the NautilusWindowSlot (our parent
+        # widget) is called when its tab become active.
+
+        self._parent_widget.connect("map", self._on_nautilus_window_slot_mapped)
+
         # Kill the shell when the tab is closed:
         #
         # Finally, we have to listen to some events of our parent widget (the
         # NautilusWindowSlot) to guess when the tab is closed in order to
-        # kill the shell (else we will have planty zombi shell running in
+        # kill the shell (else we will have plenty zombie shell running in
         # background).
         #
         # * When the tab (or the window) is closed, the "unrealize" event is
@@ -141,12 +154,43 @@ class NautilusTerminal(object):
         #   this event...
         #
         # * BUT when the tab is drag & dropped outside of the window (to open
-        #   it in a new window), this event is also emitted... and the the
-        #   "realize" event is emitted. So we have to spawn a new shell if
-        #   that happen...
+        #   it in a new window), this event is also emitted... and the
+        #   "realize" event is emitted. So we have to spawn a new shell if that
+        #   happen...
 
         self._parent_widget.connect("unrealize", self._on_nautilus_window_slot_unrealized)
         self._parent_widget.connect("realize", self._on_nautilus_window_slot_realized)
+
+    def _build_actions(self):
+        # nterm action group
+        self._nterm_action_group = Gio.SimpleActionGroup()
+        self._ui_terminal.insert_action_group("nterm", self._nterm_action_group)
+
+        copy_action = Gio.SimpleAction(name="copy");
+        copy_action.connect("activate", self._on_nterm_copy_action_activated)
+        self._nterm_action_group.add_action(copy_action)
+
+        paste_action = Gio.SimpleAction(name="paste");
+        paste_action.connect("activate", self._on_nterm_paste_action_activated)
+        self._nterm_action_group.add_action(paste_action)
+
+        # ntermwin action group
+        self._ntermwin_action_group = Gio.SimpleActionGroup()
+
+        terminal_visible_action = Gio.SimpleAction(name="terminal-visible");
+        terminal_visible_action.connect("activate", self._on_ntermwin_terminal_visible_action_activated)
+        self._ntermwin_action_group.add_action(terminal_visible_action)
+
+    def _insert_ntermwin_action_group_in_current_window(self):
+        self._nautilus_window.insert_action_group("ntermwin", self._ntermwin_action_group)
+
+    def _build_accels(self):
+        # nterm
+        self._nautilus_app.set_accels_for_action("nterm.copy", ["<Primary><Shift>c"])
+        self._nautilus_app.set_accels_for_action("nterm.paste", ["<Primary><Shift>v"])
+
+        # ntermwin
+        self._nautilus_app.set_accels_for_action("ntermwin.terminal-visible", ["F4"])
 
     def _spawn_shell(self):
         if self._shell_pid:
@@ -173,13 +217,20 @@ class NautilusTerminal(object):
         logger.log("Shell %i killed." % self._shell_pid)
         self._shell_pid = 0
 
+    def _on_nautilus_window_slot_mapped(self, widget):
+        logger.log("The active tab has changed.")
+        self._insert_ntermwin_action_group_in_current_window()
+
     def _on_nautilus_window_slot_unrealized(self, widget):
         logger.log("The tab have (probably) been closed: killing the shell %i" % self._shell_pid)
         self._kill_shell()
+        self._nautilus_window = None;
 
     def _on_nautilus_window_slot_realized(self, widget):
         logger.log("Oops, the tab have NOT been closed: spawning a new shell")
         self._spawn_shell()
+        self._nautilus_window = _find_parent_widget(widget, "NautilusWindow")
+        self._insert_ntermwin_action_group_in_current_window()
 
     def _on_terminal_focus_in_event(self, widget, event):
         nautilus_accels_helpers.remove_nautilus_accels(self._nautilus_app)
@@ -191,3 +242,15 @@ class NautilusTerminal(object):
         self._shell_pid = 0
         if not self._shell_killed:
             self._spawn_shell()
+
+    def _on_nterm_copy_action_activated(self, action, parameter):
+        logger.log("nterm.copy action activated")
+        self._ui_terminal.copy_clipboard()
+
+    def _on_nterm_paste_action_activated(self, action, parameter):
+        logger.log("nterm.paste action activated")
+        self._ui_terminal.paste_clipboard()
+
+    def _on_ntermwin_terminal_visible_action_activated(self, action, parameter):
+        logger.log("ntermwin.terminal-visible action activated")
+        self.set_terminal_visible(not self.get_terminal_visible())

@@ -14,8 +14,11 @@ def backup_nautilus_accels(nautilus_app, nautilus_window):
     for action in ["app.%s" % a for a in nautilus_app.list_actions()]:
         NAUTILUS_ACCELS_BACKUP[action] = nautilus_app.get_accels_for_action(action)
 
-    # win, slot, view
+    # win, slot, view,...
     for action_prefix in nautilus_window.list_action_prefixes():
+        # Skip Nautilus Terminal actions
+        if action_prefix.startswith("nterm"):
+            continue
         for action in ["%s.%s" % (action_prefix, a) for a in nautilus_window.get_action_group(action_prefix).list_actions()]:
             NAUTILUS_ACCELS_BACKUP[action] = nautilus_app.get_accels_for_action(action)
 
