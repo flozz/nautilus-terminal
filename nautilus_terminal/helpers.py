@@ -14,5 +14,9 @@ def process_has_child(pid):
     return False
 
 
+def get_process_cwd(pid):
+    return psutil.Process(pid).cwd()
+
+
 def escape_path_for_shell(path):
     return "'%s'" % path.replace("'", "'\\''")

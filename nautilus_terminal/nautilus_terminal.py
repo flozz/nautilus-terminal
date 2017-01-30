@@ -78,12 +78,16 @@ class NautilusTerminal(object):
 
         self._cwd = path
 
+        # Do not "cd" if the shell's cwd is already the same as the targeted path
+        if helpers.get_process_cwd(self._shell_pid) == path:
+            return
+
         # Makes the terminal visible again if it was hidden by navigating to a
         # "virtual" location
         if self.get_terminal_visible() != self._terminal_visible:
             self.set_terminal_visible(focus=False)
 
-        # cd if the shell is not running anything
+        # "cd" if the shell is not running anything
         if not self.shell_is_busy():
             logger.log("NautilusTerminal.change_directory: curent directory changed to %s" % path)
             self._inject_command(" cd %s" % helpers.escape_path_for_shell(self._cwd))
