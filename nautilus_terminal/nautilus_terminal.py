@@ -84,6 +84,11 @@ class NautilusTerminal(object):
         if self.get_terminal_visible() != self.get_terminal_requested_visibility():
             self.set_terminal_visible(focus=False)
 
+        # Do not navigate if the terminal is not visible
+        if not self.get_terminal_visible():
+            logger.log("NautilusTerminal.change_directory: current directory NOT changed to %s (terminal not visible)" % path)
+            return
+
         # Do not "cd" if the shell's cwd is already the same as the targeted path
         if helpers.get_process_cwd(self._shell_pid) == path:
             return
@@ -112,8 +117,15 @@ class NautilusTerminal(object):
     def set_terminal_visible(self, visible=None, focus=True):
         if visible == None:
             visible = self._terminal_requested_visibility
+
         self._ui_terminal.set_visible(visible)
         self._terminal_requested_visibility = visible
+
+        # Update the directory as the terminal does not "cd" when it is hidden
+        if visible:
+            self.change_directory(self._cwd)
+
+        # Focus the terminal
         if visible and focus:
             self._ui_terminal.grab_focus()
 
