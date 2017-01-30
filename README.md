@@ -19,7 +19,7 @@
 * Automatically respawn the shell if it exits,
 * Supports copy / paste from / to the terminal using `Ctrl+Shift+C` / `Ctrl+Shift+V`,
 * Can be displayed / hidden using the `F4` key,
-* ~~Supports drag & drop of file on the terminal,~~ **TODO**
+* Supports drag & drop of file on the terminal,
 * ~~Allows to configure the shell~~ **TODO** (actually it is hardcoded to `/bin/zsh`),
 * ~~Allows to configure the terminal appearance (colors, font,...).~~ **TODO**
 
@@ -83,8 +83,13 @@ Happy hacking! :)
 
 ## Changelog
 
+* **3.1.0:**
+    * File drag & drop support
+    * Hide the terminal in virtual emplacements (trash,...)
+    * Optimizations (do not spawn the shell / no "cd" if the shell is not
+      visible)
 * **3.0.1:** Script to convert the README to reStructuredText for PYPI
-* **3.0.0:** Initial Nautilus Temrinal 3 release (early development version)
+* **3.0.0:** Initial Nautilus Terminal 3 release (early development version)
 
 
 ## License GPLv3
