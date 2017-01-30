@@ -81,6 +81,12 @@ You can now hack Nautilus Terminal as you want and you can use the following scr
 Happy hacking! :)
 
 
+## Changelog
+
+* **3.0.1:** Script to convert the README to reStructuredText for PYPI
+* **3.0.0:** Initial Nautilus Temrinal 3 release (early development version)
+
+
 ## License GPLv3
 
     Nautilus Terminal - A terminal embedded in the Nautilus file browser

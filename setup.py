@@ -30,6 +30,13 @@ class install(_install):
         print("Done!")
 
 
+long_description = ""
+if os.path.isfile("README.rst"):
+    long_description = open("README.rst", "r").read()
+elif os.path.isfile("README.md"):
+    long_description = open("README.md", "r").read()
+
+
 setup(
     name="nautilus_terminal",
     version=VERSION,
@@ -37,7 +44,7 @@ setup(
     url="https://github.com/flozz/nautilus-terminal",
     license="GPL-3.0",
 
-    long_description=open("README.md").read(),
+    long_description=long_description,
 
     author="Fabien LOISON",
 
