@@ -56,6 +56,7 @@ class NautilusTerminal(object):
 
         self._ui_vpanel = None
         self._ui_terminal = None
+        self._terminal_visible = True  # TODO make this configurable
         self._nterm_action_group = None
         self._ntermwin_action_group = None
         self._shell_pid = 0
@@ -68,11 +69,21 @@ class NautilusTerminal(object):
         self._build_accels()
         self._spawn_shell()
 
-    def change_directory(self, path=None):
-        if path:
-            self._cwd = path
-        else:
-            path = self._cwd
+    def change_directory(self, path):
+        # "virtual" location (trash:///, network:///,...)
+        # No cd & hide the Terminal
+        if not path:
+            self._ui_terminal.set_visible(False)
+            return
+
+        self._cwd = path
+
+        # Makes the terminal visible again if it was hidden by navigating to a
+        # "virtual" location
+        if self.get_terminal_visible() != self._terminal_visible:
+            self.set_terminal_visible(focus=False)
+
+        # cd if the shell is not running anything
         if not self.shell_is_busy():
             logger.log("NautilusTerminal.change_directory: curent directory changed to %s" % path)
             self._inject_command(" cd %s" % helpers.escape_path_for_shell(self._cwd))
@@ -80,11 +91,14 @@ class NautilusTerminal(object):
             logger.log("NautilusTerminal.change_directory: curent directory NOT changed to %s (shell busy)" % path)
 
     def get_terminal_visible(self):
-        return self._ui_terminal.get_visible()
+        return self._ui_terminal.get_visible() and self._terminal_visible
 
-    def set_terminal_visible(self, visible):
+    def set_terminal_visible(self, visible=None, focus=True):
+        if visible == None:
+            visible = self._terminal_visible
         self._ui_terminal.set_visible(visible)
-        if visible:
+        self._terminal_visible = visible
+        if visible and focus:
             self._ui_terminal.grab_focus()
 
     def shell_is_busy(self):
