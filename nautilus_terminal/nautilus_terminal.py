@@ -1,7 +1,7 @@
 import os
 import signal
 
-from gi.repository import GLib, Gtk, Vte, Gio
+from gi.repository import GLib, Gio, Gtk, Gdk, Vte
 
 from . import logger
 from . import helpers
@@ -178,6 +178,14 @@ class NautilusTerminal(object):
         self._ui_terminal.set_property("height-request",
                 TERMINAL_CHAR_HEIGHT * TERMINAL_MIN_HEIGHT + TERMINAL_BORDER_WIDTH * 2)
 
+        # File drag & drop support
+
+        self._ui_terminal.drag_dest_set(
+                Gtk.DestDefaults.MOTION | Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP,
+                [Gtk.TargetEntry.new("text/uri-list", 0, 0)], Gdk.DragAction.COPY)
+        self._ui_terminal.drag_dest_add_uri_targets()
+        self._ui_terminal.connect("drag-data-received", self._on_terminal_drag_data_received)
+
         # Disabling Nautilus' accels when the terminal is focused:
         #
         # When the terminal is focused, we MUST remove ALL Nautilus accels to
@@ -299,6 +307,11 @@ class NautilusTerminal(object):
         self._shell_pid = 0
         if not self._shell_killed:
             self._spawn_shell()
+
+    def _on_terminal_drag_data_received(self, widget, context, x, y, data, info, time):
+        for uri in data.get_uris():
+            path = helpers.escape_path_for_shell(helpers.gvfs_uri_to_path(uri))
+            self._ui_terminal.feed_child("%s " % path, len(path)+1)
 
     def _on_nterm_copy_action_activated(self, action, parameter):
         logger.log("nterm.copy action activated")
