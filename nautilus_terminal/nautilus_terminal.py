@@ -67,7 +67,10 @@ class NautilusTerminal(object):
         self._build_actions()
         self._insert_ntermwin_action_group_in_current_window()
         self._build_accels()
-        self._spawn_shell()
+
+        # Set if the terminal should be visible by default.
+        # Will spawn the shell automatically if the terminal is visible
+        self.set_terminal_visible(self._terminal_requested_visibility)
 
     def change_directory(self, path):
         # "virtual" location (trash:///, network:///,...)
@@ -121,6 +124,11 @@ class NautilusTerminal(object):
         self._ui_terminal.set_visible(visible)
         self._terminal_requested_visibility = visible
 
+        # Spawn a shell if it is not yet spawned (if the terminal has never
+        # been visible before)
+        if visible and not self._shell_pid:
+            self._spawn_shell()
+
         # Update the directory as the terminal does not "cd" when it is hidden
         if visible:
             self.change_directory(self._cwd)
@@ -159,7 +167,7 @@ class NautilusTerminal(object):
         # We can now create our VteTerminal and insert it in the top part of
         # our GtkPaned.
 
-        self._ui_terminal = Vte.Terminal(visible=True)  # FIXME visibility
+        self._ui_terminal = Vte.Terminal()
         self._ui_terminal.connect("child-exited", self._on_terminal_child_existed)
         self._ui_vpanel.pack1(self._ui_terminal, resize=False, shrink=False)
 
