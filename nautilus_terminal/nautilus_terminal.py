@@ -56,7 +56,7 @@ class NautilusTerminal(object):
 
         self._ui_vpanel = None
         self._ui_terminal = None
-        self._terminal_visible = True  # TODO make this configurable
+        self._terminal_requested_visibility = True  # TODO make this configurable
         self._nterm_action_group = None
         self._ntermwin_action_group = None
         self._shell_pid = 0
@@ -73,35 +73,47 @@ class NautilusTerminal(object):
         # "virtual" location (trash:///, network:///,...)
         # No cd & hide the Terminal
         if not path:
+            logger.log("NautilusTerminal.change_directory: terminal hidden: navigating to a \"virtual\" location")
             self._ui_terminal.set_visible(False)
             return
 
         self._cwd = path
 
+        # Makes the terminal visible again if it was hidden by navigating to a
+        # "virtual" location
+        if self.get_terminal_visible() != self.get_terminal_requested_visibility():
+            self.set_terminal_visible(focus=False)
+
         # Do not "cd" if the shell's cwd is already the same as the targeted path
         if helpers.get_process_cwd(self._shell_pid) == path:
             return
 
-        # Makes the terminal visible again if it was hidden by navigating to a
-        # "virtual" location
-        if self.get_terminal_visible() != self._terminal_visible:
-            self.set_terminal_visible(focus=False)
+        # Do not "cd" if the shell has something running in
+        if self.shell_is_busy():
+            logger.log("NautilusTerminal.change_directory: current directory NOT changed to %s (shell busy)" % path)
+            return
 
-        # "cd" if the shell is not running anything
-        if not self.shell_is_busy():
-            logger.log("NautilusTerminal.change_directory: curent directory changed to %s" % path)
-            self._inject_command(" cd %s" % helpers.escape_path_for_shell(self._cwd))
-        else:
-            logger.log("NautilusTerminal.change_directory: curent directory NOT changed to %s (shell busy)" % path)
+        logger.log("NautilusTerminal.change_directory: current directory changed to %s" % path)
+        self._inject_command(" cd %s" % helpers.escape_path_for_shell(self._cwd))
+
+    def get_terminal_requested_visibility(self):
+        """Does the user requested the terminal to be visible?
+
+        This state can be different to the terminal widget real state, for
+        example the terminal can be requested visible by the user but hidden
+        because navigating to the trash)?
+        """
+        return self._terminal_requested_visibility
 
     def get_terminal_visible(self):
-        return self._ui_terminal.get_visible() and self._terminal_visible
+        """Does the terminal widget is visible?"""
+        return self._ui_terminal.get_visible()
 
     def set_terminal_visible(self, visible=None, focus=True):
         if visible == None:
-            visible = self._terminal_visible
+            visible = self._terminal_requested_visibility
         self._ui_terminal.set_visible(visible)
-        self._terminal_visible = visible
+        self._terminal_requested_visibility = visible
         if visible and focus:
             self._ui_terminal.grab_focus()
 
