@@ -50,9 +50,9 @@ Clone the repositiory:
     git clone git@github.com:flozz/nautilus-terminal.git
     cd nautilus-terminal
 
-Install Nautilus Terminal (as root):
+For testing, run the following as a non-privileged user, so that pip will select the `--user` scheme.  To install for all users, run the command as root instead.
 
-    python setup.py install
+    pip install .
 
 Then kill Nautilus to allow it to load the new extension:
 
@@ -62,6 +62,11 @@ Then kill Nautilus to allow it to load the new extension:
 
     cp nautilus_terminal/nautilus_terminal_extension.py /usr/share/nautilus-python/extensions/
 
+To uninstall the package, run:
+
+    pip uninstall nautilus-terminal
+
+as the same user you installed it with.
 
 ## Hacking and Debug
 
@@ -69,7 +74,7 @@ If you want work on this software, you will first have to install the [nautilus-
 
     sudo apt install python-nautilus python-psutil
 
-Then you have to copy the `nautilus_terminal_extension.py` file in the nautilus-python's extension folder (this script is just a minimal bootstrap that will import the `nautilus_terminal` module installed system wild or the one located in this repository if the right debug environment is set). This can be done by one of the script of the `tools/` folder:
+If you installed as root, you have to copy the `nautilus_terminal_extension.py` file in the nautilus-python's extension folder (this script is just a minimal bootstrap that will import the `nautilus_terminal` module installed system wild or the one located in this repository if the right debug environment is set). This can be done by one of the script of the `tools/` folder:
 
     ./tools/update-locale-extention.sh
 
