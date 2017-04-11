@@ -20,7 +20,7 @@
 * Supports copy / paste from / to the terminal using `Ctrl+Shift+C` / `Ctrl+Shift+V`,
 * Can be displayed / hidden using the `F4` key,
 * Supports drag & drop of file on the terminal,
-* ~~Allows to configure the shell~~ **TODO** (actually it is hardcoded to `/bin/zsh`),
+* Uses the correct login shell for the user.
 * ~~Allows to configure the terminal appearance (colors, font,...).~~ **TODO**
 
 **Requirements:**
