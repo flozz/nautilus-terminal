@@ -1,5 +1,6 @@
 import os
 import signal
+import pwd
 
 from gi.repository import GLib, Gio, Gtk, Gdk, Vte
 
@@ -259,9 +260,12 @@ class NautilusTerminal(object):
 
     def _spawn_shell(self):
         if self._shell_pid:
-            logger.warn("NautilusTerminal._spawn_shell: Cannot swpawn a new shell: there is already a shell running...")
+            logger.warn(
+                "NautilusTerminal._spawn_shell: Cannot spawn a new shell: "
+                "there is already a shell running."
+            )
             return
-        shell = "/bin/zsh"  # TODO make this configurable
+        shell = pwd.getpwuid(os.getuid()).pw_shell
         _, self._shell_pid = self._ui_terminal.spawn_sync(
                 Vte.PtyFlags.DEFAULT, self._cwd, [shell],
                 None, GLib.SpawnFlags.SEARCH_PATH, None, None)
