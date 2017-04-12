@@ -87,14 +87,17 @@ If you want work on this software, you will first have to install the [nautilus-
 
     sudo apt install python-nautilus python-psutil
 
-If you installed as root, you have to copy the `nautilus_terminal_extension.py` file in the nautilus-python's extension folder (this script is just a minimal bootstrap that will import the `nautilus_terminal` module installed system wild or the one located in this repository if the right debug environment is set). This can be done by one of the script of the `tools/` folder:
+This extension comes in two parts: a conventional Python module (`nautilus_terminal`), and a small bit of bootstrap code that's loaded by `python-nautilus` when Nautilus starts up (`nautilus_terminal_extension.py`). The bootstrap code must be installed where `python-nautilus` can find it before you can start making changes and testing them:
 
-    sudo tools/update-extension-system.sh install
+    tools/update-extension-user.sh install        # Current user only…
+    sudo tools/update-extension-system.sh install  # … or, system-wide.
 
-You can now hack Nautilus Terminal as you want and you can use the following script to test your code right into nautilus:
+When the bootstrap is loaded into Nautilus, it imports the Python module from either the normal `PYTHONPATH`, or from your working copy of this repository if the right debug environment is set.
 
-    ./tools/debug-in-nautilus.sh
-    ./tools/debug-in-nautilus.sh --no-bg  # keep Nautilus attached to the console
+With the bootstrap installed, you can use the following script to test new code in Nautilus without having to reinstall the module:
+
+    tools/debug-in-nautilus.sh
+    tools/debug-in-nautilus.sh --no-bg  # keep Nautilus attached to the console
 
 Happy hacking! :)
 
