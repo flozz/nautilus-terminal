@@ -316,6 +316,7 @@ class NautilusTerminal(object):
         for uri in data.get_uris():
             path = helpers.escape_path_for_shell(helpers.gvfs_uri_to_path(uri))
             self._ui_terminal.feed_child("%s " % path, len(path)+1)
+            self._ui_terminal.grab_focus()
 
     def _on_nterm_copy_action_activated(self, action, parameter):
         logger.log("nterm.copy action activated")
