@@ -35,9 +35,15 @@
 
 ### From PYPI
 
-Run the following command (as root):
+User install:
 
     pip install nautilus_terminal
+    tools/update-extension-user.sh install   # until next stable release
+
+System-wide install:
+
+    sudo pip install nautilus_terminal
+    sudo tools/update-extension-system.sh install   # foreseeable future
 
 Then kill Nautilus to allow it to load the new extension:
 
@@ -50,23 +56,30 @@ Clone the repositiory:
     git clone git@github.com:flozz/nautilus-terminal.git
     cd nautilus-terminal
 
-For testing, run the following as a non-privileged user, so that pip will select the `--user` scheme.  To install for all users, run the command as root instead.
+To install into your personal Python lib and your personal Nautilus python extension folders, run the following from your normal unprivileged account. Pip will select the `--user` scheme.
 
     pip install .
+
+To install for all users, run the command as root instead. Pip will select the `--system` scheme if you install this way. This drops everything into `/usr/local` instead, but nautilus-python doesn't look there for extensions (see upstream [bug 781232][]). So for the foreseeable future, system-wide installs need an extra step to make the extension available for all users.
+
+    sudo pip install .
+    sudo tools/update-extension-system.sh install
 
 Then kill Nautilus to allow it to load the new extension:
 
     nautilus -q
 
-**NOTE:** if the setup fails to install the Nautilus Python extension script, you can copy it manually (as root):
-
-    cp nautilus_terminal/nautilus_terminal_extension.py /usr/share/nautilus-python/extensions/
+## Uninstalling
 
 To uninstall the package, run:
 
     pip uninstall nautilus-terminal
+    tools/update-extension-user.sh uninstall   # new pip (9.0.1) handles this for installs from source
 
-as the same user you installed it with.
+If you installed it for all users:
+
+    sudo pip uninstall nautilus-terminal
+    sudo tools/update-extension-system.sh uninstall   # foreseeable future
 
 ## Hacking and Debug
 
@@ -76,7 +89,7 @@ If you want work on this software, you will first have to install the [nautilus-
 
 If you installed as root, you have to copy the `nautilus_terminal_extension.py` file in the nautilus-python's extension folder (this script is just a minimal bootstrap that will import the `nautilus_terminal` module installed system wild or the one located in this repository if the right debug environment is set). This can be done by one of the script of the `tools/` folder:
 
-    ./tools/update-locale-extention.sh
+    sudo tools/update-extension-system.sh install
 
 You can now hack Nautilus Terminal as you want and you can use the following script to test your code right into nautilus:
 
@@ -119,3 +132,4 @@ Happy hacking! :)
 [old-nterm]: https://launchpad.net/nautilus-terminal
 [nautilus-python]: https://wiki.gnome.org/Projects/NautilusPython/
 [psutil]: https://pypi.python.org/pypi/psutil/
+[bug 781232]: https://bugzilla.gnome.org/show_bug.cgi?id=781232
