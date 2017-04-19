@@ -24,6 +24,8 @@ class install(_install):
         dst_file = os.path.join(dst_dir, os.path.basename(src_file))
         self.copy_file(src_file, dst_file)
         print("Done!")
+        # TODO install the gsettings schema
+        # TODO compile schemas?
 
 
 long_description = ""

@@ -1,3 +1,5 @@
+import os
+
 from gi.repository import Gio
 import psutil
 
@@ -20,3 +22,42 @@ def get_process_cwd(pid):
 
 def escape_path_for_shell(path):
     return "'%s'" % path.replace("'", "'\\''")
+
+
+def get_packages_schemas_directory():
+    """Returns the directory of the package's schemas."""
+    return os.path.join(os.path.dirname(os.path.abspath(__file__)), "schemas")
+
+
+def gsettings_schema_installed(schemas_id):
+    """Checks if the schema with the given id is installed or not."""
+    default_schemas_source = Gio.SettingsSchemaSource.get_default()
+    schema_list = default_schemas_source.list_schemas(True)
+
+    if schemas_id in schema_list.non_relocatable:
+        return True
+
+    if schemas_id in schema_list.relocatable:
+        return True
+
+    return False
+
+
+def get_settings(schema_id, schemas_directory=None):
+    """Get the settings for the given schema id.
+
+    If the schema is not installed and a schema directory is provided, the
+    schemas of the given directory will be loaded.
+    """
+
+    if gsettings_schema_installed(schema_id):
+        settings = Gio.Settings.new(schema_id)
+        return settings
+
+    if schemas_directory:
+        source = Gio.SettingsSchemaSource.new_from_directory(
+                schemas_directory, Gio.SettingsSchemaSource.get_default(), True)
+        schema = source.lookup(schema_id, True)
+        settings = Gio.Settings.new_full(schema, None, None)
+        return settings
+
