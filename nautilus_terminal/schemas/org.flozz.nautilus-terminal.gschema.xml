@@ -12,7 +12,7 @@
       <description>Executes the custom command defined in "custom-command" in the terminal instead of the user's default shell.</description>
     </key>
     <key name="custom-command" type="s">
-      <default/>
+        <default>"/bin/sh"</default>
       <summary>Custom command to execute instead of the default shell</summary>
       <description>The custom command to execute instead of the default user's shell when "use-default-command" is set to "true".</description>
     </key>

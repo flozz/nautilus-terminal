@@ -1,7 +1,10 @@
 import os
+import pwd
 
 from gi.repository import Gio
 import psutil
+
+from . import APPLICATION_ID
 
 
 def gvfs_uri_to_path(uri):
@@ -24,7 +27,11 @@ def escape_path_for_shell(path):
     return "'%s'" % path.replace("'", "'\\''")
 
 
-def get_packages_schemas_directory():
+def get_user_default_shell():
+    return pwd.getpwuid(os.getuid()).pw_shell
+
+
+def get_package_schemas_directory():
     """Returns the directory of the package's schemas."""
     return os.path.join(os.path.dirname(os.path.abspath(__file__)), "schemas")
 
@@ -60,4 +67,16 @@ def get_settings(schema_id, schemas_directory=None):
         schema = source.lookup(schema_id, True)
         settings = Gio.Settings.new_full(schema, None, None)
         return settings
+
+def set_all_settings(settings):
+    """Sets a value (the default one if not modified) for each setting.
+    This allow settings to be visible in dconf-editor even if the schema
+    is not installed.
+    """
+    for key in settings.list_keys():
+        settings.set_value(key, settings.get_value(key))
+
+def get_application_settings():
+    """Get Nautilus Terminal settings"""
+    return get_settings(APPLICATION_ID, get_package_schemas_directory())
 

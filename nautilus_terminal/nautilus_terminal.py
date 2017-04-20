@@ -1,6 +1,5 @@
 import os
 import signal
-import pwd
 
 from gi.repository import GLib, Gio, Gtk, Gdk, Vte
 
@@ -54,6 +53,9 @@ class NautilusTerminal(object):
         self._nautilus_window = nautilus_window
         self._nautilus_app = nautilus_app
         self._cwd = cwd
+
+        self._settings = helpers.get_application_settings()
+        helpers.set_all_settings(self._settings)
 
         self._ui_vpanel = None
         self._ui_terminal = None
@@ -260,17 +262,16 @@ class NautilusTerminal(object):
 
     def _spawn_shell(self):
         if self._shell_pid:
-            logger.warn(
-                "NautilusTerminal._spawn_shell: Cannot spawn a new shell: "
-                "there is already a shell running."
-            )
+            logger.warn( "NautilusTerminal._spawn_shell: Cannot spawn a new shell: there is already a shell running.")
             return
-        shell = pwd.getpwuid(os.getuid()).pw_shell
+        shell = helpers.get_user_default_shell()
+        if self._settings.get_boolean("use-custom-command"):
+            shell = self._settings.get_string("custom-command")
         _, self._shell_pid = self._ui_terminal.spawn_sync(
                 Vte.PtyFlags.DEFAULT, self._cwd, [shell],
                 None, GLib.SpawnFlags.SEARCH_PATH, None, None)
         self._shell_killed = False
-        logger.log("Shell spawned (%s), PID: %i." % (shell, self._shell_pid))
+        logger.log("NautilusTerminal._spawn_shell: Shell spawned (%s), PID: %i." % (shell, self._shell_pid))
 
     def _kill_shell(self):
         if not self._shell_pid:
