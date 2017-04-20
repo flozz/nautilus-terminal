@@ -59,7 +59,7 @@ class NautilusTerminal(object):
 
         self._ui_vpanel = None
         self._ui_terminal = None
-        self._terminal_requested_visibility = True  # TODO make this configurable
+        self._terminal_requested_visibility = self._settings.get_boolean("default-show-terminal")
         self._nterm_action_group = None
         self._ntermwin_action_group = None
         self._shell_pid = 0
