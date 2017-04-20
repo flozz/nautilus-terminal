@@ -176,7 +176,7 @@ class NautilusTerminal(object):
 
         TERMINAL_CHAR_HEIGHT = self._ui_terminal.get_char_height()
         TERMINAL_BORDER_WIDTH = 1
-        TERMINAL_MIN_HEIGHT = 5  # lines  # TODO make this configurable
+        TERMINAL_MIN_HEIGHT = self._settings.get_uint("min-terminal-height")
 
         self._ui_terminal.set_property("height-request",
                 TERMINAL_CHAR_HEIGHT * TERMINAL_MIN_HEIGHT + TERMINAL_BORDER_WIDTH * 2)

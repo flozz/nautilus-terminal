@@ -16,5 +16,10 @@
       <summary>Custom command to execute instead of the default shell</summary>
       <description>The custom command to execute instead of the default user's shell when "use-default-command" is set to "true".</description>
     </key>
+    <key name="min-terminal-height" type="u">
+        <default>5</default>
+      <summary>Minimal height of the terminal (in line)</summary>
+      <description>Minimal amount of line that will be visible in the terminal. Also the default amount of line visible when opening a new terminal.</description>
+    </key>
   </schema>
 </schemalist>
