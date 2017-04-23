@@ -93,6 +93,19 @@ If you installed it for all users:
     sudo pip uninstall nautilus-terminal
     sudo tools/update-extension-system.sh uninstall   # foreseeable future
 
+
+## Configuring
+
+Nautilus Terminal can be configured, but there is no GUI to configure it yet.
+Currently, configuration can be done through the **DConf Editor** tool:
+
+* Run DConf Editor: `dconf-editor`,
+* Navigate to `/org/flozz/nautilus-terminal`
+* Configure Nautilus Terminal.
+
+![dconf-editor](./dconf-editor.png)
+
+
 ## Hacking and Debug
 
 If you want work on this software, you will first have to install the
@@ -133,6 +146,8 @@ Things to do before releasing a new version:
 
 
 ## Changelog
+
+* **3.2.0**: Add settings to Nautilus Terminal (#3)
 
 * **3.1.1:**
     * Allow user install instead of system wild (#1)
