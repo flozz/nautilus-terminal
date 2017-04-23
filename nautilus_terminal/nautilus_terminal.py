@@ -55,7 +55,8 @@ class NautilusTerminal(object):
         self._cwd = cwd
 
         self._settings = helpers.get_application_settings()
-        helpers.set_all_settings(self._settings)
+        helpers.set_all_settings(self._settings)  # Allows settings to be defined in dconf-editor even if
+                                                  # the schema is not installed...
 
         self._ui_vpanel = None
         self._ui_terminal = None

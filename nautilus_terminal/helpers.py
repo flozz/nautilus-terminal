@@ -68,6 +68,7 @@ def get_settings(schema_id, schemas_directory=None):
         settings = Gio.Settings.new_full(schema, None, None)
         return settings
 
+
 def set_all_settings(settings):
     """Sets a value (the default one if not modified) for each setting.
     This allow settings to be visible in dconf-editor even if the schema
@@ -75,6 +76,7 @@ def set_all_settings(settings):
     """
     for key in settings.list_keys():
         settings.set_value(key, settings.get_value(key))
+
 
 def get_application_settings():
     """Get Nautilus Terminal settings"""
