@@ -1,6 +1,5 @@
 import os
 import signal
-import pwd
 
 from gi.repository import GLib, Gio, Gtk, Gdk, Vte
 
@@ -55,9 +54,13 @@ class NautilusTerminal(object):
         self._nautilus_app = nautilus_app
         self._cwd = cwd
 
+        self._settings = helpers.get_application_settings()
+        helpers.set_all_settings(self._settings)  # Allows settings to be defined in dconf-editor even if
+                                                  # the schema is not installed...
+
         self._ui_vpanel = None
         self._ui_terminal = None
-        self._terminal_requested_visibility = True  # TODO make this configurable
+        self._terminal_requested_visibility = self._settings.get_boolean("default-show-terminal")
         self._nterm_action_group = None
         self._ntermwin_action_group = None
         self._shell_pid = 0
@@ -174,7 +177,7 @@ class NautilusTerminal(object):
 
         TERMINAL_CHAR_HEIGHT = self._ui_terminal.get_char_height()
         TERMINAL_BORDER_WIDTH = 1
-        TERMINAL_MIN_HEIGHT = 5  # lines  # TODO make this configurable
+        TERMINAL_MIN_HEIGHT = self._settings.get_uint("min-terminal-height")
 
         self._ui_terminal.set_property("height-request",
                 TERMINAL_CHAR_HEIGHT * TERMINAL_MIN_HEIGHT + TERMINAL_BORDER_WIDTH * 2)
@@ -260,17 +263,16 @@ class NautilusTerminal(object):
 
     def _spawn_shell(self):
         if self._shell_pid:
-            logger.warn(
-                "NautilusTerminal._spawn_shell: Cannot spawn a new shell: "
-                "there is already a shell running."
-            )
+            logger.warn( "NautilusTerminal._spawn_shell: Cannot spawn a new shell: there is already a shell running.")
             return
-        shell = pwd.getpwuid(os.getuid()).pw_shell
+        shell = helpers.get_user_default_shell()
+        if self._settings.get_boolean("use-custom-command"):
+            shell = self._settings.get_string("custom-command")
         _, self._shell_pid = self._ui_terminal.spawn_sync(
                 Vte.PtyFlags.DEFAULT, self._cwd, [shell],
                 None, GLib.SpawnFlags.SEARCH_PATH, None, None)
         self._shell_killed = False
-        logger.log("Shell spawned (%s), PID: %i." % (shell, self._shell_pid))
+        logger.log("NautilusTerminal._spawn_shell: Shell spawned (%s), PID: %i." % (shell, self._shell_pid))
 
     def _kill_shell(self):
         if not self._shell_pid:

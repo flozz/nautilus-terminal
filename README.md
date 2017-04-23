@@ -107,7 +107,7 @@ This extension comes in two parts: a conventional Python module
 The bootstrap code must be installed where `python-nautilus` can find it before
 you can start making changes and testing them:
 
-    tools/update-extension-user.sh install        # Current user only…
+    tools/update-extension-user.sh install         # Current user only…
     sudo tools/update-extension-system.sh install  # … or, system-wide.
 
 When the bootstrap is loaded into Nautilus, it imports the Python module from
@@ -121,6 +121,15 @@ in Nautilus without having to reinstall the module:
     tools/debug-in-nautilus.sh --no-bg  # keep Nautilus attached to the console
 
 Happy hacking! :)
+
+
+## Release
+
+Things to do before releasing a new version:
+
+* Update version number in `nautilus_terminal/__init__.py`
+* Generate `README.rst` (requires pandoc): `tools/readme-to-rst.sh`
+* Compile GSetting schema: `glib-compile-schemas nautilus_terminal/schemas`
 
 
 ## Changelog

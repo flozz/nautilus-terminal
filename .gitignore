@@ -4,3 +4,4 @@ dist
 build
 *.rst
 *.egg-info
+nautilus_terminal/schemas/gschemas.compiled

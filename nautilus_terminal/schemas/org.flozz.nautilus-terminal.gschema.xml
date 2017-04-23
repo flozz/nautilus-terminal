@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="org.flozz.nautilus-terminal" path="/org/flozz/nautilus-terminal/">
+    <key name="default-show-terminal" type="b">
+      <default>true</default>
+      <summary>Is Nautilus Terminal visible in new Nautilus windows</summary>
+      <description/>
+    </key>
+    <key name="use-custom-command" type="b">
+      <default>false</default>
+      <summary>Execute a custom command instead of the default shell</summary>
+      <description>Executes the custom command defined in "custom-command" in the terminal instead of the user's default shell.</description>
+    </key>
+    <key name="custom-command" type="s">
+      <default>"/bin/sh"</default>
+      <summary>Custom command to execute instead of the default shell</summary>
+      <description>The custom command to execute instead of the default user's shell when "use-default-command" is set to "true".</description>
+    </key>
+    <key name="min-terminal-height" type="u">
+      <default>5</default>
+      <summary>Minimal height of the terminal (in line)</summary>
+      <description>Minimal amount of line that will be visible in the terminal. Also the default amount of line visible when opening a new terminal.</description>
+    </key>
+  </schema>
+</schemalist>
