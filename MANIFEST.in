@@ -1,3 +1,4 @@
 include README.md
 include README.rst
 include nautilus_terminal/schemas/org.flozz.nautilus-terminal.gschema.xml
+include nautilus_terminal/schemas/gschemas.compiled
