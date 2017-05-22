@@ -147,8 +147,8 @@ Things to do before releasing a new version:
 
 ## Changelog
 
-* **3.2.0**: Add settings to Nautilus Terminal (#3)
-
+* **3.2.1:** Add a missing dependency in setup.py
+* **3.2.0:** Add settings to Nautilus Terminal (#3)
 * **3.1.1:**
     * Allow user install instead of system wild (#1)
     * Use the user's default shell instead of the hardcoded zsh (#2)
