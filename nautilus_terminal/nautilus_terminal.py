@@ -32,6 +32,8 @@ def create_or_update_natilus_terminal(crowbar):
     if vpanel:
         logger.log("NautilusTerminal instance found: updating its path...")
         vpanel._nt_instance.change_directory(crowbar.path)
+        # may update view
+        vpanel._nt_instance.update_ui()
         return vpanel._nt_instance
 
     # New tab, a new Nautilus Temrinal instance must be created
@@ -148,6 +150,14 @@ class NautilusTerminal(object):
         logger.log("NautilusTerminal._inject_command: %s" % command)
         self._ui_terminal.feed_child("%s\n" % command, len(command)+1)
 
+
+    def update_ui(self):
+        for widget in self._parent_widget:
+            expand=widget.get_name() in ['NautilusViewIconController','NautilusListView']
+            if expand:
+                self._parent_widget.remove(widget)
+                self.vbox.pack_end(widget, expand, expand, 0)
+
     def _build_and_inject_ui(self):
         # GtkPaned (vpanel) injection:
         #
@@ -159,10 +169,11 @@ class NautilusTerminal(object):
         self._ui_vpanel = Gtk.VPaned(visible=True)
         self._ui_vpanel._nt_instance = self
         vbox = Gtk.VBox(visible=True)
+        self.vbox=vbox
         self._ui_vpanel.add2(vbox)
         for widget in self._parent_widget:
             self._parent_widget.remove(widget)
-            expand = widget.get_name() in ["GtkOverlay", "NautilusCanvasView"]
+            expand = widget.get_name() in ['NautilusViewIconController','NautilusListView']
             vbox.pack_start(widget, expand, expand, 0)
         self._parent_widget.pack_start(self._ui_vpanel, True, True, 0)
 
