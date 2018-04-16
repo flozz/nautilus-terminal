@@ -1,5 +1,6 @@
 # Nautilus Terminal 3
 
+[![Build Status](https://travis-ci.org/flozz/nautilus-terminal.svg?branch=master)](https://travis-ci.org/flozz/nautilus-terminal)
 [![PYPI Version](https://img.shields.io/pypi/v/nautilus_terminal.svg)](https://pypi.python.org/pypi/nautilus_terminal)
 [![License](https://img.shields.io/pypi/l/nautilus_terminal.svg)](https://github.com/flozz/nautilus-terminal/blob/master/COPYING)
 
@@ -11,7 +12,7 @@ browser. It is always opened in the current folder, and follows the navigation
 folder).
 
 **NOTE:** This is a complete re-implementation of [my previous Nautilus
-Temrinal plugin][old-nterm].
+Terminal plugin][old-nterm].
 
 **NOTE²:** This is an early development version, some feature are missing (see
 below).
@@ -36,7 +37,7 @@ below).
 * [nautilus-python][]
 * [psutil][]
 
-![Nautilus Temrinal Screenshot](./screenshot.png)
+![Nautilus Terminal Screenshot](./screenshot.png)
 
 
 ## Installing Nautilus Terminal
