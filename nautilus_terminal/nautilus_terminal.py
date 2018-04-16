@@ -12,8 +12,7 @@ _EXPAND_WIDGETS = [
         "GtkOverlay",
         "NautilusCanvasView",
         "NautilusViewIconController",
-        "NautilusListView"
-        ]
+        "NautilusListView"]
 
 
 def _find_nautilus_terminal_vpanel(crowbar):
@@ -52,8 +51,11 @@ def create_or_update_natilus_terminal(crowbar):
         logger.warn("Unable to locate the NautilusWindowSlot widget: Nautilus Temrinal will not be injected!")
         return
 
-    return NautilusTerminal(nautilus_window_slot, crowbar.nautilus_window,
-            crowbar.nautilus_app, crowbar.path)
+    return NautilusTerminal(
+            nautilus_window_slot,
+            crowbar.nautilus_window,
+            crowbar.nautilus_app,
+            crowbar.path)
 
 
 class NautilusTerminal(object):
@@ -66,8 +68,9 @@ class NautilusTerminal(object):
         self._cwd = cwd
 
         self._settings = helpers.get_application_settings()
-        helpers.set_all_settings(self._settings)  # Allows settings to be defined in dconf-editor even if
-                                                  # the schema is not installed...
+        # Allows settings to be defined in dconf-editor even if
+        # the schema is not installed...
+        helpers.set_all_settings(self._settings)
 
         self._ui_vpanel = None
         self._ui_terminal = None
@@ -133,7 +136,7 @@ class NautilusTerminal(object):
         return self._ui_terminal.get_visible()
 
     def set_terminal_visible(self, visible=None, focus=True):
-        if visible == None:
+        if visible is None:
             visible = self._terminal_requested_visibility
 
         self._ui_terminal.set_visible(visible)
@@ -157,7 +160,7 @@ class NautilusTerminal(object):
 
     def _inject_command(self, command):
         logger.log("NautilusTerminal._inject_command: %s" % command)
-        self._ui_terminal.feed_child("%s\n" % command, len(command)+1)
+        self._ui_terminal.feed_child("%s\n" % command, len(command) + 1)
 
     def update_ui(self):
         for widget in self._parent_widget:
@@ -196,7 +199,8 @@ class NautilusTerminal(object):
         TERMINAL_BORDER_WIDTH = 1
         TERMINAL_MIN_HEIGHT = self._settings.get_uint("min-terminal-height")
 
-        self._ui_terminal.set_property("height-request",
+        self._ui_terminal.set_property(
+                "height-request",
                 TERMINAL_CHAR_HEIGHT * TERMINAL_MIN_HEIGHT + TERMINAL_BORDER_WIDTH * 2)
 
         # File drag & drop support
@@ -252,18 +256,18 @@ class NautilusTerminal(object):
         self._nterm_action_group = Gio.SimpleActionGroup()
         self._ui_terminal.insert_action_group("nterm", self._nterm_action_group)
 
-        copy_action = Gio.SimpleAction(name="copy");
+        copy_action = Gio.SimpleAction(name="copy")
         copy_action.connect("activate", self._on_nterm_copy_action_activated)
         self._nterm_action_group.add_action(copy_action)
 
-        paste_action = Gio.SimpleAction(name="paste");
+        paste_action = Gio.SimpleAction(name="paste")
         paste_action.connect("activate", self._on_nterm_paste_action_activated)
         self._nterm_action_group.add_action(paste_action)
 
         # ntermwin action group
         self._ntermwin_action_group = Gio.SimpleActionGroup()
 
-        terminal_visible_action = Gio.SimpleAction(name="terminal-visible");
+        terminal_visible_action = Gio.SimpleAction(name="terminal-visible")
         terminal_visible_action.connect("activate", self._on_ntermwin_terminal_visible_action_activated)
         self._ntermwin_action_group.add_action(terminal_visible_action)
 
@@ -280,7 +284,7 @@ class NautilusTerminal(object):
 
     def _spawn_shell(self):
         if self._shell_pid:
-            logger.warn( "NautilusTerminal._spawn_shell: Cannot spawn a new shell: there is already a shell running.")
+            logger.warn("NautilusTerminal._spawn_shell: Cannot spawn a new shell: there is already a shell running.")
             return
         shell = helpers.get_user_default_shell()
         if self._settings.get_boolean("use-custom-command"):
@@ -312,7 +316,7 @@ class NautilusTerminal(object):
     def _on_nautilus_window_slot_unrealized(self, widget):
         logger.log("The tab have (probably) been closed: killing the shell %i" % self._shell_pid)
         self._kill_shell()
-        self._nautilus_window = None;
+        self._nautilus_window = None
 
     def _on_nautilus_window_slot_realized(self, widget):
         logger.log("Oops, the tab have NOT been closed: spawning a new shell")
@@ -334,7 +338,7 @@ class NautilusTerminal(object):
     def _on_terminal_drag_data_received(self, widget, context, x, y, data, info, time):
         for uri in data.get_uris():
             path = helpers.escape_path_for_shell(helpers.gvfs_uri_to_path(uri))
-            self._ui_terminal.feed_child("%s " % path, len(path)+1)
+            self._ui_terminal.feed_child("%s " % path, len(path) + 1)
         self._ui_terminal.grab_focus()
 
     def _on_nterm_copy_action_activated(self, action, parameter):

@@ -81,4 +81,3 @@ def set_all_settings(settings):
 def get_application_settings():
     """Get Nautilus Terminal settings"""
     return get_settings(APPLICATION_ID, get_package_schemas_directory())
-

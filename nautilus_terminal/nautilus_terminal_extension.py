@@ -19,7 +19,7 @@ if DEBUG:
     sys.path.insert(0, os.environ["NAUTILUS_TERMINAL_DEBUG_PACKAGE_PATH"])
 
 
-from nautilus_terminal.crowbar import Crowbar
+from nautilus_terminal.crowbar import Crowbar  # noqa
 
 
 if DEBUG:
@@ -33,4 +33,3 @@ class NautilusTerminalLocationWidgetProvider(GObject.GObject, Nautilus.LocationW
 
     def get_widget(self, uri, window):
         return Crowbar(uri, window)
-
