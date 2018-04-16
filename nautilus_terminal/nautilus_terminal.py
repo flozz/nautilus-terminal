@@ -8,6 +8,14 @@ from . import helpers
 from . import nautilus_accels_helpers
 
 
+_EXPAND_WIDGETS = [
+        "GtkOverlay",
+        "NautilusCanvasView",
+        "NautilusViewIconController",
+        "NautilusListView"
+        ]
+
+
 def _find_nautilus_terminal_vpanel(crowbar):
     widget = crowbar
     while widget:
@@ -32,6 +40,8 @@ def create_or_update_natilus_terminal(crowbar):
     if vpanel:
         logger.log("NautilusTerminal instance found: updating its path...")
         vpanel._nt_instance.change_directory(crowbar.path)
+        # may update view
+        vpanel._nt_instance.update_ui()
         return vpanel._nt_instance
 
     # New tab, a new Nautilus Temrinal instance must be created
@@ -52,6 +62,7 @@ class NautilusTerminal(object):
         self._parent_widget = parent_widget  # NautilusWindowSlot
         self._nautilus_window = nautilus_window
         self._nautilus_app = nautilus_app
+        self._vbox = None
         self._cwd = cwd
 
         self._settings = helpers.get_application_settings()
@@ -148,6 +159,12 @@ class NautilusTerminal(object):
         logger.log("NautilusTerminal._inject_command: %s" % command)
         self._ui_terminal.feed_child("%s\n" % command, len(command)+1)
 
+    def update_ui(self):
+        for widget in self._parent_widget:
+            if widget.get_name() in _EXPAND_WIDGETS:
+                self._parent_widget.remove(widget)
+                self._vbox.pack_start(widget, True, True, 0)
+
     def _build_and_inject_ui(self):
         # GtkPaned (vpanel) injection:
         #
@@ -158,12 +175,12 @@ class NautilusTerminal(object):
 
         self._ui_vpanel = Gtk.VPaned(visible=True)
         self._ui_vpanel._nt_instance = self
-        vbox = Gtk.VBox(visible=True)
-        self._ui_vpanel.add2(vbox)
+        self._vbox = Gtk.VBox(visible=True)
+        self._ui_vpanel.add2(self._vbox)
         for widget in self._parent_widget:
             self._parent_widget.remove(widget)
-            expand = widget.get_name() in ["GtkOverlay", "NautilusCanvasView"]
-            vbox.pack_start(widget, expand, expand, 0)
+            expand = widget.get_name() in _EXPAND_WIDGETS
+            self._vbox.pack_start(widget, expand, expand, 0)
         self._parent_widget.pack_start(self._ui_vpanel, True, True, 0)
 
         # Terminal creation:
