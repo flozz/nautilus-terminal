@@ -1,3 +1,4 @@
+__env__
 *.bak
 *.pyc
 dist
