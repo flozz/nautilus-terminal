@@ -1,6 +1,9 @@
 import os
 import signal
 
+import gi
+gi.require_version("Vte", "2.91")  # noqa
+
 from gi.repository import GLib, Gio, Gtk, Gdk, Vte
 
 from . import logger
@@ -13,6 +16,13 @@ _EXPAND_WIDGETS = [
         "NautilusCanvasView",
         "NautilusViewIconController",
         "NautilusListView"]
+
+
+def _vte_terminal_feed_child(vte_terminal, text):
+    if len(vte_terminal.feed_child.get_arguments) == 2:
+        return vte_terminal.feed_child(text, len(text) + 1)
+    else:
+        return vte_terminal.feed_child(text)
 
 
 def _find_nautilus_terminal_vpanel(crowbar):
@@ -43,12 +53,12 @@ def create_or_update_natilus_terminal(crowbar):
         vpanel._nt_instance.update_ui()
         return vpanel._nt_instance
 
-    # New tab, a new Nautilus Temrinal instance must be created
-    logger.log("No NautilusTerminal instance found (new tab): creating a new NautilusTemrinal...")
+    # New tab, a new Nautilus Terminal instance must be created
+    logger.log("No NautilusTerminal instance found (new tab): creating a new NautilusTerminal...")
     nautilus_window_slot = _find_parent_widget(crowbar, "NautilusWindowSlot")
 
     if not nautilus_window_slot:
-        logger.warn("Unable to locate the NautilusWindowSlot widget: Nautilus Temrinal will not be injected!")
+        logger.warn("Unable to locate the NautilusWindowSlot widget: Nautilus Terminal will not be injected!")
         return
 
     return NautilusTerminal(
@@ -160,7 +170,7 @@ class NautilusTerminal(object):
 
     def _inject_command(self, command):
         logger.log("NautilusTerminal._inject_command: %s" % command)
-        self._ui_terminal.feed_child("%s\n" % command, len(command) + 1)
+        _vte_terminal_feed_child(self._ui_terminal.feed_child, "%s\n" % command)
 
     def update_ui(self):
         for widget in self._parent_widget:
