@@ -19,7 +19,7 @@ _EXPAND_WIDGETS = [
 
 
 def _vte_terminal_feed_child(vte_terminal, text):
-    if len(vte_terminal.feed_child.get_arguments) == 2:
+    if len(vte_terminal.feed_child.get_arguments()) == 2:
         return vte_terminal.feed_child(text, len(text) + 1)
     else:
         return vte_terminal.feed_child(text)
@@ -170,7 +170,7 @@ class NautilusTerminal(object):
 
     def _inject_command(self, command):
         logger.log("NautilusTerminal._inject_command: %s" % command)
-        _vte_terminal_feed_child(self._ui_terminal.feed_child, "%s\n" % command)
+        _vte_terminal_feed_child(self._ui_terminal, "%s\n" % command)
 
     def update_ui(self):
         for widget in self._parent_widget:
