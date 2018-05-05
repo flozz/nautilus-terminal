@@ -3,6 +3,7 @@
 [![Build Status](https://travis-ci.org/flozz/nautilus-terminal.svg?branch=master)](https://travis-ci.org/flozz/nautilus-terminal)
 [![PYPI Version](https://img.shields.io/pypi/v/nautilus_terminal.svg)](https://pypi.python.org/pypi/nautilus_terminal)
 [![License](https://img.shields.io/pypi/l/nautilus_terminal.svg)](https://github.com/flozz/nautilus-terminal/blob/master/COPYING)
+[![Gitter](https://badges.gitter.im/gitter.svg)](https://gitter.im/nautilus-terminal/Lobby)
 
 > A terminal embedded in Nautilus, the GNOME's file browser
 
