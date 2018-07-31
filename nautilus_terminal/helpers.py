@@ -13,10 +13,10 @@ def gvfs_uri_to_path(uri):
 
 
 def process_has_child(pid):
-    for process in psutil.process_iter():
-        if process.ppid() == pid:
-            return True
-    return False
+    if psutil.Process(pid).children():
+        return True
+    else:
+        return False
 
 
 def get_process_cwd(pid):
