@@ -19,9 +19,11 @@ _EXPAND_WIDGETS = [
 
 
 def _vte_terminal_feed_child(vte_terminal, text):
-    if len(vte_terminal.feed_child.get_arguments()) == 2:
+    try:
+        # Old call
         return vte_terminal.feed_child(text, len(text) + 1)
-    else:
+    except TypeError:
+        # Newer call
         return vte_terminal.feed_child(text)
 
 
@@ -348,7 +350,7 @@ class NautilusTerminal(object):
     def _on_terminal_drag_data_received(self, widget, context, x, y, data, info, time):
         for uri in data.get_uris():
             path = helpers.escape_path_for_shell(helpers.gvfs_uri_to_path(uri))
-            self._ui_terminal.feed_child("%s " % path, len(path) + 1)
+            _vte_terminal_feed_child(self._ui_terminal, "%s " % path)
         self._ui_terminal.grab_focus()
 
     def _on_nterm_copy_action_activated(self, action, parameter):
