@@ -78,6 +78,7 @@ class NautilusTerminal(object):
         self._nautilus_app = nautilus_app
         self._vbox = None
         self._cwd = cwd
+        self._is_ssh = False
 
         self._settings = helpers.get_application_settings()
         # Allows settings to be defined in dconf-editor even if
@@ -127,12 +128,28 @@ class NautilusTerminal(object):
             return
 
         # Do not "cd" if the shell has something running in
-        if self.shell_is_busy():
+        if self.shell_is_busy() and not self._is_ssh:
             logger.log("NautilusTerminal.change_directory: current directory NOT changed to %s (shell busy)" % path)
             return
 
         logger.log("NautilusTerminal.change_directory: current directory changed to %s" % path)
-        self._inject_command(" cd %s" % helpers.escape_path_for_shell(self._cwd))
+        new_path = helpers.escape_path_for_shell(self._cwd)
+        if new_path.find('sftp:host=') >= 0:
+            local_path, server_path = new_path.split('sftp:host=', 1)
+            server_path = server_path[:-1]
+            if server_path[-1] != '/':
+                server_path += '/'
+            server_ip, server_dir = server_path.split('/', 1)
+            if not self._is_ssh:
+                self._inject_command(" ssh root@%s" % server_ip)
+                self._is_ssh = True
+            self._inject_command(" cd /%s" % server_dir)
+        else:
+            if self._is_ssh:
+                self._inject_command(" exit")
+                self._ui_terminal.grab_focus()
+                self._is_ssh = False
+            self._inject_command(" cd %s" % new_path)
 
     def get_terminal_requested_visibility(self):
         """Does the user requested the terminal to be visible?
