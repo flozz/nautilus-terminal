@@ -1,5 +1,6 @@
 import os
 import signal
+import re
 
 import gi
 gi.require_version("Vte", "2.91")  # noqa
@@ -78,6 +79,7 @@ class NautilusTerminal(object):
         self._nautilus_app = nautilus_app
         self._vbox = None
         self._cwd = cwd
+        self._is_ssh = False
 
         self._settings = helpers.get_application_settings()
         # Allows settings to be defined in dconf-editor even if
@@ -127,12 +129,58 @@ class NautilusTerminal(object):
             return
 
         # Do not "cd" if the shell has something running in
-        if self.shell_is_busy():
+        if self.shell_is_busy() and not self._is_ssh:
             logger.log("NautilusTerminal.change_directory: current directory NOT changed to %s (shell busy)" % path)
             return
 
         logger.log("NautilusTerminal.change_directory: current directory changed to %s" % path)
-        self._inject_command(" cd %s" % helpers.escape_path_for_shell(self._cwd))
+        new_path = helpers.escape_path_for_shell(self._cwd)
+        if new_path.find('sftp:host=') >= 0:
+            # Need to get the host and also the user name because we don't always have da root access.
+            server_dir= self.remote_shell( new_path )
+            self._inject_command("cd '%s" % server_dir)
+        else:
+            if self._is_ssh:
+                self._inject_command(" exit")
+                self._ui_terminal.grab_focus()
+                self._is_ssh = False
+            self._inject_command("cd %s" % new_path)
+
+
+    def remote_host(self, localPath):
+        # return the host portion of the path if one exists.
+        m = re.search( 'host=([\w\.]*)', localPath )
+        if ( m ):
+            return m.group(1)
+        return "";
+
+    def remote_user(self, localPath):
+        # return the user portion of the path if one exists
+        m = re.search( 'user=([\w\-\_]*)', localPath )
+        if ( m ):
+            return m.group(1)
+        return "root"
+
+    def remote_path(self, localPath):
+        # return everything else beyone the sftp stuff.
+        m = re.search( 'host=([^/]*)(.+)', localPath )
+        if ( m ):
+            return m.group(2)
+        return "/"
+
+    def remote_shell(self, localPath):
+
+        host = self.remote_host( localPath )
+        user = self.remote_user( localPath )
+        path = self.remote_path( localPath )
+        logger.log("host:%s user:%s path:%s" % ( host, user, path ) )
+
+        if not self._is_ssh:
+            self._inject_command(" ssh %s@%s" % (user, host) )
+            self._is_ssh = True
+
+        return path;
+
 
     def get_terminal_requested_visibility(self):
         """Does the user requested the terminal to be visible?
