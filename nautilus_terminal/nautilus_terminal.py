@@ -1,7 +1,6 @@
 import os
 import signal
 import re
-import time
 
 import gi
 
@@ -140,7 +139,7 @@ class NautilusTerminal(object):
         new_path = helpers.escape_path_for_shell(self._cwd)
         if new_path.find('sftp:host=') >= 0:
             # Need to get the host and also the user name because we don't always have da root access.
-            server_dir= self.remote_shell( new_path )
+            server_dir = self.remote_shell(new_path)
             self._inject_command(" cd '%s" % server_dir)
         else:
             # If there is a host set then get out.
@@ -150,34 +149,33 @@ class NautilusTerminal(object):
 
             self._inject_command(" cd %s" % new_path)
 
-
     def remote_host(self, localPath):
         # return the host portion of the path if one exists.
-        m = re.search( 'host=([\w\.]*)', localPath )
-        if ( m ):
+        m = re.search('host=([\w\.]*)', localPath)
+        if m:
             return m.group(1)
-        return "";
+        return ""
 
     def remote_user(self, localPath):
         # return the user portion of the path if one exists
-        m = re.search( 'user=([\w\-\_]*)', localPath )
-        if ( m ):
+        m = re.search('user=([\w\-\_]*)', localPath)
+        if m:
             return m.group(1)
         return "root"
 
     def remote_path(self, localPath):
         # return everything else beyone the sftp stuff.
-        m = re.search( 'host=([^/]*)(.+)', localPath )
-        if ( m ):
+        m = re.search('host=([^/]*)(.+)', localPath)
+        if m:
             return m.group(2)
         return "/"
 
     def remote_shell(self, localPath):
         # We have a remote shell connect to the host / user
-        host = self.remote_host( localPath )
-        user = self.remote_user( localPath )
-        path = self.remote_path( localPath )
-        logger.log("host:%s user:%s path:%s" % ( host, user, path ) )
+        host = self.remote_host(localPath)
+        user = self.remote_user(localPath)
+        path = self.remote_path(localPath)
+        logger.log("host:%s user:%s path:%s" % (host, user, path))
 
         # If we change anything be sure to exit first before moving on.
         #  Really only need to do this if we are running remotely.
@@ -186,22 +184,20 @@ class NautilusTerminal(object):
             if self._ssh_host != host or self._ssh_user != user:
                 self._ssh_host = None
                 self._ssh_user = None
-                logger.log( "exiting...")
+                logger.log("exiting...")
 
         if not self._ssh_host:
             # if this we havn't logged in then...
             self._exit_existing_shell()
-            self._spawn_shell( ["/usr/bin/ssh", "%s@%s" % (user, host) ] )
+            self._spawn_shell(["/usr/bin/ssh", "%s@%s" % (user, host)])
             self._ssh_host = host
             self._ssh_user = user
 
-        return path;
+        return path
 
-    def _exit_existing_shell( self ):
+    def _exit_existing_shell(self):
         # Get out of the current shell, we may need to get back in.
-        #self._inject_command("exit")
-        # time.sleep(1)
-        self._kill_shell();
+        self._kill_shell()
 
         # self._ui_terminal.grab_focus()
         self._ssh_host = None
@@ -368,7 +364,7 @@ class NautilusTerminal(object):
         # ntermwin
         self._nautilus_app.set_accels_for_action("ntermwin.terminal-visible", ["F4"])
 
-    def _spawn_shell(self, command = None ):
+    def _spawn_shell(self, command=None):
         if self._shell_pid:
             logger.warn("NautilusTerminal._spawn_shell: Cannot spawn a new shell: there is already a shell running.")
             return
