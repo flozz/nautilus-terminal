@@ -151,21 +151,21 @@ class NautilusTerminal(object):
 
     def remote_host(self, localPath):
         # return the host portion of the path if one exists.
-        m = re.search('host=([\w\.]*)', localPath)
+        m = re.search(r'host=([\w\.]*)', localPath)
         if m:
             return m.group(1)
         return ""
 
     def remote_user(self, localPath):
         # return the user portion of the path if one exists
-        m = re.search('user=([\w\-\_]*)', localPath)
+        m = re.search(r'user=([\w\-\_]*)', localPath)
         if m:
             return m.group(1)
         return "root"
 
     def remote_path(self, localPath):
         # return everything else beyone the sftp stuff.
-        m = re.search('host=([^/]*)(.+)', localPath)
+        m = re.search(r'host=([^/]*)(.+)', localPath)
         if m:
             return m.group(2)
         return "/"
