@@ -1,8 +1,10 @@
 import os
 import signal
 import re
+import time
 
 import gi
+
 gi.require_version("Vte", "2.91")  # noqa
 
 from gi.repository import GLib, Gio, Gtk, Gdk, Vte
@@ -79,7 +81,8 @@ class NautilusTerminal(object):
         self._nautilus_app = nautilus_app
         self._vbox = None
         self._cwd = cwd
-        self._is_ssh = False
+        self._ssh_host = None  # This is going to remember the host.  If it changes, we need to logout and in.
+        self._ssh_user = None  # This is going to remember the user.  If it changes, we need to logout and in.
 
         self._settings = helpers.get_application_settings()
         # Allows settings to be defined in dconf-editor even if
@@ -129,7 +132,7 @@ class NautilusTerminal(object):
             return
 
         # Do not "cd" if the shell has something running in
-        if self.shell_is_busy() and not self._is_ssh:
+        if self.shell_is_busy() and not self._ssh_host:
             logger.log("NautilusTerminal.change_directory: current directory NOT changed to %s (shell busy)" % path)
             return
 
@@ -138,13 +141,14 @@ class NautilusTerminal(object):
         if new_path.find('sftp:host=') >= 0:
             # Need to get the host and also the user name because we don't always have da root access.
             server_dir= self.remote_shell( new_path )
-            self._inject_command("cd '%s" % server_dir)
+            self._inject_command(" cd '%s" % server_dir)
         else:
-            if self._is_ssh:
-                self._inject_command(" exit")
-                self._ui_terminal.grab_focus()
-                self._is_ssh = False
-            self._inject_command("cd %s" % new_path)
+            # If there is a host set then get out.
+            if self._ssh_host:
+                self._exit_existing_shell()
+                self._spawn_shell()
+
+            self._inject_command(" cd %s" % new_path)
 
 
     def remote_host(self, localPath):
@@ -169,18 +173,40 @@ class NautilusTerminal(object):
         return "/"
 
     def remote_shell(self, localPath):
-
+        # We have a remote shell connect to the host / user
         host = self.remote_host( localPath )
         user = self.remote_user( localPath )
         path = self.remote_path( localPath )
         logger.log("host:%s user:%s path:%s" % ( host, user, path ) )
 
-        if not self._is_ssh:
-            self._inject_command(" ssh %s@%s" % (user, host) )
-            self._is_ssh = True
+        # If we change anything be sure to exit first before moving on.
+        #  Really only need to do this if we are running remotely.
+        if self._ssh_host:
+            # Check for the changes in host or user.
+            if self._ssh_host != host or self._ssh_user != user:
+                self._ssh_host = None
+                self._ssh_user = None
+                logger.log( "exiting...")
+
+        if not self._ssh_host:
+            # if this we havn't logged in then...
+            self._exit_existing_shell()
+            self._spawn_shell( ["/usr/bin/ssh", "%s@%s" % (user, host) ] )
+            self._ssh_host = host
+            self._ssh_user = user
 
         return path;
 
+    def _exit_existing_shell( self ):
+        # Get out of the current shell, we may need to get back in.
+        #self._inject_command("exit")
+        # time.sleep(1)
+        self._kill_shell();
+
+        # self._ui_terminal.grab_focus()
+        self._ssh_host = None
+        self._ssh_user = None
+        self._ssh_pid = None
 
     def get_terminal_requested_visibility(self):
         """Does the user requested the terminal to be visible?
@@ -342,18 +368,24 @@ class NautilusTerminal(object):
         # ntermwin
         self._nautilus_app.set_accels_for_action("ntermwin.terminal-visible", ["F4"])
 
-    def _spawn_shell(self):
+    def _spawn_shell(self, command = None ):
         if self._shell_pid:
             logger.warn("NautilusTerminal._spawn_shell: Cannot spawn a new shell: there is already a shell running.")
             return
-        shell = helpers.get_user_default_shell()
-        if self._settings.get_boolean("use-custom-command"):
-            shell = self._settings.get_string("custom-command")
-        _, self._shell_pid = self._ui_terminal.spawn_sync(
-                Vte.PtyFlags.DEFAULT, self._cwd, [shell],
-                None, GLib.SpawnFlags.SEARCH_PATH, None, None)
+        if command:
+            _, self._shell_pid = self._ui_terminal.spawn_sync(
+                    Vte.PtyFlags.DEFAULT, None, command,
+                    None, GLib.SpawnFlags.SEARCH_PATH, None, None)
+            logger.log("NautilusTerminal._spawn_shell: Shell spawned (%s), PID: %i." % (command, self._shell_pid))
+        else:
+            shell = helpers.get_user_default_shell()
+            if self._settings.get_boolean("use-custom-command"):
+                shell = self._settings.get_string("custom-command")
+            _, self._shell_pid = self._ui_terminal.spawn_sync(
+                    Vte.PtyFlags.DEFAULT, self._cwd, [shell],
+                    None, GLib.SpawnFlags.SEARCH_PATH, None, None)
+            logger.log("NautilusTerminal._spawn_shell: Shell spawned (%s), PID: %i." % (shell, self._shell_pid))
         self._shell_killed = False
-        logger.log("NautilusTerminal._spawn_shell: Shell spawned (%s), PID: %i." % (shell, self._shell_pid))
 
     def _kill_shell(self):
         if not self._shell_pid:
