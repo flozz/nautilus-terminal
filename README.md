@@ -35,7 +35,7 @@ below).
 
 **Requirements:**
 
-* [nautilus-python][]
+* [nautilus-python][] (`python-nautilus` package on Debian / Ubuntu)
 * [psutil][]
 
 ![Nautilus Terminal Screenshot](./screenshot.png)
@@ -47,7 +47,7 @@ below).
 
 User install:
 
-    pip install nautilus_terminal
+    pip install --user nautilus_terminal
 
 System-wide install:
 
