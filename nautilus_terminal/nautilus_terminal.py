@@ -24,7 +24,7 @@ def _vte_terminal_feed_child(vte_terminal, text):
         return vte_terminal.feed_child(text, len(text) + 1)
     except TypeError:
         # Newer call
-        return vte_terminal.feed_child(text)
+        return vte_terminal.feed_child(text.encode('utf-8'))
 
 
 def _find_nautilus_terminal_vpanel(crowbar):
