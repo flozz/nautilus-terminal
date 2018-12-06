@@ -149,6 +149,8 @@ Things to do before releasing a new version:
 
 ## Changelog
 
+* **3.2.3:**
+    * Fixes `VteTerminal.feed_child()` call by conversion from str to utf-8
 * **3.2.2:**
     * Fixes `VteTerminal.feed_child()` call (#12)
     * Improves child process searching (@l-deniau, #14)
