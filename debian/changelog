@@ -1,0 +1,5 @@
+nautilus-terminal (3.2.2-1) unstable; urgency=medium
+
+  * Initial release (Closes: #nnnn)  <nnnn is the bug number of your ITP>
+
+ -- Fabien LOISON <flo@unknown>  Mon, 10 Dec 2018 13:22:14 +0100
