@@ -9,7 +9,7 @@
 
 **Nautilus Terminal** is a terminal embedded into Nautilus, the GNOME's file
 browser. It is always opened in the current folder, and follows the navigation
-(the `cd` command is automatically executed when you navigate to an other
+(the `cd` command is automatically executed when you navigate to another
 folder).
 
 **NOTE:** This is a complete re-implementation of [my previous Nautilus

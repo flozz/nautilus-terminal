@@ -1,5 +1,11 @@
+nautilus-terminal (3.2.2-2) cosmic; urgency=medium
+
+  * Change series from unstable to cosmic
+
+ -- Fabien LOISON <flo@flogisoft.com>  Tue, 11 Dec 2018 13:01:11 +0100
+
 nautilus-terminal (3.2.2-1) unstable; urgency=medium
 
-  * Initial release (Closes: #nnnn)  <nnnn is the bug number of your ITP>
+  * Initial release
 
- -- Fabien LOISON <flo@unknown>  Mon, 10 Dec 2018 13:22:14 +0100
+ -- Fabien LOISON <flo@flogisoft.com>  Mon, 10 Dec 2018 13:22:14 +0100
