@@ -1,5 +1,6 @@
 import os
 import signal
+import sys
 
 import gi
 gi.require_version("Vte", "2.91")  # noqa
@@ -19,12 +20,14 @@ _EXPAND_WIDGETS = [
 
 
 def _vte_terminal_feed_child(vte_terminal, text):
+    if sys.version_info.major >= 3:
+        text = text.encode("utf-8")
     try:
         # Old call
         return vte_terminal.feed_child(text, len(text) + 1)
     except TypeError:
         # Newer call
-        return vte_terminal.feed_child(text.encode('utf-8'))
+        return vte_terminal.feed_child(text)
 
 
 def _find_nautilus_terminal_vpanel(crowbar):
