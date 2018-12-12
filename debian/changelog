@@ -1,6 +1,6 @@
-nautilus-terminal (3.2.2-2) cosmic; urgency=medium
+nautilus-terminal (3.2.3-0ubuntu1) cosmic; urgency=medium
 
-  * Change series from unstable to cosmic
+  * Update to v3.2.3
 
  -- Fabien LOISON <flo@flogisoft.com>  Tue, 11 Dec 2018 13:01:11 +0100
 

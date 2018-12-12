@@ -35,7 +35,7 @@ Description: Python module for Nautilus Terminal (Python 3)
 
 Package: nautilus-terminal
 Architecture: all
-Depends: python-nautilus-terminal, python-nautilus
+Depends: python-nautilus-terminal, python-nautilus, ${misc:Depends}
 Suggests: nautilus
 Description: Terminal embedded in Nautilus, the GNOME's file browser
  Nautilus Terminal is a terminal embedded into Nautilus, the GNOME's file
