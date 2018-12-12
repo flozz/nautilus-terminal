@@ -1,0 +1,11 @@
+nautilus-terminal (3.2.3-0ubuntu1) cosmic; urgency=medium
+
+  * Update to v3.2.3
+
+ -- Fabien LOISON <flo@flogisoft.com>  Tue, 11 Dec 2018 13:01:11 +0100
+
+nautilus-terminal (3.2.2-1) unstable; urgency=medium
+
+  * Initial release
+
+ -- Fabien LOISON <flo@flogisoft.com>  Mon, 10 Dec 2018 13:22:14 +0100

@@ -1,0 +1,44 @@
+Source: nautilus-terminal
+Section: python
+Priority: optional
+Maintainer: Fabien LOISON <flo@flogisoft.com>
+Build-Depends: debhelper (>= 11), dh-python, python-all, python-setuptools, python3-all, python3-setuptools
+Standards-Version: 4.1.3
+Homepage: https://github.com/flozz/nautilus-terminal
+X-Python-Version: >= 2.7
+X-Python3-Version: >= 3.5
+#Vcs-Browser: https://salsa.debian.org/debian/nautilus-terminal
+#Vcs-Git: https://salsa.debian.org/debian/nautilus-terminal.git
+#Testsuite: autopkgtest-pkg-python
+
+Package: python-nautilus-terminal
+Architecture: all
+Depends: python-psutil, ${python:Depends}, ${misc:Depends}
+Description: Python module for Nautilus Terminal (Python 2)
+ Nautilus Terminal is a terminal embedded into Nautilus, the GNOME's file
+ browser. It is always opened in the current folder, and follows the navigation
+ (the cd command is automatically executed when you navigate to another
+ folder).
+ .
+ This package installs the library for Python 2.
+
+Package: python3-nautilus-terminal
+Architecture: all
+Depends: python3-psutil, ${python3:Depends}, ${misc:Depends}
+Description: Python module for Nautilus Terminal (Python 3)
+ Nautilus Terminal is a terminal embedded into Nautilus, the GNOME's file
+ browser. It is always opened in the current folder, and follows the navigation
+ (the cd command is automatically executed when you navigate to another
+ folder).
+ .
+ This package installs the library for Python 3.
+
+Package: nautilus-terminal
+Architecture: all
+Depends: python-nautilus-terminal, python-nautilus, ${misc:Depends}
+Suggests: nautilus
+Description: Terminal embedded in Nautilus, the GNOME's file browser
+ Nautilus Terminal is a terminal embedded into Nautilus, the GNOME's file
+ browser. It is always opened in the current folder, and follows the navigation
+ (the cd command is automatically executed when you navigate to another
+ folder).

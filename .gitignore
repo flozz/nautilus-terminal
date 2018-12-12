@@ -6,3 +6,12 @@ build
 *.rst
 *.egg-info
 nautilus_terminal/schemas/gschemas.compiled
+
+.pybuild
+debian/tmp*
+debian/*debhelper*
+debian/*.substvars
+debian/files
+debian/nautilus-terminal/
+debian/python-nautilus-terminal/
+debian/python3-nautilus-terminal/
