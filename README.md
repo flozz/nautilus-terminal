@@ -43,6 +43,13 @@ below).
 
 ## Installing Nautilus Terminal
 
+### From the PPA (Ubuntu)
+
+    sudo add-apt-repository ppa:flozz/nautilus-terminal
+    sudo apt-get update
+    sudp apt install nautilus-terminal
+
+
 ### From PYPI
 
 User install:
@@ -52,11 +59,16 @@ User install:
 System-wide install:
 
     sudo pip install nautilus_terminal
-    sudo tools/update-extension-system.sh install   # foreseeable future
 
 Then kill Nautilus to allow it to load the new extension:
 
     nautilus -q
+
+If it does not work, try using the following command (from this repository):
+
+    sudo tools/update-extension-user.sh install    # for a user install
+    sudo tools/update-extension-system.sh install  # for a system wild install
+
 
 ### From sources
 
@@ -149,6 +161,8 @@ Things to do before releasing a new version:
 
 ## Changelog
 
+* **3.2.3:**
+   * Fixes encoding with Python 3 (#29)
 * **3.2.2:**
     * Fixes `VteTerminal.feed_child()` call (#12)
     * Improves child process searching (@l-deniau, #14)
