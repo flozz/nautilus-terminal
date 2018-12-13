@@ -47,7 +47,7 @@ below).
 
     sudo add-apt-repository ppa:flozz/nautilus-terminal
     sudo apt-get update
-    sudp apt install nautilus-terminal
+    sudo apt install nautilus-terminal
 
 
 ### From PYPI
