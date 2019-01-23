@@ -67,7 +67,7 @@ Then kill Nautilus to allow it to load the new extension:
 If it does not work, try using the following command (from this repository):
 
     sudo tools/update-extension-user.sh install    # for a user install
-    sudo tools/update-extension-system.sh install  # for a system wild install
+    sudo tools/update-extension-system.sh install  # for a system-wide install
 
 
 ### From sources
@@ -169,7 +169,7 @@ Things to do before releasing a new version:
 * **3.2.1:** Add a missing dependency in setup.py
 * **3.2.0:** Add settings to Nautilus Terminal (#3)
 * **3.1.1:**
-    * Allow user install instead of system wild (#1)
+    * Allow user install instead of system-wide (#1)
     * Use the user's default shell instead of the hardcoded zsh (#2)
     * Focus the terminal after drag & drop of file on it (#4)
 * **3.1.0:**
