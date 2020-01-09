@@ -21,5 +21,10 @@
       <summary>Minimal height of the terminal (in line)</summary>
       <description>Minimal amount of line that will be visible in the terminal. Also the default amount of line visible when opening a new terminal.</description>
     </key>
+    <key name="terminal-bottom" type="b">
+      <default>false</default>
+      <summary>Nautilus Terminal at the bottom</summary>
+      <description>Nautilus Terminal will be shown at the bottom of the windows</description>
+    </key>
   </schema>
 </schemalist>
