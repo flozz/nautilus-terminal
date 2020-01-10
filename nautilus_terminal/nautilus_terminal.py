@@ -90,6 +90,7 @@ class NautilusTerminal(object):
         self._ui_vpanel = None
         self._ui_terminal = None
         self._terminal_requested_visibility = self._settings.get_boolean("default-show-terminal")
+        self._terminal_bottom = self._settings.get_boolean("terminal-bottom")
         self._nterm_action_group = None
         self._ntermwin_action_group = None
         self._shell_pid = 0
@@ -194,7 +195,11 @@ class NautilusTerminal(object):
         self._ui_vpanel = Gtk.VPaned(visible=True)
         self._ui_vpanel._nt_instance = self
         self._vbox = Gtk.VBox(visible=True)
-        self._ui_vpanel.add2(self._vbox)
+        if self._terminal_bottom:
+            self._ui_vpanel.add1(self._vbox)
+        else:
+            self._ui_vpanel.add2(self._vbox)
+
         for widget in self._parent_widget:
             self._parent_widget.remove(widget)
             expand = widget.get_name() in _EXPAND_WIDGETS
@@ -208,7 +213,10 @@ class NautilusTerminal(object):
 
         self._ui_terminal = Vte.Terminal()
         self._ui_terminal.connect("child-exited", self._on_terminal_child_existed)
-        self._ui_vpanel.pack1(self._ui_terminal, resize=False, shrink=False)
+        if self._terminal_bottom:
+            self._ui_vpanel.pack2(self._ui_terminal, resize=False, shrink=False)
+        else:
+            self._ui_vpanel.pack1(self._ui_terminal, resize=False, shrink=False)
 
         TERMINAL_CHAR_HEIGHT = self._ui_terminal.get_char_height()
         TERMINAL_BORDER_WIDTH = 1
