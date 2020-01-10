@@ -167,8 +167,10 @@ Things to do before releasing a new version:
 
 ## Changelog
 
+* **3.3.0:**
+    * New option to have the terminal at the bottom of the window (#35)
 * **3.2.3:**
-   * Fixes encoding with Python 3 (#29)
+    * Fixes encoding with Python 3 (#29)
 * **3.2.2:**
     * Fixes `VteTerminal.feed_child()` call (#12)
     * Improves child process searching (@l-deniau, #14)
