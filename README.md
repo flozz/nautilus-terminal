@@ -147,6 +147,12 @@ in Nautilus without having to reinstall the module:
     tools/debug-in-nautilus.sh
     tools/debug-in-nautilus.sh --no-bg  # keep Nautilus attached to the console
 
+When you start working on this extension, you will have to compile the
+GSettings schema (and you will have to recompile it each time you modify the
+`nautilus_terminal/schemas/org.flozz.nautilus-terminal.gschema.xml` file):
+
+    glib-compile-schemas nautilus_terminal/schemas
+
 Happy hacking! :)
 
 
