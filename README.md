@@ -43,13 +43,6 @@ below).
 
 ## Installing Nautilus Terminal
 
-### From the PPA (Ubuntu)
-
-    sudo add-apt-repository ppa:flozz/nautilus-terminal
-    sudo apt-get update
-    sudo apt install nautilus-terminal
-
-
 ### From PYPI
 
 User install:
