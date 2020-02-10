@@ -43,6 +43,12 @@ below).
 
 ## Installing Nautilus Terminal
 
+### Fedora Package
+
+    dnf copr enable tomaszgasior/mushrooms
+    dnf install nautilus-terminal
+
+
 ### From PYPI
 
 User install:
