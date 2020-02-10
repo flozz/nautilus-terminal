@@ -95,7 +95,8 @@ Then kill Nautilus to allow it to load the new extension:
 
     nautilus -q
 
-## Uninstalling
+
+## Uninstalling (source or PYPI packages)
 
 To uninstall the package, run:
 
@@ -191,7 +192,7 @@ Things to do before releasing a new version:
 ## License GPLv3
 
     Nautilus Terminal - A terminal embedded in the Nautilus file browser
-    Copyright (C) 2010-2017  Fabien LOISON <http://www.flozz.fr/>
+    Copyright (C) 2010-2020  Fabien LOISON <http://www.flozz.fr/>
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
