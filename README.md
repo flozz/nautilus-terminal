@@ -111,11 +111,7 @@ If you installed it for all users:
 ## Configuring
 
 Nautilus Terminal can be configured, but there is no GUI to configure it yet.
-Currently, configuration can be done through the **DConf Editor** tool:
-
-* Run DConf Editor: `dconf-editor`,
-* Navigate to `/org/flozz/nautilus-terminal`
-* Configure Nautilus Terminal.
+Currently, configuration can be done through the **DConf Editor** tool: `dconf-editor /org/flozz/nautilus-terminal`
 
 ![dconf-editor](./dconf-editor.png)
 
