@@ -35,7 +35,7 @@ below).
 
 **Requirements:**
 
-* [nautilus-python][] (`python-nautilus` package on Debian / Ubuntu)
+* [nautilus-python][] (`python-nautilus` or `python-nautilus` package on Debian / Ubuntu)
 * [psutil][]
 
 ![Nautilus Terminal Screenshot](./screenshot.png)
@@ -47,6 +47,27 @@ below).
 
     dnf copr enable tomaszgasior/mushrooms
     dnf install nautilus-terminal
+
+### Ubuntu
+
+We do not provide specific package for Ubuntu so you will have to install it from PYPI or from sources.... But first you will have to install some dependencies depending of your Ubuntu version.
+
+#### Ubuntu 20.04 and later
+
+Install dependencies:
+
+    sudo apt install python3-nautilus python3-pip
+
+Then, follow the instructions to install it from PYPI or from sources, but replace the `pip` command by `pip3`.
+
+
+#### Ubuntu 19.10 and earlier
+
+Install dependencies:
+
+    sudo apt install python-nautilus python-pip
+
+Then follow the instructions to install it from PYPI or from sources.
 
 
 ### From PYPI
