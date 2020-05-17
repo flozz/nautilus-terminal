@@ -35,7 +35,7 @@ below).
 
 **Requirements:**
 
-* [nautilus-python][] (`python-nautilus` or `python-nautilus` package on Debian / Ubuntu)
+* [nautilus-python][] (`python-nautilus` or `python3-nautilus` package on Debian / Ubuntu)
 * [psutil][]
 
 ![Nautilus Terminal Screenshot](./screenshot.png)
