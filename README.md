@@ -40,6 +40,8 @@ below).
 
 ![Nautilus Terminal Screenshot](./screenshot.png)
 
+If you want to read more about this project and its history, I wrote an article on my blog (it is in French, but Google Translate should help) : [Nautilus Terminal: The story of a complicated project](https://blog.flozz.fr/2018/12/17/nautilus-terminal-lhistoire-dun-projet-complique/).
+
 
 ## Installing Nautilus Terminal
 
