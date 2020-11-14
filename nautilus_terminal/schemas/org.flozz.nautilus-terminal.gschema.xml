@@ -31,5 +31,15 @@
       <summary>Keyboard shortcut to toggle the terminal</summary>
       <description>The keyboard shortcut to toggle Nautilus Terminal (e.g. "F4", "&lt;Ctrl&gt;F4")</description>
     </key>
+    <key name="background-color" type="s">
+      <default>"#000000"</default>
+      <summary>Terminal background color</summary>
+      <description>The color of the terminal background (Hexadecimal notation. E.g. "#000000", "black")</description>
+    </key>
+    <key name="foreground-color" type="s">
+      <default>"#ffffff"</default>
+      <summary>Terminal text color</summary>
+      <description>The color of the terminal text (Hexadecimal notation. E.g. "#FFFFFF", "white")</description>
+    </key>
   </schema>
 </schemalist>

@@ -9,6 +9,7 @@ from gi.repository import GLib, Gio, Gtk, Gdk, Vte
 
 from . import logger
 from . import helpers
+from . import color_helpers
 from . import nautilus_accels_helpers
 
 
@@ -225,6 +226,32 @@ class NautilusTerminal(object):
         self._ui_terminal.set_property(
                 "height-request",
                 TERMINAL_CHAR_HEIGHT * TERMINAL_MIN_HEIGHT + TERMINAL_BORDER_WIDTH * 2)
+
+        # Terminal colors
+
+        fg_color = (255, 255, 255)
+        bg_color = (0, 0, 0)
+
+        settings_fg_color = self._settings.get_string("foreground-color")
+        settings_bg_color = self._settings.get_string("background-color")
+
+        if color_helpers.is_color(settings_fg_color):
+            fg_color = color_helpers.parse_color_string(settings_fg_color)
+
+        if color_helpers.is_color(settings_bg_color):
+            bg_color = color_helpers.parse_color_string(settings_bg_color)
+
+        self._ui_terminal.set_color_foreground(Gdk.RGBA(
+                fg_color[0] / 255.0,
+                fg_color[1] / 255.0,
+                fg_color[2] / 255.0,
+                1))
+
+        self._ui_terminal.set_color_background(Gdk.RGBA(
+                bg_color[0] / 255.0,
+                bg_color[1] / 255.0,
+                bg_color[2] / 255.0,
+                1))
 
         # File drag & drop support
 
