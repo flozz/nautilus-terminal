@@ -26,5 +26,10 @@
       <summary>Nautilus Terminal at the bottom</summary>
       <description>Nautilus Terminal will be shown at the bottom of the windows</description>
     </key>
+    <key name="toggle-shortcut" type="s">
+      <default>"F4"</default>
+      <summary>Keyboard shortcut to toggle the terminal</summary>
+      <description>The keyboard shortcut to toggle Nautilus Terminal (e.g. "F4", "&lt;Ctrl&gt;F4")</description>
+    </key>
   </schema>
 </schemalist>

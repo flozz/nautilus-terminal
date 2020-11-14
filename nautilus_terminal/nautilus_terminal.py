@@ -303,7 +303,8 @@ class NautilusTerminal(object):
         self._nautilus_app.set_accels_for_action("nterm.paste", ["<Primary><Shift>v"])
 
         # ntermwin
-        self._nautilus_app.set_accels_for_action("ntermwin.terminal-visible", ["F4"])
+        accel = self._settings.get_string("toggle-shortcut")
+        self._nautilus_app.set_accels_for_action("ntermwin.terminal-visible", [accel])
 
     def _spawn_shell(self):
         if self._shell_pid:
