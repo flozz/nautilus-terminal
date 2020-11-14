@@ -186,6 +186,9 @@ Things to do before releasing a new version:
 
 ## Changelog
 
+* **3.4.0:**
+    * Allows to configure the terminal toggle shortcut (#50, #43)
+    * Allows to configure terminal background and text color (#32)
 * **3.3.0:**
     * New option to have the terminal at the bottom of the window (#35)
 * **3.2.3:**
