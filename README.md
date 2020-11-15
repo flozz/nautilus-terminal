@@ -192,6 +192,15 @@ Things to do before releasing a new version:
 * Compile GSetting schema: `glib-compile-schemas nautilus_terminal/schemas`
 
 
+## Supporting this project
+
+Wanna support this project?
+
+* [☕️ Buy me a coffee](https://www.buymeacoffee.com/flozz),
+* [❤️ sponsor me on Github](https://github.com/sponsors/flozz),
+* [💵️ or give me a tip on PayPal](https://www.paypal.me/0xflozz).
+
+
 ## Changelog
 
 * **3.4.1:** Updates documentation and settings screenshot.
@@ -218,15 +227,6 @@ Things to do before releasing a new version:
       visible)
 * **3.0.1:** Script to convert the README to reStructuredText for PYPI
 * **3.0.0:** Initial Nautilus Terminal 3 release (early development version)
-
-
-## Supporting this project
-
-Wanna support this project?
-
-* [☕️ Buy me a coffee](https://www.buymeacoffee.com/flozz),
-* [❤️ sponsor me on Github](https://github.com/sponsors/flozz),
-* [💵️ or give me a tip on paypal](https://www.paypal.me/0xflozz).
 
 
 ## License GPLv3
