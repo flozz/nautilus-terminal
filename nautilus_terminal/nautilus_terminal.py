@@ -14,10 +14,10 @@ from . import nautilus_accels_helpers
 
 
 _EXPAND_WIDGETS = [
-        "GtkOverlay",
-        "NautilusCanvasView",
-        "NautilusViewIconController",
-        "NautilusListView"]
+    "GtkOverlay",
+    "NautilusCanvasView",
+    "NautilusViewIconController",
+    "NautilusListView"]
 
 
 def _vte_terminal_feed_child(vte_terminal, text):
@@ -68,10 +68,10 @@ def create_or_update_natilus_terminal(crowbar):
         return
 
     return NautilusTerminal(
-            nautilus_window_slot,
-            crowbar.nautilus_window,
-            crowbar.nautilus_app,
-            crowbar.path)
+        nautilus_window_slot,
+        crowbar.nautilus_window,
+        crowbar.nautilus_app,
+        crowbar.path)
 
 
 class NautilusTerminal(object):
@@ -224,8 +224,8 @@ class NautilusTerminal(object):
         TERMINAL_MIN_HEIGHT = self._settings.get_uint("min-terminal-height")
 
         self._ui_terminal.set_property(
-                "height-request",
-                TERMINAL_CHAR_HEIGHT * TERMINAL_MIN_HEIGHT + TERMINAL_BORDER_WIDTH * 2)
+            "height-request",
+            TERMINAL_CHAR_HEIGHT * TERMINAL_MIN_HEIGHT + TERMINAL_BORDER_WIDTH * 2)
 
         # Terminal colors
 
@@ -242,22 +242,22 @@ class NautilusTerminal(object):
             bg_color = color_helpers.parse_color_string(settings_bg_color)
 
         self._ui_terminal.set_color_foreground(Gdk.RGBA(
-                fg_color[0] / 255.0,
-                fg_color[1] / 255.0,
-                fg_color[2] / 255.0,
-                1))
+            fg_color[0] / 255.0,
+            fg_color[1] / 255.0,
+            fg_color[2] / 255.0,
+            1))
 
         self._ui_terminal.set_color_background(Gdk.RGBA(
-                bg_color[0] / 255.0,
-                bg_color[1] / 255.0,
-                bg_color[2] / 255.0,
-                1))
+            bg_color[0] / 255.0,
+            bg_color[1] / 255.0,
+            bg_color[2] / 255.0,
+            1))
 
         # File drag & drop support
 
         self._ui_terminal.drag_dest_set(
-                Gtk.DestDefaults.MOTION | Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP,
-                [Gtk.TargetEntry.new("text/uri-list", 0, 0)], Gdk.DragAction.COPY)
+            Gtk.DestDefaults.MOTION | Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP,
+            [Gtk.TargetEntry.new("text/uri-list", 0, 0)], Gdk.DragAction.COPY)
         self._ui_terminal.drag_dest_add_uri_targets()
         self._ui_terminal.connect("drag-data-received", self._on_terminal_drag_data_received)
 
@@ -341,8 +341,8 @@ class NautilusTerminal(object):
         if self._settings.get_boolean("use-custom-command"):
             shell = self._settings.get_string("custom-command")
         _, self._shell_pid = self._ui_terminal.spawn_sync(
-                Vte.PtyFlags.DEFAULT, self._cwd, [shell],
-                None, GLib.SpawnFlags.SEARCH_PATH, None, None)
+            Vte.PtyFlags.DEFAULT, self._cwd, [shell],
+            None, GLib.SpawnFlags.SEARCH_PATH, None, None)
         self._shell_killed = False
         logger.log("NautilusTerminal._spawn_shell: Shell spawned (%s), PID: %i." % (shell, self._shell_pid))
 

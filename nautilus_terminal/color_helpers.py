@@ -32,7 +32,6 @@ def is_color(string):
     :param str string: The string to check.
     :rtype: bool
 
-    >>> from rivalcfg.color_helpers import is_color
     >>> is_color("#FF0000") # hexadecimal colors are supported
     True
     >>> is_color("#F00")  # short format allowed
@@ -63,7 +62,6 @@ def parse_color_string(color):
     :param str color: The string to convert.
     :return: (r, g, b)
 
-    >>> from rivalcfg.color_helpers import parse_color_string
     >>> parse_color_string("#FF0000") # hexadecimal colors are supported
     (255, 0, 0)
     >>> parse_color_string("#F00")  # short format allowed
@@ -94,5 +92,4 @@ def parse_color_string(color):
         int(color[0:2], 16),
         int(color[2:4], 16),
         int(color[4:], 16)
-        )
-
+    )
