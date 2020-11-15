@@ -219,6 +219,15 @@ Things to do before releasing a new version:
 * **3.0.0:** Initial Nautilus Terminal 3 release (early development version)
 
 
+## Supporting this project
+
+Wanna support this project?
+
+* [☕️ Buy me a coffee](https://www.buymeacoffee.com/flozz),
+* [❤️ sponsor me on Github](https://github.com/sponsors/flozz),
+* [💵️ or give me a tip on paypal](https://www.paypal.me/0xflozz).
+
+
 ## License GPLv3
 
     Nautilus Terminal - A terminal embedded in the Nautilus file browser
