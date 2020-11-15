@@ -1,7 +1,7 @@
 # Nautilus Terminal 3
 
-[![Build Status](https://travis-ci.org/flozz/nautilus-terminal.svg?branch=master)](https://travis-ci.org/flozz/nautilus-terminal)
-[![PYPI Version](https://img.shields.io/pypi/v/nautilus_terminal.svg)](https://pypi.python.org/pypi/nautilus_terminal)
+[![Lint / Tests](https://github.com/flozz/nautilus-terminal/workflows/Lint%20and%20Tests/badge.svg)](https://github.com/flozz/nautilus-terminal/actions)
+[![PYPI Version](https://img.shields.io/pypi/v/nautilus_terminal.svg)](https://pypi.org/project/nautilus_terminal/)
 [![License](https://img.shields.io/pypi/l/nautilus_terminal.svg)](https://github.com/flozz/nautilus-terminal/blob/master/COPYING)
 [![Gitter](https://badges.gitter.im/gitter.svg)](https://gitter.im/nautilus-terminal/Lobby)
 
@@ -28,10 +28,10 @@ below).
 * Automatically respawn the shell if it exits,
 * Supports copy / paste from / to the terminal using
   `Ctrl+Shift+C` / `Ctrl+Shift+V`,
-* Can be displayed / hidden using the `F4` key,
+* Can be displayed / hidden using the `F4` key (configurable),
 * Supports drag & drop of file on the terminal,
-* Uses the default shell for the user.
-* ~~Allows to configure the terminal appearance (colors, font,...).~~ **TODO**
+* Uses the default shell for the user,
+* Allows to configure the terminal appearance (background and text color).
 
 **Requirements:**
 
@@ -50,9 +50,11 @@ If you want to read more about this project and its history, I wrote an article 
     dnf copr enable tomaszgasior/mushrooms
     dnf install nautilus-terminal
 
+
 ### Ubuntu
 
 We do not provide specific package for Ubuntu so you will have to install it from PYPI or from sources.... But first you will have to install some dependencies depending of your Ubuntu version.
+
 
 #### Ubuntu 20.04 and later
 
@@ -60,7 +62,7 @@ Install dependencies:
 
     sudo apt install python3-nautilus python3-pip
 
-Then, follow the instructions to install it from PYPI or from sources, but replace the `pip` command by `pip3`.
+Then follow the instructions to install it from PYPI or from sources.
 
 
 #### Ubuntu 19.10 and earlier
@@ -69,18 +71,18 @@ Install dependencies:
 
     sudo apt install python-nautilus python-pip
 
-Then follow the instructions to install it from PYPI or from sources.
+Then, follow the instructions to install it from PYPI or from sources, but replace the `pip3` command by `pip`.
 
 
 ### From PYPI
 
 User install:
 
-    pip install --user nautilus_terminal
+    pip3 install --user nautilus_terminal
 
 System-wide install:
 
-    sudo pip install nautilus_terminal
+    sudo pip3 install nautilus_terminal
 
 Then kill Nautilus to allow it to load the new extension:
 
@@ -103,7 +105,7 @@ To install into your personal Python lib and your personal Nautilus python
 extension folders, run the following from your normal unprivileged account. Pip
 will select the `--user` scheme.
 
-    pip install .
+    pip3 install .
 
 To install for all users, run the command as root instead. Pip will select the
 `--system` scheme if you install this way. This drops everything into
@@ -111,7 +113,7 @@ To install for all users, run the command as root instead. Pip will select the
 (see upstream [bug 781232][]). So for the foreseeable future, system-wide
 installs need an extra step to make the extension available for all users.
 
-    sudo pip install .
+    sudo pip3 install .
     sudo tools/update-extension-system.sh install
 
 Then kill Nautilus to allow it to load the new extension:
@@ -123,11 +125,11 @@ Then kill Nautilus to allow it to load the new extension:
 
 To uninstall the package, run:
 
-    pip uninstall nautilus-terminal
+    pip3 uninstall nautilus-terminal
 
 If you installed it for all users:
 
-    sudo pip uninstall nautilus-terminal
+    sudo pip3 uninstall nautilus-terminal
     sudo tools/update-extension-system.sh uninstall   # foreseeable future
 
 
@@ -143,9 +145,9 @@ Currently, configuration can be done through the **DConf Editor** tool: `dconf-e
 
 If you want work on this software, you will first have to install the
 [nautilus-python][] and [psutil][] packages. On Debian / Ubuntu, you will find
-it in the `python-nautilus` and `python-psutil` packages:
+it in the `python3-nautilus` and `python3-psutil` packages:
 
-    sudo apt install python-nautilus python-psutil
+    sudo apt install python3-nautilus python3-psutil
 
 This extension comes in two parts: a conventional Python module
 (`nautilus_terminal`), and a small bit of bootstrap code that's loaded by
