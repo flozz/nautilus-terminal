@@ -54,9 +54,17 @@ setup(
 
     packages=find_packages(),
     include_package_data=True,
+
     install_requires=[
         "psutil~=5.2.2",
     ],
+
+    extras_require={
+        "dev": [
+            "flake8",
+            "nox",
+        ],
+    },
 
     cmdclass={"install": install}
 )

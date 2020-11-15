@@ -1,8 +1,0 @@
-language: python
-
-install:
-    - pip install flake8
-
-script:
-    - flake8 nautilus_terminal
-

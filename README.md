@@ -172,6 +172,12 @@ GSettings schema (and you will have to recompile it each time you modify the
 
     glib-compile-schemas nautilus_terminal/schemas
 
+Running lint and tests:
+
+    pip3 install nox
+    python3 -m nox --session lint
+    python3 -m nox --session test
+
 Happy hacking! :)
 
 
