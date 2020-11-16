@@ -203,6 +203,8 @@ Wanna support this project?
 
 ## Changelog
 
+* **3.4.2:** Fixes the PYPI package with an up to date version of the compiled
+  gsettings schema
 * **3.4.1:** Updates documentation and settings screenshot.
 * **3.4.0:**
     * Allows to configure the terminal toggle shortcut (#50, #43)
