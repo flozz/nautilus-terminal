@@ -197,9 +197,9 @@ class NautilusTerminal(object):
         self._ui_vpanel._nt_instance = self
         self._vbox = Gtk.VBox(visible=True)
         if self._terminal_bottom:
-            self._ui_vpanel.add1(self._vbox)
+            self._ui_vpanel.pack1(self._vbox, resize=True, shrink=True)
         else:
-            self._ui_vpanel.add2(self._vbox)
+            self._ui_vpanel.pack2(self._vbox, resize=True, shrink=True)
 
         for widget in self._parent_widget:
             self._parent_widget.remove(widget)
