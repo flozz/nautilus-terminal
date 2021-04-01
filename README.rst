@@ -237,6 +237,13 @@ Wanna support this project?
 Changelog
 ---------
 
+* **3.5.0:**
+
+  * Fixes minimum height when the teminal is on the bottom (@tkachen, #52)
+  * Allows to configure the font (@tkachen, #10, #53)
+  * Drops Python 3.6 support
+  * Coding style enforced using Black
+
 * **3.4.2:** Fixes the PYPI package with an up to date version of the
   compiled gsettings schema
 * **3.4.1:** Updates documentation and settings screenshot.
