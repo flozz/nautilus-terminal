@@ -13,8 +13,8 @@ navigate to another folder).
 **NOTE:** This is a complete re-implementation of `my previous Nautilus
 Terminal plugin <https://launchpad.net/nautilus-terminal>`__.
 
-**NOTE²:** This is an early development version, some feature are
-missing (see below).
+**NOTE²:** This is an early development version, this software can sometime
+crash Nautilus.
 
 **Features:**
 
@@ -29,7 +29,7 @@ missing (see below).
 * Can be displayed / hidden using the ``F4`` key (configurable),
 * Supports drag & drop of file on the terminal,
 * Uses the default shell for the user,
-* Allows to configure the terminal appearance (background and text
+* Allows to configure the terminal appearance (font, background and text
   color).
 
 **Requirements:**
@@ -41,8 +41,6 @@ missing (see below).
 
 .. figure:: https://raw.githubusercontent.com/flozz/nautilus-terminal/master/screenshot.png
    :alt: Nautilus Terminal Screenshot
-
-   Nautilus Terminal Screenshot
 
 If you want to read more about this project and its history, I wrote an
 article on my blog (it is in French, but Google Translate should help) :
@@ -64,9 +62,9 @@ Fedora Package
 Ubuntu
 ~~~~~~
 
-We do not provide specific package for Ubuntu so you will have to
-install it from PYPI or from sources…. But first you will have to
-install some dependencies depending of your Ubuntu version.
+There is no specific package for Ubuntu so you will have to install it from
+PYPI or from sources…. But first you will have to install some dependencies
+depending of your Ubuntu version.
 
 Ubuntu 20.04 and later
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -160,12 +158,12 @@ Configuring
 
 Nautilus Terminal can be configured, but there is no GUI to configure it
 yet. Currently, configuration can be done through the **DConf Editor**
-tool: ``dconf-editor /org/flozz/nautilus-terminal``
+tool::
+
+    dconf-editor /org/flozz/nautilus-terminal
 
 .. figure:: ./dconf-editor.png
    :alt: dconf-editor
-
-   dconf-editor
 
 
 Hacking and Debug
@@ -222,7 +220,6 @@ Release
 Things to do before releasing a new version:
 
 * Update version number in ``nautilus_terminal/__init__.py``
-* Generate ``README.rst`` (requires pandoc): ``tools/readme-to-rst.sh``
 * Compile GSetting schema:
   ``glib-compile-schemas nautilus_terminal/schemas``
 
