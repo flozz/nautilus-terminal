@@ -41,5 +41,10 @@
       <summary>Terminal text color</summary>
       <description>The color of the terminal text (Hexadecimal notation. E.g. "#FFFFFF", "white")</description>
     </key>
+    <key name="custom-font" type="s">
+      <default>""</default>
+      <summary>A Pango font description</summary>
+      <description>String representation of a Pango font description (e.g. "DejaVu Sans Mono 10")</description>
+    </key>
   </schema>
 </schemalist>

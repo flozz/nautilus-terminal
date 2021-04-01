@@ -5,7 +5,7 @@ import sys
 import gi
 gi.require_version("Vte", "2.91")  # noqa
 
-from gi.repository import GLib, Gio, Gtk, Gdk, Vte
+from gi.repository import GLib, Gio, Gtk, Gdk, Vte, Pango
 
 from . import logger
 from . import helpers
@@ -213,6 +213,10 @@ class NautilusTerminal(object):
         # our GtkPaned.
 
         self._ui_terminal = Vte.Terminal()
+
+        settings_font = self._settings.get_string("custom-font")
+        self._ui_terminal.set_font(Pango.FontDescription(settings_font))
+
         self._ui_terminal.connect("child-exited", self._on_terminal_child_existed)
         if self._terminal_bottom:
             self._ui_vpanel.pack2(self._ui_terminal, resize=False, shrink=False)
