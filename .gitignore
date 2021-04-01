@@ -3,7 +3,6 @@ __env__
 *.pyc
 dist
 build
-*.rst
 *.egg-info
 nautilus_terminal/schemas/gschemas.compiled
 
