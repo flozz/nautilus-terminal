@@ -2,22 +2,23 @@ import os
 import signal
 import sys
 
-import gi
-gi.require_version("Vte", "2.91")  # noqa
-
-from gi.repository import GLib, Gio, Gtk, Gdk, Vte, Pango
-
 from . import logger
 from . import helpers
 from . import color_helpers
 from . import nautilus_accels_helpers
+
+import gi
+
+gi.require_version("Vte", "2.91")
+from gi.repository import GLib, Gio, Gtk, Gdk, Vte, Pango  # noqa: E402
 
 
 _EXPAND_WIDGETS = [
     "GtkOverlay",
     "NautilusCanvasView",
     "NautilusViewIconController",
-    "NautilusListView"]
+    "NautilusListView",
+]
 
 
 def _vte_terminal_feed_child(vte_terminal, text):
@@ -34,7 +35,9 @@ def _vte_terminal_feed_child(vte_terminal, text):
 def _find_nautilus_terminal_vpanel(crowbar):
     widget = crowbar
     while widget:
-        if widget.get_name() == "GtkVPaned" and hasattr(widget, "_nt_instance"):
+        if widget.get_name() == "GtkVPaned" and hasattr(
+            widget, "_nt_instance"
+        ):
             return widget
         widget = widget.get_parent()
     return None
@@ -60,22 +63,26 @@ def create_or_update_natilus_terminal(crowbar):
         return vpanel._nt_instance
 
     # New tab, a new Nautilus Terminal instance must be created
-    logger.log("No NautilusTerminal instance found (new tab): creating a new NautilusTerminal...")
+    logger.log(
+        "No NautilusTerminal instance found (new tab): creating a new NautilusTerminal..."
+    )
     nautilus_window_slot = _find_parent_widget(crowbar, "NautilusWindowSlot")
 
     if not nautilus_window_slot:
-        logger.warn("Unable to locate the NautilusWindowSlot widget: Nautilus Terminal will not be injected!")
+        logger.warn(
+            "Unable to locate the NautilusWindowSlot widget: Nautilus Terminal will not be injected!"
+        )
         return
 
     return NautilusTerminal(
         nautilus_window_slot,
         crowbar.nautilus_window,
         crowbar.nautilus_app,
-        crowbar.path)
+        crowbar.path,
+    )
 
 
 class NautilusTerminal(object):
-
     def __init__(self, parent_widget, nautilus_window, nautilus_app, cwd):
         self._parent_widget = parent_widget  # NautilusWindowSlot
         self._nautilus_window = nautilus_window
@@ -90,14 +97,18 @@ class NautilusTerminal(object):
 
         self._ui_vpanel = None
         self._ui_terminal = None
-        self._terminal_requested_visibility = self._settings.get_boolean("default-show-terminal")
+        self._terminal_requested_visibility = self._settings.get_boolean(
+            "default-show-terminal"
+        )
         self._terminal_bottom = self._settings.get_boolean("terminal-bottom")
         self._nterm_action_group = None
         self._ntermwin_action_group = None
         self._shell_pid = 0
         self._shell_killed = False
 
-        nautilus_accels_helpers.backup_nautilus_accels(nautilus_app, nautilus_window)
+        nautilus_accels_helpers.backup_nautilus_accels(
+            nautilus_app, nautilus_window
+        )
         self._build_and_inject_ui()
         self._build_actions()
         self._insert_ntermwin_action_group_in_current_window()
@@ -111,7 +122,9 @@ class NautilusTerminal(object):
         # "virtual" location (trash:///, network:///,...)
         # No cd & hide the Terminal
         if not path:
-            logger.log("NautilusTerminal.change_directory: terminal hidden: navigating to a \"virtual\" location")
+            logger.log(
+                'NautilusTerminal.change_directory: terminal hidden: navigating to a "virtual" location'
+            )
             self._ui_terminal.set_visible(False)
             return
 
@@ -119,12 +132,18 @@ class NautilusTerminal(object):
 
         # Makes the terminal visible again if it was hidden by navigating to a
         # "virtual" location
-        if self.get_terminal_visible() != self.get_terminal_requested_visibility():
+        if (
+            self.get_terminal_visible()
+            != self.get_terminal_requested_visibility()
+        ):
             self.set_terminal_visible(focus=False)
 
         # Do not navigate if the terminal is not visible
         if not self.get_terminal_visible():
-            logger.log("NautilusTerminal.change_directory: current directory NOT changed to %s (terminal not visible)" % path)
+            logger.log(
+                "NautilusTerminal.change_directory: current directory NOT changed to %s (terminal not visible)"
+                % path
+            )
             return
 
         # Do not "cd" if the shell's cwd is already the same as the targeted path
@@ -133,11 +152,19 @@ class NautilusTerminal(object):
 
         # Do not "cd" if the shell has something running in
         if self.shell_is_busy():
-            logger.log("NautilusTerminal.change_directory: current directory NOT changed to %s (shell busy)" % path)
+            logger.log(
+                "NautilusTerminal.change_directory: current directory NOT changed to %s (shell busy)"
+                % path
+            )
             return
 
-        logger.log("NautilusTerminal.change_directory: current directory changed to %s" % path)
-        self._inject_command(" cd %s" % helpers.escape_path_for_shell(self._cwd))
+        logger.log(
+            "NautilusTerminal.change_directory: current directory changed to %s"
+            % path
+        )
+        self._inject_command(
+            " cd %s" % helpers.escape_path_for_shell(self._cwd)
+        )
 
     def get_terminal_requested_visibility(self):
         """Does the user requested the terminal to be visible?
@@ -217,11 +244,17 @@ class NautilusTerminal(object):
         settings_font = self._settings.get_string("custom-font")
         self._ui_terminal.set_font(Pango.FontDescription(settings_font))
 
-        self._ui_terminal.connect("child-exited", self._on_terminal_child_existed)
+        self._ui_terminal.connect(
+            "child-exited", self._on_terminal_child_existed
+        )
         if self._terminal_bottom:
-            self._ui_vpanel.pack2(self._ui_terminal, resize=False, shrink=False)
+            self._ui_vpanel.pack2(
+                self._ui_terminal, resize=False, shrink=False
+            )
         else:
-            self._ui_vpanel.pack1(self._ui_terminal, resize=False, shrink=False)
+            self._ui_vpanel.pack1(
+                self._ui_terminal, resize=False, shrink=False
+            )
 
         TERMINAL_CHAR_HEIGHT = self._ui_terminal.get_char_height()
         TERMINAL_BORDER_WIDTH = 1
@@ -229,7 +262,9 @@ class NautilusTerminal(object):
 
         self._ui_terminal.set_property(
             "height-request",
-            TERMINAL_CHAR_HEIGHT * TERMINAL_MIN_HEIGHT + TERMINAL_BORDER_WIDTH * 2)
+            TERMINAL_CHAR_HEIGHT * TERMINAL_MIN_HEIGHT
+            + TERMINAL_BORDER_WIDTH * 2,
+        )
 
         # Terminal colors
 
@@ -245,25 +280,37 @@ class NautilusTerminal(object):
         if color_helpers.is_color(settings_bg_color):
             bg_color = color_helpers.parse_color_string(settings_bg_color)
 
-        self._ui_terminal.set_color_foreground(Gdk.RGBA(
-            fg_color[0] / 255.0,
-            fg_color[1] / 255.0,
-            fg_color[2] / 255.0,
-            1))
+        self._ui_terminal.set_color_foreground(
+            Gdk.RGBA(
+                fg_color[0] / 255.0,
+                fg_color[1] / 255.0,
+                fg_color[2] / 255.0,
+                1,
+            )
+        )
 
-        self._ui_terminal.set_color_background(Gdk.RGBA(
-            bg_color[0] / 255.0,
-            bg_color[1] / 255.0,
-            bg_color[2] / 255.0,
-            1))
+        self._ui_terminal.set_color_background(
+            Gdk.RGBA(
+                bg_color[0] / 255.0,
+                bg_color[1] / 255.0,
+                bg_color[2] / 255.0,
+                1,
+            )
+        )
 
         # File drag & drop support
 
         self._ui_terminal.drag_dest_set(
-            Gtk.DestDefaults.MOTION | Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP,
-            [Gtk.TargetEntry.new("text/uri-list", 0, 0)], Gdk.DragAction.COPY)
+            Gtk.DestDefaults.MOTION
+            | Gtk.DestDefaults.HIGHLIGHT
+            | Gtk.DestDefaults.DROP,
+            [Gtk.TargetEntry.new("text/uri-list", 0, 0)],
+            Gdk.DragAction.COPY,
+        )
         self._ui_terminal.drag_dest_add_uri_targets()
-        self._ui_terminal.connect("drag-data-received", self._on_terminal_drag_data_received)
+        self._ui_terminal.connect(
+            "drag-data-received", self._on_terminal_drag_data_received
+        )
 
         # Disabling Nautilus' accels when the terminal is focused:
         #
@@ -273,9 +320,12 @@ class NautilusTerminal(object):
         # accels are called). Of course we have also to restore the accels when
         # the terminal is no more focused.
 
-        self._ui_terminal.connect("focus-in-event", self._on_terminal_focus_in_event)
-        self._ui_terminal.connect("focus-out-event", self._on_terminal_focus_out_event)
-
+        self._ui_terminal.connect(
+            "focus-in-event", self._on_terminal_focus_in_event
+        )
+        self._ui_terminal.connect(
+            "focus-out-event", self._on_terminal_focus_out_event
+        )
         # Register the window-level action group of the currently displayed
         # terminal
         #
@@ -284,7 +334,9 @@ class NautilusTerminal(object):
         # properly. The "map" event of the NautilusWindowSlot (our parent
         # widget) is called when its tab become active.
 
-        self._parent_widget.connect("map", self._on_nautilus_window_slot_mapped)
+        self._parent_widget.connect(
+            "map", self._on_nautilus_window_slot_mapped
+        )
 
         # Kill the shell when the tab is closed:
         #
@@ -302,13 +354,19 @@ class NautilusTerminal(object):
         #   "realize" event is emitted right after. So we have to spawn a new
         #   shell if that happen...
 
-        self._parent_widget.connect("unrealize", self._on_nautilus_window_slot_unrealized)
-        self._parent_widget.connect("realize", self._on_nautilus_window_slot_realized)
+        self._parent_widget.connect(
+            "unrealize", self._on_nautilus_window_slot_unrealized
+        )
+        self._parent_widget.connect(
+            "realize", self._on_nautilus_window_slot_realized
+        )
 
     def _build_actions(self):
         # nterm action group
         self._nterm_action_group = Gio.SimpleActionGroup()
-        self._ui_terminal.insert_action_group("nterm", self._nterm_action_group)
+        self._ui_terminal.insert_action_group(
+            "nterm", self._nterm_action_group
+        )
 
         copy_action = Gio.SimpleAction(name="copy")
         copy_action.connect("activate", self._on_nterm_copy_action_activated)
@@ -322,44 +380,70 @@ class NautilusTerminal(object):
         self._ntermwin_action_group = Gio.SimpleActionGroup()
 
         terminal_visible_action = Gio.SimpleAction(name="terminal-visible")
-        terminal_visible_action.connect("activate", self._on_ntermwin_terminal_visible_action_activated)
+        terminal_visible_action.connect(
+            "activate", self._on_ntermwin_terminal_visible_action_activated
+        )
         self._ntermwin_action_group.add_action(terminal_visible_action)
 
     def _insert_ntermwin_action_group_in_current_window(self):
-        self._nautilus_window.insert_action_group("ntermwin", self._ntermwin_action_group)
+        self._nautilus_window.insert_action_group(
+            "ntermwin", self._ntermwin_action_group
+        )
 
     def _build_accels(self):
         # nterm
-        self._nautilus_app.set_accels_for_action("nterm.copy", ["<Primary><Shift>c"])
-        self._nautilus_app.set_accels_for_action("nterm.paste", ["<Primary><Shift>v"])
+        self._nautilus_app.set_accels_for_action(
+            "nterm.copy", ["<Primary><Shift>c"]
+        )
+        self._nautilus_app.set_accels_for_action(
+            "nterm.paste", ["<Primary><Shift>v"]
+        )
 
         # ntermwin
         accel = self._settings.get_string("toggle-shortcut")
-        self._nautilus_app.set_accels_for_action("ntermwin.terminal-visible", [accel])
+        self._nautilus_app.set_accels_for_action(
+            "ntermwin.terminal-visible", [accel]
+        )
 
     def _spawn_shell(self):
         if self._shell_pid:
-            logger.warn("NautilusTerminal._spawn_shell: Cannot spawn a new shell: there is already a shell running.")
+            logger.warn(
+                "NautilusTerminal._spawn_shell: Cannot spawn a new shell: there is already a shell running."
+            )
             return
         shell = helpers.get_user_default_shell()
         if self._settings.get_boolean("use-custom-command"):
             shell = self._settings.get_string("custom-command")
         _, self._shell_pid = self._ui_terminal.spawn_sync(
-            Vte.PtyFlags.DEFAULT, self._cwd, [shell],
-            None, GLib.SpawnFlags.SEARCH_PATH, None, None)
+            Vte.PtyFlags.DEFAULT,
+            self._cwd,
+            [shell],
+            None,
+            GLib.SpawnFlags.SEARCH_PATH,
+            None,
+            None,
+        )
         self._shell_killed = False
-        logger.log("NautilusTerminal._spawn_shell: Shell spawned (%s), PID: %i." % (shell, self._shell_pid))
+        logger.log(
+            "NautilusTerminal._spawn_shell: Shell spawned (%s), PID: %i."
+            % (shell, self._shell_pid)
+        )
 
     def _kill_shell(self):
         if not self._shell_pid:
-            logger.warn("NautilusTerminal._kill_shell: Cannot kill the shell: there is no shell to kill...")
+            logger.warn(
+                "NautilusTerminal._kill_shell: Cannot kill the shell: there is no shell to kill..."
+            )
             return
         self._shell_killed = True
         try:
             os.kill(self._shell_pid, signal.SIGTERM)
             os.kill(self._shell_pid, signal.SIGKILL)
         except OSError:
-            logger.error("NautilusTerminal._kill_shell: An error occured when killing the shell %i" % self._shell_pid)
+            logger.error(
+                "NautilusTerminal._kill_shell: An error occured when killing the shell %i"
+                % self._shell_pid
+            )
             self._shell_pid = 0
         logger.log("Shell %i killed." % self._shell_pid)
         self._shell_pid = 0
@@ -369,7 +453,10 @@ class NautilusTerminal(object):
         self._insert_ntermwin_action_group_in_current_window()
 
     def _on_nautilus_window_slot_unrealized(self, widget):
-        logger.log("The tab have (probably) been closed: killing the shell %i" % self._shell_pid)
+        logger.log(
+            "The tab have (probably) been closed: killing the shell %i"
+            % self._shell_pid
+        )
         self._kill_shell()
         self._nautilus_window = None
 
@@ -390,7 +477,9 @@ class NautilusTerminal(object):
         if not self._shell_killed:
             self._spawn_shell()
 
-    def _on_terminal_drag_data_received(self, widget, context, x, y, data, info, time):
+    def _on_terminal_drag_data_received(
+        self, widget, context, x, y, data, info, time
+    ):
         for uri in data.get_uris():
             path = helpers.escape_path_for_shell(helpers.gvfs_uri_to_path(uri))
             _vte_terminal_feed_child(self._ui_terminal, "%s " % path)
@@ -404,6 +493,8 @@ class NautilusTerminal(object):
         logger.log("nterm.paste action activated")
         self._ui_terminal.paste_clipboard()
 
-    def _on_ntermwin_terminal_visible_action_activated(self, action, parameter):
+    def _on_ntermwin_terminal_visible_action_activated(
+        self, action, parameter
+    ):
         logger.log("ntermwin.terminal-visible action activated")
         self.set_terminal_visible(not self.get_terminal_visible())

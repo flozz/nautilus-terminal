@@ -7,6 +7,7 @@ from setuptools.command.install import install as _install
 
 from nautilus_terminal import VERSION
 
+
 class install(_install):
     def run(self):
         _install.run(self)
@@ -16,7 +17,9 @@ class install(_install):
         # in setuptools is a bug, not a feature.
         print("== Installing Nautilus Python extension...")
         src_file = "nautilus_terminal/nautilus_terminal_extension.py"
-        dst_dir = os.path.join(self.install_data, "share/nautilus-python/extensions")
+        dst_dir = os.path.join(
+            self.install_data, "share/nautilus-python/extensions"
+        )
         self.mkpath(dst_dir)
         dst_file = os.path.join(dst_dir, os.path.basename(src_file))
         self.copy_file(src_file, dst_file)
@@ -28,7 +31,9 @@ class install(_install):
         self.mkpath(dst_dir)
         dst_file = os.path.join(dst_dir, os.path.basename(src_file))
         self.copy_file(src_file, dst_file)
-        print("== Done! Run 'glib-compile-schemas /usr/share/glib-2.0/schemas/' for a global installation to compile the schema.")
+        print(
+            "== Done! Run 'glib-compile-schemas /usr/share/glib-2.0/schemas/' for a global installation to compile the schema."
+        )
 
 
 long_description = ""
@@ -44,27 +49,21 @@ setup(
     description="A terminal embedded in Nautilus, the GNOME's file browser",
     url="https://github.com/flozz/nautilus-terminal",
     license="GPL-3.0",
-
     long_description=long_description,
-
     author="Fabien LOISON",
-
     keywords="nautilus extension terminal gnome",
     platforms=["Linux", "BSD"],
-
     packages=find_packages(),
     include_package_data=True,
-
     install_requires=[
         "psutil>=5.6.6",
     ],
-
     extras_require={
         "dev": [
-            "flake8",
             "nox",
+            "flake8",
+            "black",
         ],
     },
-
-    cmdclass={"install": install}
+    cmdclass={"install": install},
 )

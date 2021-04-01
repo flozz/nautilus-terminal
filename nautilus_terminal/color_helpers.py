@@ -6,6 +6,7 @@ This module contains varous helper functions related to color.
 import re
 
 
+# fmt: off
 NAMED_COLORS = {
     "white":   (0xFF, 0xFF, 0xFF),
     "silver":  (0xC0, 0xC0, 0xC0),
@@ -24,6 +25,7 @@ NAMED_COLORS = {
     "fuchsia": (0xFF, 0x00, 0xFF),
     "purple":  (0x80, 0x00, 0x80),
 }
+# fmt: on
 
 
 def is_color(string):
@@ -91,5 +93,5 @@ def parse_color_string(color):
     return (
         int(color[0:2], 16),
         int(color[2:4], 16),
-        int(color[4:], 16)
+        int(color[4:], 16),
     )

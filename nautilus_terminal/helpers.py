@@ -60,7 +60,8 @@ def get_settings(schema_id, schemas_directory=None):
 
     if schemas_directory:
         source = Gio.SettingsSchemaSource.new_from_directory(
-            schemas_directory, Gio.SettingsSchemaSource.get_default(), True)
+            schemas_directory, Gio.SettingsSchemaSource.get_default(), True
+        )
         schema = source.lookup(schema_id, True)
         settings = Gio.Settings.new_full(schema, None, None)
         return settings

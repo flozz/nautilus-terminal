@@ -29,7 +29,8 @@ else:
     print("* Starting Nautilus Terminal")
 
 
-class NautilusTerminalLocationWidgetProvider(GObject.GObject, Nautilus.LocationWidgetProvider):
-
+class NautilusTerminalLocationWidgetProvider(
+    GObject.GObject, Nautilus.LocationWidgetProvider
+):
     def get_widget(self, uri, window):
         return Crowbar(uri, window)

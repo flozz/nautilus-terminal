@@ -6,7 +6,6 @@ from .nautilus_terminal import create_or_update_natilus_terminal
 
 
 class Crowbar(Gtk.EventBox):
-
     def __init__(self, uri, window):
         super(Crowbar, self).__init__()
 

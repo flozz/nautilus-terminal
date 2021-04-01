@@ -25,7 +25,7 @@ jobs:
       run: |
         pip3 install setuptools
         pip3 install nox
-    - name: Lint with flake8
+    - name: Lint with Flake8 and Black
       run: |
         python3 -m nox --session lint
     - name: Test with doctest

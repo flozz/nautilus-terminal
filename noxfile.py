@@ -1,12 +1,22 @@
 import nox
 
 
-@nox.session
+PYTHON_FILES = [
+    "nautilus_terminal",
+    "noxfile.py",
+    "setup.py",
+]
+
+
+@nox.session(reuse_venv=True)
 def lint(session):
-    session.install("flake8")
-    session.run("flake8", "--ignore", "E241,E402,E501", "nautilus_terminal", "noxfile.py")
+    session.install("flake8", "black")
+    session.run("flake8", *PYTHON_FILES)
+    session.run("black", "--check", *PYTHON_FILES)
 
 
-@nox.session(python=["3.6", "3.7", "3.8", "3.9"])
+@nox.session(python=["3.6", "3.7", "3.8", "3.9"], reuse_venv=True)
 def test(session):
-    session.run("python", "-m", "doctest", "./nautilus_terminal/color_helpers.py")
+    session.run(
+        "python", "-m", "doctest", "./nautilus_terminal/color_helpers.py"
+    )
