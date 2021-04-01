@@ -15,7 +15,7 @@ def lint(session):
     session.run("black", "--check", *PYTHON_FILES)
 
 
-@nox.session(python=["3.6", "3.7", "3.8", "3.9"], reuse_venv=True)
+@nox.session(python=["3.7", "3.8", "3.9"], reuse_venv=True)
 def test(session):
     session.run(
         "python", "-m", "doctest", "./nautilus_terminal/color_helpers.py"
