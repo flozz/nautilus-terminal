@@ -100,6 +100,9 @@ class NautilusTerminal(object):
         self._terminal_requested_visibility = self._settings.get_boolean(
             "default-show-terminal"
         )
+        self._terminal_focus_on_init = self._settings.get_boolean(
+            "default-focus-terminal"
+        )
         self._terminal_bottom = self._settings.get_boolean("terminal-bottom")
         self._nterm_action_group = None
         self._ntermwin_action_group = None
@@ -116,7 +119,7 @@ class NautilusTerminal(object):
 
         # Set if the terminal should be visible by default.
         # Will spawn the shell automatically if the terminal is visible
-        self.set_terminal_visible(self._terminal_requested_visibility)
+        self.set_terminal_visible(self._terminal_requested_visibility, self._terminal_focus_on_init)
 
     def change_directory(self, path):
         # "virtual" location (trash:///, network:///,...)

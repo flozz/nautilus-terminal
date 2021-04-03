@@ -46,5 +46,10 @@
       <summary>A Pango font description</summary>
       <description>String representation of a Pango font description (e.g. "DejaVu Sans Mono 10")</description>
     </key>
+    <key name="default-focus-terminal" type="b">
+      <default>false</default>
+      <summary>Is Nautilus Terminal focused in new Nautilus windows</summary>
+      <description>Enabled "default-show-terminal" is required</description>
+    </key>
   </schema>
 </schemalist>
