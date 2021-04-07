@@ -181,7 +181,6 @@ class NautilusTerminal(object):
         if self.get_auto_clean() == 1:
             self._emit_key_press("l", Gdk.ModifierType.CONTROL_MASK)
 
-
     def stash_current_termianl_content(self):
         # move to the end of line in terminal
         self._emit_key_press("e", Gdk.ModifierType.CONTROL_MASK)
