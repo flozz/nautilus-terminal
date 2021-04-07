@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
+  <enum id="org.flozz.nautilus-terminal.clean-mode">
+    <value nick="Off" value="0"/>
+    <value nick="Ctrl+L shortcut" value="1"/>
+    <value nick="clear command" value="2"/>
+  </enum>
   <schema id="org.flozz.nautilus-terminal" path="/org/flozz/nautilus-terminal/">
     <key name="default-show-terminal" type="b">
       <default>true</default>
@@ -50,6 +55,14 @@
       <default>false</default>
       <summary>Is Nautilus Terminal focused in new Nautilus windows</summary>
       <description>Enabled "default-show-terminal" is required</description>
+    </key>
+    <key name="auto-clean" enum="org.flozz.nautilus-terminal.clean-mode">
+      <default>'Off'</default>
+      <summary>Automaitly clean terminal after each 'cd' command</summary>
+      <description>
+        Ctrl+L shortcut - clears terminal screen keeping scrollback
+        clear command - clears terminal including scrollback
+      </description>
     </key>
   </schema>
 </schemalist>

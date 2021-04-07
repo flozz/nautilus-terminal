@@ -104,6 +104,7 @@ class NautilusTerminal(object):
             "default-focus-terminal"
         )
         self._terminal_bottom = self._settings.get_boolean("terminal-bottom")
+        self._auto_clean = self._settings.get_enum("auto-clean")
         self._nterm_action_group = None
         self._ntermwin_action_group = None
         self._shell_pid = 0
@@ -167,9 +168,28 @@ class NautilusTerminal(object):
             "NautilusTerminal.change_directory: current directory changed to %s"
             % path
         )
-        self._inject_command(
-            " cd %s" % helpers.escape_path_for_shell(self._cwd)
-        )
+
+        command = " cd %s" % helpers.escape_path_for_shell(self._cwd)
+        if self.get_auto_clean() == 2:
+            command += " && clear "
+
+        # Cut current user input to clipboard
+        self.stash_current_termianl_content()
+
+        self._inject_command(command)
+
+        if self.get_auto_clean() == 1:
+            self._emit_key_press("l", Gdk.ModifierType.CONTROL_MASK)
+
+
+    def stash_current_termianl_content(self):
+        # move to the end of line in terminal
+        self._emit_key_press("e", Gdk.ModifierType.CONTROL_MASK)
+        # cut all content in line to the left
+        self._emit_key_press("u", Gdk.ModifierType.CONTROL_MASK)
+
+    def get_auto_clean(self):
+        return self._auto_clean
 
     def get_terminal_requested_visibility(self):
         """Does the user requested the terminal to be visible?
@@ -210,6 +230,14 @@ class NautilusTerminal(object):
     def _inject_command(self, command):
         logger.log("NautilusTerminal._inject_command: %s" % command)
         _vte_terminal_feed_child(self._ui_terminal, "%s\n" % command)
+
+    def _emit_key_press(self, key, state=0):
+        event = Gdk.Event().new(Gdk.EventType.KEY_PRESS)
+        event.state = state
+        event.keyval = Gdk.keyval_from_name(key)
+        event.window = self._ui_terminal.get_window()
+        event.send_event = True
+        self._ui_terminal.emit("key-press-event", event)
 
     def update_ui(self):
         for widget in self._parent_widget:
