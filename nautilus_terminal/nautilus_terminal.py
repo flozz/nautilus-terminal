@@ -19,7 +19,8 @@ _EXPAND_WIDGETS = [
     "NautilusViewIconController",
     "NautilusListView",
 ]
-
+_AUTO_CLEAN_SOFT = 1
+_AUTO_CLEAN_HARD = 2
 
 def _vte_terminal_feed_child(vte_terminal, text):
     if sys.version_info.major >= 3:
@@ -169,16 +170,16 @@ class NautilusTerminal(object):
             % path
         )
 
-        command = " cd %s" % helpers.escape_path_for_shell(self._cwd)
-        if self.get_auto_clean() == 2:
-            command += " && clear "
+        command = " cd %s " % helpers.escape_path_for_shell(self._cwd)
+        if self.get_auto_clean() == _AUTO_CLEAN_HARD:
+            command += "&& clear "
 
         # Cut current user input to clipboard
         self.stash_current_termianl_content()
 
         self._inject_command(command)
 
-        if self.get_auto_clean() == 1:
+        if self.get_auto_clean() == _AUTO_CLEAN_SOFT:
             self._emit_key_press("l", Gdk.ModifierType.CONTROL_MASK)
 
     def stash_current_termianl_content(self):

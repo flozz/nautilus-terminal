@@ -2,8 +2,8 @@
 <schemalist>
   <enum id="org.flozz.nautilus-terminal.clean-mode">
     <value nick="Off" value="0"/>
-    <value nick="Ctrl+L shortcut" value="1"/>
-    <value nick="clear command" value="2"/>
+    <value nick="Soft" value="1"/>
+    <value nick="Hard" value="2"/>
   </enum>
   <schema id="org.flozz.nautilus-terminal" path="/org/flozz/nautilus-terminal/">
     <key name="default-show-terminal" type="b">
@@ -60,8 +60,9 @@
       <default>'Off'</default>
       <summary>Automaitly clean terminal after each 'cd' command</summary>
       <description>
-        Ctrl+L shortcut - clears terminal screen keeping scrollback
-        clear command - clears terminal including scrollback
+        Soft Mode - clears terminal screen keeping scrollback (like Ctrl+L shortcut)  
+
+        Hard Mode - clears terminal including scrollback (like command 'clear')
       </description>
     </key>
   </schema>
