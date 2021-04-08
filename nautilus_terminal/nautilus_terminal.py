@@ -22,6 +22,7 @@ _EXPAND_WIDGETS = [
 _AUTO_CLEAN_SOFT = 1
 _AUTO_CLEAN_HARD = 2
 
+
 def _vte_terminal_feed_child(vte_terminal, text):
     if sys.version_info.major >= 3:
         text = text.encode("utf-8")
@@ -106,6 +107,9 @@ class NautilusTerminal(object):
         )
         self._terminal_bottom = self._settings.get_boolean("terminal-bottom")
         self._auto_clean = self._settings.get_enum("auto-clean")
+        self._auto_cut_user_input = self._settings.get_boolean(
+            "auto-cut-user-input"
+        )
         self._nterm_action_group = None
         self._ntermwin_action_group = None
         self._shell_pid = 0
@@ -174,8 +178,8 @@ class NautilusTerminal(object):
         if self.get_auto_clean() == _AUTO_CLEAN_HARD:
             command += "&& clear "
 
-        # Cut current user input to clipboard
-        self.stash_current_termianl_content()
+        if self.get_auto_cut_user_input():
+            self.stash_current_termianl_content()
 
         self._inject_command(command)
 
@@ -187,6 +191,9 @@ class NautilusTerminal(object):
         self._emit_key_press("e", Gdk.ModifierType.CONTROL_MASK)
         # cut all content in line to the left
         self._emit_key_press("u", Gdk.ModifierType.CONTROL_MASK)
+
+    def get_auto_cut_user_input(self):
+        return self._auto_cut_user_input
 
     def get_auto_clean(self):
         return self._auto_clean

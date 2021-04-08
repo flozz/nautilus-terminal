@@ -60,10 +60,15 @@
       <default>'Off'</default>
       <summary>Automaitly clean terminal after each 'cd' command</summary>
       <description>
-        Soft Mode - clears terminal screen keeping scrollback (like Ctrl+L shortcut)  
+        Soft Mode - clears terminal screen keeping scrollback (like Ctrl+l shortcut).
 
-        Hard Mode - clears terminal including scrollback (like command 'clear')
+        Hard Mode - clears terminal including scrollback (like command 'clear').
       </description>
+    </key>
+    <key name="auto-cut-user-input" type="b">
+      <default>true</default>
+      <summary>Automaitly cut user input from terminal before applying 'cd' command</summary>
+      <description>This feature uses Ctrl+e and Ctrl+u shortcuts to remove user input. This won't work in vi-mode and may be incompatible with some shells.</description>
     </key>
   </schema>
 </schemalist>
