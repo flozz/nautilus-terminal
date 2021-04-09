@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
+  <enum id="org.flozz.nautilus-terminal.clean-mode">
+    <value nick="Off" value="0"/>
+    <value nick="Soft" value="1"/>
+    <value nick="Hard" value="2"/>
+  </enum>
   <schema id="org.flozz.nautilus-terminal" path="/org/flozz/nautilus-terminal/">
     <key name="default-show-terminal" type="b">
       <default>true</default>
@@ -50,6 +55,20 @@
       <default>false</default>
       <summary>Is Nautilus Terminal focused in new Nautilus windows</summary>
       <description>Enabled "default-show-terminal" is required</description>
+    </key>
+    <key name="auto-clean" enum="org.flozz.nautilus-terminal.clean-mode">
+      <default>'Off'</default>
+      <summary>Automaitly clean terminal after each 'cd' command</summary>
+      <description>
+        Soft Mode - clears terminal screen keeping scrollback (like Ctrl+l shortcut).
+
+        Hard Mode - clears terminal including scrollback (like command 'clear').
+      </description>
+    </key>
+    <key name="auto-cut-user-input" type="b">
+      <default>true</default>
+      <summary>Automaitly cut user input from terminal before applying 'cd' command</summary>
+      <description>This feature uses Ctrl+e and Ctrl+u shortcuts to remove user input. This won't work in vi-mode and may be incompatible with some shells.</description>
     </key>
   </schema>
 </schemalist>
