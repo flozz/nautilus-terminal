@@ -417,6 +417,12 @@ class NautilusTerminal(object):
         )
         self._ui_menu.add(menu_item)
 
+        self._ui_menu.add(Gtk.SeparatorMenuItem())
+
+        menu_item = Gtk.ImageMenuItem.new_from_stock("gtk-preferences", None)
+        menu_item.connect_after("activate", self._on_menu_preferences_activate)
+        self._ui_menu.add(menu_item)
+
         self._ui_menu.show_all()
         self._ui_terminal.connect(
             "button-release-event", self._on_terminal_popup_menu
@@ -550,6 +556,9 @@ class NautilusTerminal(object):
         if event.type == Gdk.EventType.BUTTON_RELEASE and event.button != 3:
             return
         self._ui_menu.popup(None, None, None, None, 3, 0)
+
+    def _on_menu_preferences_activate(self, widget):
+        self._inject_command("dconf-editor /org/flozz/nautilus-terminal")
 
     def _on_nterm_copy_action_activated(self, action, parameter):
         logger.log("nterm.copy action activated")
