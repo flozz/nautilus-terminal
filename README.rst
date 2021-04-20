@@ -16,6 +16,9 @@ Terminal plugin <https://launchpad.net/nautilus-terminal>`__.
 **NOTE²:** This is an early development version, this software can sometime
 crash Nautilus.
 
+.. figure:: https://raw.githubusercontent.com/flozz/nautilus-terminal/master/screenshot.png
+   :alt: Nautilus Terminal Screenshot
+
 **Features:**
 
 * Embed a Terminal in each Nautilus tab / window,
@@ -38,9 +41,6 @@ crash Nautilus.
   (``python-nautilus`` or ``python3-nautilus`` package on Debian /
   Ubuntu)
 * `psutil <https://pypi.python.org/pypi/psutil/>`__
-
-.. figure:: https://raw.githubusercontent.com/flozz/nautilus-terminal/master/screenshot.png
-   :alt: Nautilus Terminal Screenshot
 
 If you want to read more about this project and its history, I wrote an
 article on my blog (it is in French, but Google Translate should help) :
@@ -291,7 +291,7 @@ License GPLv3
 ::
 
    Nautilus Terminal - A terminal embedded in the Nautilus file browser
-   Copyright (C) 2010-2020  Fabien LOISON <http://www.flozz.fr/>
+   Copyright (C) 2010-2021  Fabien LOISON <http://www.flozz.fr/>
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
