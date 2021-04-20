@@ -401,6 +401,27 @@ class NautilusTerminal(object):
             "realize", self._on_nautilus_window_slot_realized
         )
 
+        # Terminal Context Menu
+
+        self._ui_menu = Gtk.Menu()
+
+        menu_item = Gtk.ImageMenuItem.new_from_stock("gtk-copy", None)
+        menu_item.connect_after(
+            "activate", lambda w: self._ui_terminal.copy_clipboard()
+        )
+        self._ui_menu.add(menu_item)
+
+        menu_item = Gtk.ImageMenuItem.new_from_stock("gtk-paste", None)
+        menu_item.connect_after(
+            "activate", lambda w: self._ui_terminal.paste_clipboard()
+        )
+        self._ui_menu.add(menu_item)
+
+        self._ui_menu.show_all()
+        self._ui_terminal.connect(
+            "button-release-event", self._on_terminal_popup_menu
+        )
+
     def _build_actions(self):
         # nterm action group
         self._nterm_action_group = Gio.SimpleActionGroup()
@@ -524,6 +545,11 @@ class NautilusTerminal(object):
             path = helpers.escape_path_for_shell(helpers.gvfs_uri_to_path(uri))
             _vte_terminal_feed_child(self._ui_terminal, "%s " % path)
         self._ui_terminal.grab_focus()
+
+    def _on_terminal_popup_menu(self, widget, event):
+        if event.type == Gdk.EventType.BUTTON_RELEASE and event.button != 3:
+            return
+        self._ui_menu.popup(None, None, None, None, 3, 0)
 
     def _on_nterm_copy_action_activated(self, action, parameter):
         logger.log("nterm.copy action activated")
