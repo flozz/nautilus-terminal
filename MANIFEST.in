@@ -2,3 +2,4 @@ include README.md
 include README.rst
 include nautilus_terminal/schemas/org.flozz.nautilus-terminal.gschema.xml
 include nautilus_terminal/schemas/gschemas.compiled
+include nautilus_terminal/images/nautilus-terminal-logo.svg

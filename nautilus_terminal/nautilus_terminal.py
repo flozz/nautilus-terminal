@@ -6,6 +6,7 @@ from . import logger
 from . import helpers
 from . import color_helpers
 from . import nautilus_accels_helpers
+from .about_dialog import AboutDialog
 
 import gi
 
@@ -423,6 +424,10 @@ class NautilusTerminal(object):
         menu_item.connect_after("activate", self._on_menu_preferences_activate)
         self._ui_menu.add(menu_item)
 
+        menu_item = Gtk.ImageMenuItem.new_from_stock("gtk-about", None)
+        menu_item.connect_after("activate", self._on_menu_about_activate)
+        self._ui_menu.add(menu_item)
+
         self._ui_menu.show_all()
         self._ui_terminal.connect(
             "button-release-event", self._on_terminal_popup_menu
@@ -559,6 +564,11 @@ class NautilusTerminal(object):
 
     def _on_menu_preferences_activate(self, widget):
         self._inject_command("dconf-editor /org/flozz/nautilus-terminal")
+
+    def _on_menu_about_activate(self, widget):
+        about_dialog = AboutDialog(parent=self._nautilus_window)
+        about_dialog.run()
+        about_dialog.destroy()
 
     def _on_nterm_copy_action_activated(self, action, parameter):
         logger.log("nterm.copy action activated")
