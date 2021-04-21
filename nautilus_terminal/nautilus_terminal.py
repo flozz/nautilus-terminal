@@ -162,14 +162,6 @@ class NautilusTerminal(object):
         if helpers.get_process_cwd(self._shell_pid) == path:
             return
 
-        # Do not "cd" if the shell has something running in
-        if self.shell_is_busy():
-            logger.log(
-                "NautilusTerminal.change_directory: current directory NOT changed to %s (shell busy)"
-                % path
-            )
-            return
-
         logger.log(
             "NautilusTerminal.change_directory: current directory changed to %s"
             % path
@@ -178,9 +170,6 @@ class NautilusTerminal(object):
         command = " cd %s " % helpers.escape_path_for_shell(self._cwd)
         if self.get_auto_clean() == _AUTO_CLEAN_HARD:
             command += "&& clear "
-
-        if self.get_auto_cut_user_input():
-            self.stash_current_termianl_content()
 
         self._inject_command(command)
 
@@ -236,7 +225,19 @@ class NautilusTerminal(object):
         return helpers.process_has_child(self._shell_pid)
 
     def _inject_command(self, command):
+        # Do not inject the command if the shell has something running in
+        if self.shell_is_busy():
+            logger.warn(
+                "NautilusTerminal._inject_command: command '%s' not injected (shell busy)"
+                % command
+            )
+            return
         logger.log("NautilusTerminal._inject_command: %s" % command)
+
+        # Remove any user inputs before injecting the command
+        if self.get_auto_cut_user_input():
+            self.stash_current_termianl_content()
+
         _vte_terminal_feed_child(self._ui_terminal, "%s\n" % command)
 
     def _emit_key_press(self, key, state=0):
