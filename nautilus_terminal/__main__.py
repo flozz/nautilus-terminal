@@ -37,8 +37,20 @@ class CheckExtensionAction(argparse.Action):
             result += "    https://github.com/flozz/nautilus-terminal\n"
 
         result += "\x1B[1mNautilus Terminal Extension:\x1B[0m "
-        if is_system_extension_installed() or is_user_extension_installed():
+        if (
+            is_system_extension_installed()
+            and not is_user_extension_installed()
+        ) or (
+            not is_system_extension_installed()
+            and is_user_extension_installed()
+        ):
             result += "\x1B[1;32mInstalled\x1B[0m\n"
+        elif is_system_extension_installed() and is_user_extension_installed():
+            result += "\x1B[1;31mError\x1B[0m\n"
+            result += "    Nautilus Terminal extension is installed twice...\n"
+            result += "    Please remove one of the installed extentions using one of the following commands:\n"
+            result += "    \x1B[1;34mSystem-wide:\x1B[0m sudo nautilus-terminal --uninstall-system\n"
+            result += "    \x1B[1;34mCurrent user:\x1B[0m nautilus-terminal --uninstall-user\n"
         else:
             retcode = 1
             result += "\x1B[1;31mAbsent\x1B[0m\n"

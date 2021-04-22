@@ -1,6 +1,7 @@
 import os
 import sys
 
+ROOT = os.path.abspath(os.path.dirname(__file__))
 
 EXTENSION_FILE = "nautilus_terminal_extension.py"
 SYSTEM_EXTENSION_DIR = "/usr/share/nautilus-python/extensions"
@@ -14,12 +15,18 @@ GLIB_COMPILE_SCHEMA = "/usr/bin/glib-compile-schemas"
 
 
 def is_system_extension_installed():
-    return os.path.isfile(os.path.join(SYSTEM_EXTENSION_DIR, EXTENSION_FILE))
+    return os.path.isfile(
+        os.path.join(SYSTEM_EXTENSION_DIR, EXTENSION_FILE)
+    ) or os.path.isfile(
+        os.path.join(SYSTEM_EXTENSION_DIR, EXTENSION_FILE + "c")  # .pyc
+    )
 
 
 def is_user_extension_installed():
     return os.path.isfile(
         os.path.join(CURRENT_USER_EXTENSION_DIR, EXTENSION_FILE)
+    ) or os.path.isfile(
+        os.path.join(CURRENT_USER_EXTENSION_DIR, EXTENSION_FILE + "c")  # .pyc
     )
 
 
