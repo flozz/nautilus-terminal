@@ -24,6 +24,12 @@ class CheckExtensionAction(argparse.Action):
     """Check if the Nautilus extension is properly installed and exit."""
 
     def __call__(self, parser, namespace, value, option_string=None):
+        if os.getuid() == 0:
+            print(
+                "E: You must run nautilus-terminal as regular user to perform an installation check."
+            )
+            sys.exit(1)
+
         result = ""
         retcode = 0
 
@@ -41,11 +47,12 @@ class CheckExtensionAction(argparse.Action):
             is_system_extension_installed()
             and not is_user_extension_installed()
         ) or (
-            not is_system_extension_installed()
-            and is_user_extension_installed()
+            is_user_extension_installed()
+            and not is_system_extension_installed()
         ):
             result += "\x1B[1;32mInstalled\x1B[0m\n"
         elif is_system_extension_installed() and is_user_extension_installed():
+            retcode = 1
             result += "\x1B[1;31mError\x1B[0m\n"
             result += "    Nautilus Terminal extension is installed twice...\n"
             result += "    Please remove one of the installed extentions using one of the following commands:\n"
