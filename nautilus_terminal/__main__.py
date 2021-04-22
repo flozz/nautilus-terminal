@@ -1,3 +1,4 @@
+import os
 import sys
 import argparse
 
@@ -5,6 +6,8 @@ from .debug import get_debug_info
 from .install_nautilus_extension import is_system_extension_installed
 from .install_nautilus_extension import is_user_extension_installed
 from .install_nautilus_extension import is_nautilus_python_installed
+from .install_nautilus_extension import install_system
+from .install_nautilus_extension import uninstall_system
 
 
 _EPILOG = """
@@ -69,6 +72,32 @@ class CheckExtensionAction(argparse.Action):
         sys.exit(retcode)
 
 
+class InstallSystemAction(argparse.Action):
+    """Install Nautilus Terminal extention system-wide and exit."""
+
+    def __call__(self, parser, namespace, value, option_string=None):
+        if os.getuid() != 0:
+            print(
+                "E: You must run nautilus-terminal as root to perform a system-wide installation."
+            )
+            sys.exit(1)
+        install_system()
+        sys.exit(0)
+
+
+class UninstallSystemAction(argparse.Action):
+    """Uninstall Nautilus Terminal extention system-wide and exit."""
+
+    def __call__(self, parser, namespace, value, option_string=None):
+        if os.getuid() != 0:
+            print(
+                "E: You must run nautilus-terminal as root to perform a system-wide removal."
+            )
+            sys.exit(1)
+        uninstall_system()
+        sys.exit(0)
+
+
 def main(args=sys.argv[1:]):
     cli_parser = argparse.ArgumentParser(
         prog="nautilus-terminal",
@@ -87,6 +116,20 @@ def main(args=sys.argv[1:]):
         help="Check if the Nautilus extension is properly installed and exit",
         nargs=0,
         action=CheckExtensionAction,
+    )
+
+    cli_parser.add_argument(
+        "--install-system",
+        help="Install Nautilus Terminal extention system-wide and exit",
+        nargs=0,
+        action=InstallSystemAction,
+    )
+
+    cli_parser.add_argument(
+        "--uninstall-system",
+        help="Uninstall Nautilus Terminal extention system-wide and exit",
+        nargs=0,
+        action=UninstallSystemAction,
     )
 
     if len(args) == 0:

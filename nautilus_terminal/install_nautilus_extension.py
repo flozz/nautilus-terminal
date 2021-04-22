@@ -1,5 +1,5 @@
 import os
-import sys
+import shutil
 
 ROOT = os.path.abspath(os.path.dirname(__file__))
 
@@ -47,12 +47,13 @@ def install_system():
 
        This must be run as root!
     """
-    if os.getuid() != 0:
-        print(
-            "E: You must run nautilus-terminal as root to perform a system-wide installation."
-        )
-        sys.exit(2)
-    pass
+    if not os.path.isdir(SYSTEM_EXTENSION_DIR):
+        os.makedirs(SYSTEM_EXTENSION_DIR)
+    shutil.copy(
+        os.path.join(ROOT, EXTENSION_FILE),
+        os.path.join(SYSTEM_EXTENSION_DIR, EXTENSION_FILE),
+    )
+    print("Nautilus Terminal extension successfully installed on the system.")
 
 
 def uninstall_system():
@@ -62,12 +63,16 @@ def uninstall_system():
 
        This must be run as root!
     """
-    if os.getuid() != 0:
-        print(
-            "E: You must run nautilus-terminal as root to perform a system-wide uninstallation."
-        )
-        sys.exit(2)
-    pass
+    files = [
+        os.path.join(SYSTEM_EXTENSION_DIR, EXTENSION_FILE),
+        os.path.join(SYSTEM_EXTENSION_DIR, EXTENSION_FILE + "c"),  # .pyc
+    ]
+    for file_ in files:
+        if os.path.isfile(file_):
+            os.remove(file_)
+    print(
+        "Nautilus Terminal extension successfully uninstalled from the system."
+    )
 
 
 def install_user():
