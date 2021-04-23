@@ -1,5 +1,7 @@
 import os
 import shutil
+import subprocess
+
 
 XDG_DATA_DIR = os.environ.get("XDG_DATA_DIR", "/usr/share")
 XDG_DATA_HOME = os.environ.get(
@@ -12,6 +14,7 @@ SYSTEM_EXTENSION_DIR = os.path.join(XDG_DATA_DIR, "nautilus-python/extensions")
 USER_EXTENSION_DIR = os.path.join(XDG_DATA_HOME, "nautilus-python/extensions")
 
 GLIB_SCHEMA_FILE = "org.flozz.nautilus-terminal.gschema.xml"
+GLIB_SCHEMA_SOURCE = os.path.join(ROOT, "schemas", GLIB_SCHEMA_FILE)
 SYSTEM_GLIB_SCHEMA_DIR = os.path.join(XDG_DATA_DIR, "glib-2.0/schemas")
 GLIB_COMPILE_SCHEMA = "/usr/bin/glib-compile-schemas"
 
@@ -55,6 +58,20 @@ def install_system():
         os.path.join(ROOT, EXTENSION_FILE),
         os.path.join(SYSTEM_EXTENSION_DIR, EXTENSION_FILE),
     )
+    if not os.path.isdir(SYSTEM_GLIB_SCHEMA_DIR):
+        os.makedirs(SYSTEM_GLIB_SCHEMA_DIR)
+    shutil.copy(
+        GLIB_SCHEMA_SOURCE,
+        os.path.join(SYSTEM_GLIB_SCHEMA_DIR, GLIB_SCHEMA_FILE),
+    )
+    if is_glib_compile_schema_installed():
+        subprocess.call([GLIB_COMPILE_SCHEMA, SYSTEM_GLIB_SCHEMA_DIR])
+        print("GLib schema successfully compiled.")
+    else:
+        print(
+            "GLib schema cannot be compiled. Please install GLib schema compiler and run the following command (as root):"
+        )
+        print(" ".join([GLIB_COMPILE_SCHEMA, SYSTEM_GLIB_SCHEMA_DIR]))
     print("Nautilus Terminal extension successfully installed on the system.")
 
 
@@ -68,10 +85,13 @@ def uninstall_system():
     files = [
         os.path.join(SYSTEM_EXTENSION_DIR, EXTENSION_FILE),
         os.path.join(SYSTEM_EXTENSION_DIR, EXTENSION_FILE + "c"),  # .pyc
+        os.path.join(SYSTEM_GLIB_SCHEMA_DIR, GLIB_SCHEMA_FILE),
     ]
     for file_ in files:
         if os.path.isfile(file_):
             os.remove(file_)
+    if is_glib_compile_schema_installed():
+        subprocess.call([GLIB_COMPILE_SCHEMA, SYSTEM_GLIB_SCHEMA_DIR])
     print(
         "Nautilus Terminal extension successfully uninstalled from the system."
     )
