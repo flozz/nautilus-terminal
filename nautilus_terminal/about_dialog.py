@@ -1,4 +1,4 @@
-from pathlib import Path
+import os
 
 from gi.repository import Gtk
 from gi.repository import GdkPixbuf
@@ -8,9 +8,8 @@ from . import VERSION
 
 
 def find_data_path(path):
-    path_file = Path(__file__)
-    root = path_file.parent.resolve()
-    return root.joinpath(path).as_posix()
+    root = os.path.abspath(os.path.dirname(__file__))
+    return os.path.join(root, path)
 
 
 class AboutDialog(Gtk.AboutDialog):
