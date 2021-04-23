@@ -8,6 +8,8 @@ from .install_nautilus_extension import is_user_extension_installed
 from .install_nautilus_extension import is_nautilus_python_installed
 from .install_nautilus_extension import install_system
 from .install_nautilus_extension import uninstall_system
+from .install_nautilus_extension import install_user
+from .install_nautilus_extension import uninstall_user
 
 
 _EPILOG = """
@@ -98,6 +100,32 @@ class UninstallSystemAction(argparse.Action):
         sys.exit(0)
 
 
+class InstallUserAction(argparse.Action):
+    """Install Nautilus Terminal extention for the current user and exit."""
+
+    def __call__(self, parser, namespace, value, option_string=None):
+        if os.getuid() == 0:
+            print(
+                "E: You must run nautilus-terminal as a regular user to perform the installation."
+            )
+            sys.exit(1)
+        install_user()
+        sys.exit(0)
+
+
+class UninstallUserAction(argparse.Action):
+    """Uninstall Nautilus Terminal extention from the current user and exit."""
+
+    def __call__(self, parser, namespace, value, option_string=None):
+        if os.getuid() == 0:
+            print(
+                "E: You must run nautilus-terminal as a regular user to perform the removal."
+            )
+            sys.exit(1)
+        uninstall_user()
+        sys.exit(0)
+
+
 def main(args=sys.argv[1:]):
     cli_parser = argparse.ArgumentParser(
         prog="nautilus-terminal",
@@ -130,6 +158,20 @@ def main(args=sys.argv[1:]):
         help="Uninstall Nautilus Terminal extention system-wide and exit",
         nargs=0,
         action=UninstallSystemAction,
+    )
+
+    cli_parser.add_argument(
+        "--install-user",
+        help="Install Nautilus Terminal extention for the current user and exit",
+        nargs=0,
+        action=InstallUserAction,
+    )
+
+    cli_parser.add_argument(
+        "--uninstall-user",
+        help="Uninstall Nautilus Terminal extention from the current user and exit.",
+        nargs=0,
+        action=UninstallUserAction,
     )
 
     if len(args) == 0:

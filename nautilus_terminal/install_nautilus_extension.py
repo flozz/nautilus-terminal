@@ -76,10 +76,37 @@ def uninstall_system():
 
 
 def install_user():
-    """Installs the Nautilus extension for the current user."""
-    pass
+    """Installs the Nautilus extension for the current user.
+
+    .. WARNING::
+
+       This must be run as a regular user!
+    """
+    if not os.path.isdir(CURRENT_USER_EXTENSION_DIR):
+        os.makedirs(SYSTEM_EXTENSION_DIR)
+    shutil.copy(
+        os.path.join(ROOT, EXTENSION_FILE),
+        os.path.join(SYSTEM_EXTENSION_DIR, EXTENSION_FILE),
+    )
+    print(
+        "Nautilus Terminal extension successfully installed on the current user."
+    )
 
 
 def uninstall_user():
-    """Remove the Nautilus extension for the current user."""
-    pass
+    """Remove the Nautilus extension for the current user.
+
+    .. WARNING::
+
+       This must be run as a regular user!
+    """
+    files = [
+        os.path.join(CURRENT_USER_EXTENSION_DIR, EXTENSION_FILE),
+        os.path.join(CURRENT_USER_EXTENSION_DIR, EXTENSION_FILE + "c"),  # .pyc
+    ]
+    for file_ in files:
+        if os.path.isfile(file_):
+            os.remove(file_)
+    print(
+        "Nautilus Terminal extension successfully uninstalled from the current user."
+    )
