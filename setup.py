@@ -6,34 +6,18 @@ from setuptools import setup, find_packages
 from setuptools.command.install import install as _install
 
 from nautilus_terminal import VERSION
+from nautilus_terminal.install_nautilus_extension import install_system
+from nautilus_terminal.install_nautilus_extension import install_user
 
 
 class install(_install):
     def run(self):
         _install.run(self)
 
-        # Do what distutils install_data used to do... *sigh*
-        # Despite what the setuptools docs say, the omission of this
-        # in setuptools is a bug, not a feature.
-        print("== Installing Nautilus Python extension...")
-        src_file = "nautilus_terminal/nautilus_terminal_extension.py"
-        dst_dir = os.path.join(
-            self.install_data, "share/nautilus-python/extensions"
-        )
-        self.mkpath(dst_dir)
-        dst_file = os.path.join(dst_dir, os.path.basename(src_file))
-        self.copy_file(src_file, dst_file)
-        print("== Done!")
-
-        print("== Installing GSettings Schema")
-        src_file = "./nautilus_terminal/schemas/org.flozz.nautilus-terminal.gschema.xml"
-        dst_dir = os.path.join(self.install_data, "share/glib-2.0/schemas")
-        self.mkpath(dst_dir)
-        dst_file = os.path.join(dst_dir, os.path.basename(src_file))
-        self.copy_file(src_file, dst_file)
-        print(
-            "== Done! Run 'glib-compile-schemas /usr/share/glib-2.0/schemas/' for a global installation to compile the schema."
-        )
+        if os.getuid() == 0:
+            install_system()
+        else:
+            install_user()
 
 
 long_description = ""
@@ -64,4 +48,9 @@ setup(
         ],
     },
     cmdclass={"install": install},
+    entry_points={
+        "console_scripts": [
+            "nautilus-terminal = nautilus_terminal.__main__:main",
+        ]
+    },
 )
