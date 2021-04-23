@@ -1,16 +1,18 @@
 import os
 import shutil
 
+XDG_DATA_DIR = os.environ.get("XDG_DATA_DIR", "/usr/share")
+XDG_DATA_HOME = os.environ.get(
+    "XDG_DATA_HOME", os.path.expanduser("~/.local/share")
+)
 ROOT = os.path.abspath(os.path.dirname(__file__))
 
 EXTENSION_FILE = "nautilus_terminal_extension.py"
-SYSTEM_EXTENSION_DIR = "/usr/share/nautilus-python/extensions"
-CURRENT_USER_EXTENSION_DIR = os.path.expanduser(
-    "~/.local/share/nautilus-python/extensions/"
-)
+SYSTEM_EXTENSION_DIR = os.path.join(XDG_DATA_DIR, "nautilus-python/extensions")
+USER_EXTENSION_DIR = os.path.join(XDG_DATA_HOME, "nautilus-python/extensions")
 
-GSETTINGS_SCHEMA_FILE = "org.flozz.nautilus-terminal.gschema.xml"
-SYSTEM_GSETTINGS_SCHEMA_DIR = "/usr/share/glib-2.0/schemas"
+GLIB_SCHEMA_FILE = "org.flozz.nautilus-terminal.gschema.xml"
+SYSTEM_GLIB_SCHEMA_DIR = os.path.join(XDG_DATA_DIR, "glib-2.0/schemas")
 GLIB_COMPILE_SCHEMA = "/usr/bin/glib-compile-schemas"
 
 
@@ -24,9 +26,9 @@ def is_system_extension_installed():
 
 def is_user_extension_installed():
     return os.path.isfile(
-        os.path.join(CURRENT_USER_EXTENSION_DIR, EXTENSION_FILE)
+        os.path.join(USER_EXTENSION_DIR, EXTENSION_FILE)
     ) or os.path.isfile(
-        os.path.join(CURRENT_USER_EXTENSION_DIR, EXTENSION_FILE + "c")  # .pyc
+        os.path.join(USER_EXTENSION_DIR, EXTENSION_FILE + "c")  # .pyc
     )
 
 
@@ -82,7 +84,7 @@ def install_user():
 
        This must be run as a regular user!
     """
-    if not os.path.isdir(CURRENT_USER_EXTENSION_DIR):
+    if not os.path.isdir(USER_EXTENSION_DIR):
         os.makedirs(SYSTEM_EXTENSION_DIR)
     shutil.copy(
         os.path.join(ROOT, EXTENSION_FILE),
@@ -101,8 +103,8 @@ def uninstall_user():
        This must be run as a regular user!
     """
     files = [
-        os.path.join(CURRENT_USER_EXTENSION_DIR, EXTENSION_FILE),
-        os.path.join(CURRENT_USER_EXTENSION_DIR, EXTENSION_FILE + "c"),  # .pyc
+        os.path.join(USER_EXTENSION_DIR, EXTENSION_FILE),
+        os.path.join(USER_EXTENSION_DIR, EXTENSION_FILE + "c"),  # .pyc
     ]
     for file_ in files:
         if os.path.isfile(file_):
