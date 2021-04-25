@@ -2,6 +2,7 @@ import os
 import sys
 import argparse
 
+from . import VERSION
 from .debug import get_debug_info
 from .install_nautilus_extension import is_system_extension_installed
 from .install_nautilus_extension import is_user_extension_installed
@@ -130,6 +131,12 @@ def main(args=sys.argv[1:]):
     cli_parser = argparse.ArgumentParser(
         prog="nautilus-terminal",
         epilog=_EPILOG,
+    )
+
+    cli_parser.add_argument(
+        "--version",
+        action="version",
+        version=VERSION,
     )
 
     cli_parser.add_argument(
