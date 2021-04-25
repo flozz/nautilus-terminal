@@ -105,10 +105,10 @@ def install_user():
        This must be run as a regular user!
     """
     if not os.path.isdir(USER_EXTENSION_DIR):
-        os.makedirs(SYSTEM_EXTENSION_DIR)
+        os.makedirs(USER_EXTENSION_DIR)
     shutil.copy(
         os.path.join(ROOT, EXTENSION_FILE),
-        os.path.join(SYSTEM_EXTENSION_DIR, EXTENSION_FILE),
+        os.path.join(USER_EXTENSION_DIR, EXTENSION_FILE),
     )
     print(
         "Nautilus Terminal extension successfully installed on the current user."
