@@ -47,6 +47,9 @@ def _get_nautilus_terminal_info():
     result += "Current user extension: %s\n" % (
         "Installed" if is_user_extension_installed() else "Absent"
     )
+    result += "Installation path: %s\n" % os.path.dirname(
+        os.path.abspath(__file__)
+    )
     return result
 
 
