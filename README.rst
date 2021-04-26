@@ -156,6 +156,45 @@ tool::
    :alt: dconf-editor
 
 
+Trouble Shooting
+----------------
+
+Nautilus Terminal Doesn't show up? Here are a bunch of things to check before
+opening an issue:
+
+* Try to restart Nautilus::
+
+        nautilus -q
+
+* Try to restart Nautilus and keep it attached to a terminal to catch eventual
+  error messages::
+
+        nautilus -q && nautilus
+
+* Check that the extension is properly installed with one of the following
+  commands::
+
+        nautilus-terminal --check
+        python3 -m nautilus_terminal --check
+
+  If everything is OK, the output should be::
+
+        Nautilus Python: Installed
+        Nautilus Terminal Extension: Installed
+
+If none of the above worked, please `open an issue
+<https://github.com/flozz/nautilus-terminal/issues>`_ with as much information
+as possible:
+
+* How did you installed Nautilus Terminal,
+* What you tried,
+* Any error message outputted during the installation or by Nautilus,
+* When possible, please include the output of one of the following command::
+
+        nautilus-terminal --print-debug
+        python3 -m nautilus_terminal --print-debug
+
+
 Hacking and Debug
 -----------------
 
