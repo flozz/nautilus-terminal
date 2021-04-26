@@ -36,9 +36,17 @@ def is_user_extension_installed():
 
 
 def is_nautilus_python_installed():
-    return os.path.isfile(
-        "/usr/lib/x86_64-linux-gnu/nautilus/extensions-3.0/libnautilus-python.so"
-    )
+    paths = [
+        "/usr/lib/nautilus/extensions-3.0/libnautilus-python.so",
+        "/usr/lib64/nautilus/extensions-3.0/libnautilus-python.so",
+        "/usr/lib/x86_64-linux-gnu/nautilus/extensions-3.0/libnautilus-python.so",
+    ]
+
+    for path in paths:
+        if os.path.isfile(path):
+            return True
+
+    return False
 
 
 def is_glib_compile_schema_installed():
