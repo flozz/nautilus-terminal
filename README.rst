@@ -1,7 +1,7 @@
 Nautilus Terminal 3
 ===================
 
-|Lint / Tests| |PYPI Version| |License| |Discord|
+|Lint / Tests| |PYPI Version| |License| |Discord| |Black|
 
    A terminal embedded in Nautilus, the GNOME’s file browser
 
@@ -13,34 +13,22 @@ navigate to another folder).
 **NOTE:** This is a complete re-implementation of `my previous Nautilus
 Terminal plugin <https://launchpad.net/nautilus-terminal>`__.
 
-**NOTE²:** This is an early development version, this software can sometime
-crash Nautilus.
-
 .. figure:: https://raw.githubusercontent.com/flozz/nautilus-terminal/master/screenshot.png
    :alt: Nautilus Terminal Screenshot
 
-**Features:**
+Main Features
+-------------
 
 * Embed a Terminal in each Nautilus tab / window,
-* Follow the navigation: if you navigate in Nautilus, the ``cd``
+* Follows the navigation: if you navigate in Nautilus, the ``cd``
   command is automatically executed in the terminal,
-* Detects running process: if something is running in the terminal, the
-  ``cd`` command is not send to the shell,
-* Automatically respawn the shell if it exits,
-* Supports copy / paste from / to the terminal using
-  ``Ctrl+Shift+C`` / ``Ctrl+Shift+V``,
 * Can be displayed / hidden using the ``F4`` key (configurable),
+* Configurable: font, background and text color, terminal position (displayed
+  at top or at bottom of the windows),...
+* Supports copy / paste through contextual menu and
+  ``Ctrl+Shift+C`` / ``Ctrl+Shift+V``,
 * Supports drag & drop of file on the terminal,
-* Uses the default shell for the user,
-* Allows to configure the terminal appearance (font, background and text
-  color).
-
-**Requirements:**
-
-* `nautilus-python <https://wiki.gnome.org/Projects/NautilusPython/>`__
-  (``python-nautilus`` or ``python3-nautilus`` package on Debian /
-  Ubuntu)
-* `psutil <https://pypi.python.org/pypi/psutil/>`__
+* ...
 
 If you want to read more about this project and its history, I wrote an
 article on my blog (it is in French, but Google Translate should help) :
@@ -51,6 +39,17 @@ project <https://blog.flozz.fr/2018/12/17/nautilus-terminal-lhistoire-dun-projet
 Installing Nautilus Terminal
 ----------------------------
 
+Requirements
+~~~~~~~~~~~~
+
+* A recent version of **Nautilus 3.x** or **Nautilus 40**,
+* `nautilus-python <https://wiki.gnome.org/Projects/NautilusPython/>`__,
+* `psutil <https://pypi.python.org/pypi/psutil/>`__,
+* GLib 2 tools (``glib-compile-schemas``),
+* dconf-editor (to configure the application; this will no more be required in
+  the future).
+
+
 Fedora Package
 ~~~~~~~~~~~~~~
 
@@ -59,98 +58,89 @@ Fedora Package
    dnf copr enable tomaszgasior/mushrooms
    dnf install nautilus-terminal
 
+
 Ubuntu
 ~~~~~~
 
-There is no specific package for Ubuntu so you will have to install it from
-PYPI or from sources…. But first you will have to install some dependencies
+There is no specific package for Ubuntu yet, so you will have to install it
+from PyPI or from sources. But first you will have to install some dependencies
 depending of your Ubuntu version.
+
 
 Ubuntu 20.04 and later
 ^^^^^^^^^^^^^^^^^^^^^^
 
 Install dependencies::
 
-   sudo apt install python3-nautilus python3-pip
+   sudo apt install python3-nautilus python3-psutil python3-pip libglib2.0-bin dconf-editor
 
-Then follow the instructions to install it from PYPI or from sources.
+Then follow the instructions to install it from PyPI or from sources.
+
 
 Ubuntu 19.10 and earlier
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
 Install dependencies::
 
-   sudo apt install python-nautilus python-pip
+   sudo apt install python-nautilus python-psutil python-pip libglib2.0-bin dconf-editor
 
-Then, follow the instructions to install it from PYPI or from sources,
+Then, follow the instructions to install it from PyPI or from sources,
 but replace the ``pip3`` command by ``pip``.
 
-From PYPI
+
+From PyPI
 ~~~~~~~~~
 
 User install::
 
    pip3 install --user nautilus_terminal
+   python3 -m nautilus_terminal --install-user
 
 System-wide install::
 
    sudo pip3 install nautilus_terminal
+   sudo nautilus-terminal --install-system
 
 Then kill Nautilus to allow it to load the new extension::
 
    nautilus -q
 
-If it does not work, try using the following command (from this
-repository)::
-
-   sudo tools/update-extension-user.sh install    # for a user install
-   sudo tools/update-extension-system.sh install  # for a system-wide install
 
 From sources
 ~~~~~~~~~~~~
 
-Clone the repositiory::
+Clone the repository and navigate to it::
 
    git clone git@github.com:flozz/nautilus-terminal.git
    cd nautilus-terminal
 
-To install into your personal Python lib and your personal Nautilus
-python extension folders, run the following from your normal
-unprivileged account. Pip will select the ``--user`` scheme.
+User install::
 
-::
+   pip3 install --user .
+   python3 -m nautilus_terminal --install-user
 
-   pip3 install .
-
-To install for all users, run the command as root instead. Pip will
-select the ``--system`` scheme if you install this way. This drops
-everything into ``/usr/local`` instead, but nautilus-python doesn’t look
-there for extensions (see upstream `bug
-781232 <https://bugzilla.gnome.org/show_bug.cgi?id=781232>`__). So for
-the foreseeable future, system-wide installs need an extra step to make
-the extension available for all users.
-
-::
+System-wide install::
 
    sudo pip3 install .
-   sudo tools/update-extension-system.sh install
+   sudo nautilus-terminal --install-system
 
 Then kill Nautilus to allow it to load the new extension::
 
    nautilus -q
 
 
-Uninstalling (source or PYPI packages)
---------------------------------------
+Uninstalling (sources or PyPI packages)
+---------------------------------------
 
-To uninstall the package, run::
+User uninstall::
 
+   python3 -m nautilus_terminal --uninstall-user
    pip3 uninstall nautilus-terminal
 
-If you installed it for all users::
+System-wide uninstall::
 
+   sudo nautilus-terminal --uninstall-system
    sudo pip3 uninstall nautilus-terminal
-   sudo tools/update-extension-system.sh uninstall   # foreseeable future
 
 
 Configuring
@@ -170,12 +160,7 @@ Hacking and Debug
 -----------------
 
 If you want work on this software, you will first have to install the
-`nautilus-python <https://wiki.gnome.org/Projects/NautilusPython/>`__
-and `psutil <https://pypi.python.org/pypi/psutil/>`__ packages. On
-Debian / Ubuntu, you will find it in the ``python3-nautilus`` and
-``python3-psutil`` packages::
-
-   sudo apt install python3-nautilus python3-psutil
+dependencies listed above.
 
 This extension comes in two parts: a conventional Python module
 (``nautilus_terminal``), and a small bit of bootstrap code that’s loaded
@@ -184,8 +169,8 @@ by ``python-nautilus`` when Nautilus starts up
 installed where ``python-nautilus`` can find it before you can start
 making changes and testing them::
 
-   tools/update-extension-user.sh install         # Current user only…
-   sudo tools/update-extension-system.sh install  # … or, system-wide.
+   python3 -m nautilus_terminal --install-user  # Current user only
+   sudo python3 -m nautilus_terminal --install-system  # System-wide
 
 When the bootstrap is loaded into Nautilus, it imports the Python module
 from either the normal ``PYTHONPATH``, or from your working copy of this
@@ -198,18 +183,16 @@ new code in Nautilus without having to reinstall the module::
    tools/debug-in-nautilus.sh --no-bg  # keep Nautilus attached to the console
 
 When you start working on this extension, you will have to compile the
-GSettings schema (and you will have to recompile it each time you modify
-the
-``nautilus_terminal/schemas/org.flozz.nautilus-terminal.gschema.xml``
-file)::
+GSettings schema (and you will have to recompile it each time you modify the
+``nautilus_terminal/schemas/org.flozz.nautilus-terminal.gschema.xml`` file)::
 
-   glib-compile-schemas nautilus_terminal/schemas
+   glib-compile-schemas nautilus_terminal/schemas/
 
 Running lint and tests::
 
    pip3 install nox
-   python3 -m nox --session lint
-   python3 -m nox --session test
+   python3 -m nox -s lint
+   python3 -m nox -s test
 
 Happy hacking! :)
 
@@ -285,28 +268,6 @@ Changelog
   version)
 
 
-License GPLv3
--------------
-
-::
-
-   Nautilus Terminal - A terminal embedded in the Nautilus file browser
-   Copyright (C) 2010-2021  Fabien LOISON <http://www.flozz.fr/>
-
-   This program is free software: you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published by
-   the Free Software Foundation, either version 3 of the License, or
-   (at your option) any later version.
-
-   This program is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   GNU General Public License for more details.
-
-   You should have received a copy of the GNU General Public License
-   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-
 .. |Lint / Tests| image:: https://github.com/flozz/nautilus-terminal/workflows/Lint%20and%20Tests/badge.svg
    :target: https://github.com/flozz/nautilus-terminal/actions
 .. |PYPI Version| image:: https://img.shields.io/pypi/v/nautilus_terminal.svg
@@ -315,3 +276,5 @@ License GPLv3
    :target: https://github.com/flozz/nautilus-terminal/blob/master/COPYING
 .. |Discord| image:: https://img.shields.io/badge/chat-Discord-8c9eff?logo=discord&logoColor=ffffff
    :target: https://discord.gg/P77sWhuSs4
+.. |Black| image:: https://img.shields.io/badge/code%20style-black-000000.svg
+   :target: https://black.readthedocs.io/en/stable/
