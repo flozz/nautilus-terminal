@@ -64,12 +64,14 @@ class CheckExtensionAction(argparse.Action):
             result += "    Please remove one of the installed extentions using one of the following commands:\n"
             result += "    \x1B[1;34mSystem-wide:\x1B[0m sudo nautilus-terminal --uninstall-system\n"
             result += "    \x1B[1;34mCurrent user:\x1B[0m nautilus-terminal --uninstall-user\n"
+            result += "    NOTE: you may need to replace the 'nautilus-terminal' command by 'python3 -m nautilus_terminal'."
         else:
             retcode = 1
             result += "\x1B[1;31mAbsent\x1B[0m\n"
             result += "    Please install the Nautilus Extension with one of the following commands:\n"
             result += "    \x1B[1;34mSystem-wide:\x1B[0m sudo nautilus-terminal --install-system\n"
             result += "    \x1B[1;34mCurrent user:\x1B[0m nautilus-terminal --install-user\n"
+            result += "    NOTE: you may need to replace the 'nautilus-terminal' command by 'python3 -m nautilus_terminal'."
 
         print(result)
         sys.exit(retcode)

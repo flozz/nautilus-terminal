@@ -94,12 +94,10 @@ From PyPI
 User install::
 
    pip3 install --user nautilus_terminal
-   python3 -m nautilus_terminal --install-user
 
 System-wide install::
 
    sudo pip3 install nautilus_terminal
-   sudo nautilus-terminal --install-system
 
 Then kill Nautilus to allow it to load the new extension::
 
@@ -117,12 +115,10 @@ Clone the repository and navigate to it::
 User install::
 
    pip3 install --user .
-   python3 -m nautilus_terminal --install-user
 
 System-wide install::
 
    sudo pip3 install .
-   sudo nautilus-terminal --install-system
 
 Then kill Nautilus to allow it to load the new extension::
 
@@ -181,6 +177,17 @@ opening an issue:
 
         Nautilus Python: Installed
         Nautilus Terminal Extension: Installed
+
+  If there is any error, you will have an help message similar to this one to
+  tell you how to fix::
+
+        Nautilus Python: Installed
+        Nautilus Terminal Extension: Absent
+            Please install the Nautilus Extension with one of the following commands:
+            System-wide: sudo nautilus-terminal --install-system
+            Current user: nautilus-terminal --install-user
+            NOTE: you may need to replace the 'nautilus-terminal' command by 'python3 -m nautilus_terminal'.
+
 
 If none of the above worked, please `open an issue
 <https://github.com/flozz/nautilus-terminal/issues>`_ with as much information
