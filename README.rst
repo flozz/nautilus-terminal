@@ -266,6 +266,19 @@ Wanna support this project?
 Changelog
 ---------
 
+* **4.0.0:**
+
+  * Nautilus 40 support
+  * New logo
+  * Adds an "About" window
+  * Adds a context menu to copy/paste, run dconf-editor and display the "About"
+    window
+  * Adds a CLI to check, install, uninstall, print debug,...
+    (``nautilus-terminal -h``)
+  * Fixes Nautilus Terminal stealing the focus in new Nautilus windows (@tkachen, #54)
+  * Adds an option to clear the terminal after each navigation (@tkachen, #55)
+  * WARNING: This will be the last version to support Python 2.7!
+
 * **3.5.0:**
 
   * Fixes minimum height when the teminal is on the bottom (@tkachen, #52)
