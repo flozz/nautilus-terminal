@@ -16,6 +16,7 @@ USER_EXTENSION_DIR = os.path.join(XDG_DATA_HOME, "nautilus-python/extensions")
 GLIB_SCHEMA_FILE = "org.flozz.nautilus-terminal.gschema.xml"
 GLIB_SCHEMA_SOURCE = os.path.join(ROOT, "schemas", GLIB_SCHEMA_FILE)
 SYSTEM_GLIB_SCHEMA_DIR = os.path.join(XDG_DATA_DIR, "glib-2.0/schemas")
+USER_GLIB_SCHEMA_DIR = os.path.join(XDG_DATA_HOME, "glib-2.0/schemas")
 GLIB_COMPILE_SCHEMA = "/usr/bin/glib-compile-schemas"
 
 
@@ -60,18 +61,21 @@ def install_system():
 
        This must be run as root!
     """
+    # Copy extension
     if not os.path.isdir(SYSTEM_EXTENSION_DIR):
         os.makedirs(SYSTEM_EXTENSION_DIR)
     shutil.copy(
         os.path.join(ROOT, EXTENSION_FILE),
         os.path.join(SYSTEM_EXTENSION_DIR, EXTENSION_FILE),
     )
+    # Copy schemas
     if not os.path.isdir(SYSTEM_GLIB_SCHEMA_DIR):
         os.makedirs(SYSTEM_GLIB_SCHEMA_DIR)
     shutil.copy(
         GLIB_SCHEMA_SOURCE,
         os.path.join(SYSTEM_GLIB_SCHEMA_DIR, GLIB_SCHEMA_FILE),
     )
+    # Compile schemas
     if is_glib_compile_schema_installed():
         subprocess.call([GLIB_COMPILE_SCHEMA, SYSTEM_GLIB_SCHEMA_DIR])
         print("GLib schema successfully compiled.")
@@ -80,6 +84,7 @@ def install_system():
             "GLib schema cannot be compiled. Please install GLib schema compiler and run the following command (as root):"
         )
         print(" ".join([GLIB_COMPILE_SCHEMA, SYSTEM_GLIB_SCHEMA_DIR]))
+    #
     print("Nautilus Terminal extension successfully installed on the system.")
 
 
@@ -99,7 +104,10 @@ def uninstall_system():
         if os.path.isfile(file_):
             os.remove(file_)
     if is_glib_compile_schema_installed():
-        subprocess.call([GLIB_COMPILE_SCHEMA, SYSTEM_GLIB_SCHEMA_DIR])
+        try:
+            subprocess.call([GLIB_COMPILE_SCHEMA, SYSTEM_GLIB_SCHEMA_DIR])
+        except Exception:
+            print("An error occured while trying to recompile glib schemas")
     print(
         "Nautilus Terminal extension successfully uninstalled from the system."
     )
@@ -112,12 +120,30 @@ def install_user():
 
        This must be run as a regular user!
     """
+    # Copy extension
     if not os.path.isdir(USER_EXTENSION_DIR):
         os.makedirs(USER_EXTENSION_DIR)
     shutil.copy(
         os.path.join(ROOT, EXTENSION_FILE),
         os.path.join(USER_EXTENSION_DIR, EXTENSION_FILE),
     )
+    # Copy schemas
+    if not os.path.isdir(USER_GLIB_SCHEMA_DIR):
+        os.makedirs(USER_GLIB_SCHEMA_DIR)
+    shutil.copy(
+        GLIB_SCHEMA_SOURCE,
+        os.path.join(USER_GLIB_SCHEMA_DIR, GLIB_SCHEMA_FILE),
+    )
+    # Compile schemas
+    if is_glib_compile_schema_installed():
+        subprocess.call([GLIB_COMPILE_SCHEMA, USER_GLIB_SCHEMA_DIR])
+        print("GLib schema successfully compiled.")
+    else:
+        print(
+            "GLib schema cannot be compiled. Please install GLib schema compiler and run the following command:"
+        )
+        print(" ".join([GLIB_COMPILE_SCHEMA, USER_GLIB_SCHEMA_DIR]))
+    #
     print(
         "Nautilus Terminal extension successfully installed on the current user."
     )
@@ -133,10 +159,16 @@ def uninstall_user():
     files = [
         os.path.join(USER_EXTENSION_DIR, EXTENSION_FILE),
         os.path.join(USER_EXTENSION_DIR, EXTENSION_FILE + "c"),  # .pyc
+        os.path.join(USER_GLIB_SCHEMA_DIR, GLIB_SCHEMA_FILE),
     ]
     for file_ in files:
         if os.path.isfile(file_):
             os.remove(file_)
+    if is_glib_compile_schema_installed():
+        try:
+            subprocess.call([GLIB_COMPILE_SCHEMA, USER_GLIB_SCHEMA_DIR])
+        except Exception:
+            print("An error occured while trying to recompile glib schemas")
     print(
         "Nautilus Terminal extension successfully uninstalled from the current user."
     )
