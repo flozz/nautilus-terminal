@@ -1,6 +1,6 @@
 ---
-name: Bug and support template
-about: Template to use when you report a bug or need support
+name: I need help
+about: Choose this if you need help to install/update/uninstall/use Nautilus Terminal
 title: ''
 labels: help wanted
 assignees: ''
@@ -23,11 +23,11 @@ If this not solved your problem, then open an issue with as much information as 
 
 ### Installation information
 
-* How did you installed or tried to install Nautilus Terminal (distribution specific package, from source, what commands you used,...) ?
+* How did you install (or try to install) Nautilus Terminal (distribution specific package, from sources, what commands you used,...) ?
 
 → 
 
-* Was it a fresh install or an update? 
+* Was it a fresh install or an update?
 
 → 
 
