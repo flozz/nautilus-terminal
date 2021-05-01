@@ -91,7 +91,7 @@ from PyPI.
 Ubuntu 20.04 and later
 ^^^^^^^^^^^^^^^^^^^^^^
 
-Install dependencies::
+To install Nautilus Terminal on Ubuntu >= 20.04, first install dependencies::
 
    sudo apt install python3-nautilus python3-psutil python3-pip libglib2.0-bin dconf-editor
 
@@ -100,7 +100,7 @@ Then install Nautilus Terminal::
     sudo pip3 install nautilus-terminal
     sudo nautilus-terminal --install-system
 
-Then close current Nautilus instance to apply the changes::
+Finally close current Nautilus instance to apply the changes::
 
     nautilus -q
 
@@ -108,7 +108,7 @@ Then close current Nautilus instance to apply the changes::
 Ubuntu 19.10 and earlier
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-Install dependencies::
+To install Nautilus Terminal on Ubuntu <= 19.10, first install dependencies::
 
    sudo apt install python-nautilus python-psutil python-pip libglib2.0-bin dconf-editor
 
@@ -117,7 +117,7 @@ Then install Nautilus Terminal::
     sudo pip install nautilus-terminal
     sudo nautilus-terminal --install-system
 
-Then close current Nautilus instance to apply the changes::
+Finally close current Nautilus instance to apply the changes::
 
     nautilus -q
 
