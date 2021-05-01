@@ -50,21 +50,42 @@ Requirements
   the future).
 
 
-Fedora Package
-~~~~~~~~~~~~~~
+ArchLinux
+~~~~~~~~~
 
-::
+Nautilus Terminal is available in the ArchLinux's *Community* repository. To
+install it, run the following command::
+
+    sudo pacman -S nautilus-terminal
+
+Then close current Nautilus instance to apply the changes::
+
+    nautilus -q
+
+Package source: https://archlinux.org/packages/community/any/nautilus-terminal/
+
+
+Fedora (TomaszGasior's Package)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+To install Nautilus Terminal on Fedora using the TomaszGasior's package, run
+the following commands::
 
    dnf copr enable tomaszgasior/mushrooms
    dnf install nautilus-terminal
+
+Then close current Nautilus instance to apply the changes::
+
+    nautilus -q
+
+Package source: https://github.com/TomaszGasior/mushrooms-rpms/tree/nautilus-terminal
 
 
 Ubuntu
 ~~~~~~
 
 There is no specific package for Ubuntu yet, so you will have to install it
-from PyPI or from sources. But first you will have to install some dependencies
-depending of your Ubuntu version.
+from PyPI.
 
 
 Ubuntu 20.04 and later
@@ -74,7 +95,14 @@ Install dependencies::
 
    sudo apt install python3-nautilus python3-psutil python3-pip libglib2.0-bin dconf-editor
 
-Then follow the instructions to install it from PyPI or from sources.
+Then install Nautilus Terminal::
+
+    sudo pip3 install nautilus-terminal
+    sudo nautilus-terminal --install-system
+
+Then close current Nautilus instance to apply the changes::
+
+    nautilus -q
 
 
 Ubuntu 19.10 and earlier
@@ -84,22 +112,33 @@ Install dependencies::
 
    sudo apt install python-nautilus python-psutil python-pip libglib2.0-bin dconf-editor
 
-Then, follow the instructions to install it from PyPI or from sources,
-but replace the ``pip3`` command by ``pip``.
+Then install Nautilus Terminal::
+
+    sudo pip install nautilus-terminal
+    sudo nautilus-terminal --install-system
+
+Then close current Nautilus instance to apply the changes::
+
+    nautilus -q
 
 
 From PyPI
 ~~~~~~~~~
 
+You can install Nautilus Terminal system-wide or for the current user. The
+system-wide install is recommended.
+
+System-wide install (recommended)::
+
+   sudo pip3 install nautilus_terminal
+   sudo nautilus-terminal --install-system
+
 User install::
 
    pip3 install --user nautilus_terminal
+   python3 -m nautilus_terminal --user-install
 
-System-wide install::
-
-   sudo pip3 install nautilus_terminal
-
-Then kill Nautilus to allow it to load the new extension::
+Then close current Nautilus instance to apply the changes::
 
    nautilus -q
 
@@ -112,15 +151,20 @@ Clone the repository and navigate to it::
    git clone git@github.com:flozz/nautilus-terminal.git
    cd nautilus-terminal
 
+You can install Nautilus Terminal system-wide or for the current user. The
+system-wide install is recommended.
+
+System-wide install (recommended)::
+
+   sudo pip3 install .
+   sudo nautilus-terminal --install-system
+
 User install::
 
    pip3 install --user .
+   python3 -m nautilus_terminal --user-install
 
-System-wide install::
-
-   sudo pip3 install .
-
-Then kill Nautilus to allow it to load the new extension::
+Then close current Nautilus instance to apply the changes::
 
    nautilus -q
 
@@ -128,15 +172,15 @@ Then kill Nautilus to allow it to load the new extension::
 Uninstalling (sources or PyPI packages)
 ---------------------------------------
 
-User uninstall::
-
-   python3 -m nautilus_terminal --uninstall-user
-   pip3 uninstall nautilus-terminal
-
 System-wide uninstall::
 
    sudo nautilus-terminal --uninstall-system
    sudo pip3 uninstall nautilus-terminal
+
+User uninstall::
+
+   python3 -m nautilus_terminal --uninstall-user
+   pip3 uninstall nautilus-terminal
 
 
 Configuring
