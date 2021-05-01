@@ -2,7 +2,7 @@
 name: Bug and support template
 about: Template to use when you report a bug or need support
 title: ''
-labels: ''
+labels: help wanted
 assignees: ''
 
 ---
