@@ -1,0 +1,66 @@
+name: "Build and Publish Python Packages"
+
+on:
+  push:
+    tags: "v[0-9]+.[0-9]+.[0-9]+"
+
+jobs:
+
+  build_sdist:
+
+    name: "Source distribution"
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: "Checkout the repository"
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+
+      - name: "Install dependencies"
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libglib2.0-bin
+
+      - name: "Set up Python"
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.9
+
+      - name: "Compile GLib schemas"
+        run: |
+          glib-compile-schemas nautilus_terminal/schemas/
+
+      - name: "Build source distribution"
+        run: |
+          python setup.py sdist
+
+      - name: "Upload artifacts"
+        uses: actions/upload-artifact@v2
+        with:
+          name: nautilus-terminal-sdist
+          path: dist/
+          retention-days: 1
+
+  publish_pypi:
+
+    name: "Publish packages on PyPI"
+    runs-on: ubuntu-latest
+    needs:
+      - build_sdist
+
+    steps:
+
+      - name: "Download artifacts"
+        uses: actions/download-artifact@v2
+
+      - name: "Move packages to the dist/ folder"
+        run: |
+          mkdir dist/
+          mv nautilus-terminal-sdist/* dist/
+
+      - name: "Publish packages on PyPI"
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          password: ${{ secrets.PYPI_API_TOKEN }}

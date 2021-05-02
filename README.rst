@@ -287,16 +287,6 @@ Running lint and tests::
 Happy hacking! :)
 
 
-Release
--------
-
-Things to do before releasing a new version:
-
-* Update version number in ``nautilus_terminal/__init__.py``
-* Compile GSetting schema:
-  ``glib-compile-schemas nautilus_terminal/schemas``
-
-
 Supporting this project
 -----------------------
 
