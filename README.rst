@@ -169,8 +169,22 @@ Then close current Nautilus instance to apply the changes::
    nautilus -q
 
 
-Uninstalling (sources or PyPI packages)
----------------------------------------
+Updating (PyPI package)
+-----------------------
+
+If you made a system-wide install (recommended)::
+
+   sudo pip3 install --upgrade nautilus_terminal
+   sudo nautilus-terminal --install-system
+
+If you made an user install::
+
+   pip3 install --user --upgrade nautilus_terminal
+   python3 -m nautilus_terminal --user-install
+
+
+Uninstalling (sources or PyPI package)
+--------------------------------------
 
 System-wide uninstall::
 
@@ -232,6 +246,9 @@ opening an issue:
             Current user: nautilus-terminal --install-user
             NOTE: you may need to replace the 'nautilus-terminal' command by 'python3 -m nautilus_terminal'.
 
+* Try to get some logs from Nautilus::
+
+        nautilus -q && nautilus
 
 If none of the above worked, please `open an issue
 <https://github.com/flozz/nautilus-terminal/issues>`_ with as much information
