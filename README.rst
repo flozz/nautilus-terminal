@@ -317,6 +317,11 @@ Wanna support this project?
 Changelog
 ---------
 
+* **4.0.1:**
+
+  * Install and compile GLib schema on user-install
+  * Update the documentation
+
 * **4.0.0:**
 
   * Nautilus 40 support
