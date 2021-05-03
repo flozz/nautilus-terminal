@@ -136,7 +136,7 @@ System-wide install (recommended)::
 User install::
 
    pip3 install --user nautilus_terminal
-   python3 -m nautilus_terminal --user-install
+   python3 -m nautilus_terminal --install-user
 
 Then close current Nautilus instance to apply the changes::
 
@@ -162,7 +162,7 @@ System-wide install (recommended)::
 User install::
 
    pip3 install --user .
-   python3 -m nautilus_terminal --user-install
+   python3 -m nautilus_terminal --install-user
 
 Then close current Nautilus instance to apply the changes::
 
