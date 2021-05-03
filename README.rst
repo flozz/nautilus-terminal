@@ -180,7 +180,7 @@ If you made a system-wide install (recommended)::
 If you made an user install::
 
    pip3 install --user --upgrade nautilus_terminal
-   python3 -m nautilus_terminal --user-install
+   python3 -m nautilus_terminal --install-user
 
 
 Uninstalling (sources or PyPI package)
