@@ -304,6 +304,21 @@ Running lint and tests::
 Happy hacking! :)
 
 
+Packaging This Software
+-----------------------
+
+If you want to package this software for a Linux distribution, here are some
+useful information for you:
+
+* You can use the ``python3 setup.py install --root /tmp/foo/bar`` command to
+  perform a system-wide-like install in the specified folder.
+
+* You should remove the ``nautilus_terminal/not_packaged.py`` file from your
+  package. Removing this file will disable options that allow user to modify
+  its installation (``--install-*`` and ``--uninstall-*`` options of the
+  ``nautilus-terminal`` command).
+
+
 Supporting this project
 -----------------------
 

@@ -20,6 +20,10 @@ USER_GLIB_SCHEMA_DIR = os.path.join(XDG_DATA_HOME, "glib-2.0/schemas")
 GLIB_COMPILE_SCHEMA = "/usr/bin/glib-compile-schemas"
 
 
+def is_packaged():
+    return not os.path.isfile(os.path.join(ROOT, "not_packaged.py"))
+
+
 def is_system_extension_installed():
     return os.path.isfile(
         os.path.join(SYSTEM_EXTENSION_DIR, EXTENSION_FILE)

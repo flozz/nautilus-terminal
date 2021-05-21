@@ -11,6 +11,7 @@ from .install_nautilus_extension import install_system
 from .install_nautilus_extension import uninstall_system
 from .install_nautilus_extension import install_user
 from .install_nautilus_extension import uninstall_user
+from .install_nautilus_extension import is_packaged
 
 
 _EPILOG = """
@@ -129,6 +130,20 @@ class UninstallUserAction(argparse.Action):
         sys.exit(0)
 
 
+class DisplayPackagedMessageAction(argparse.Action):
+    """Display a message for packaged Nautilus Terminal versions when the user
+    try to call the "installation fix" options."""
+
+    def __call__(self, parser, namespace, value, option_string=None):
+        print("E: You cannot perform this action:")
+        print(
+            "You installed Nautilus Terminal using a distribution package. "
+            "If you encounter an issue, try to reinstall it or contact "
+            "its maintainer."
+        )
+        sys.exit(1)
+
+
 def main(args=sys.argv[1:]):
     cli_parser = argparse.ArgumentParser(
         prog="nautilus-terminal",
@@ -155,33 +170,62 @@ def main(args=sys.argv[1:]):
         action=CheckExtensionAction,
     )
 
-    cli_parser.add_argument(
-        "--install-system",
-        help="Install Nautilus Terminal extention system-wide and exit",
-        nargs=0,
-        action=InstallSystemAction,
-    )
+    if not is_packaged():
+        cli_parser.add_argument(
+            "--install-system",
+            help="Install Nautilus Terminal extention system-wide and exit",
+            nargs=0,
+            action=InstallSystemAction,
+        )
 
-    cli_parser.add_argument(
-        "--uninstall-system",
-        help="Uninstall Nautilus Terminal extention system-wide and exit",
-        nargs=0,
-        action=UninstallSystemAction,
-    )
+        cli_parser.add_argument(
+            "--uninstall-system",
+            help="Uninstall Nautilus Terminal extention system-wide and exit",
+            nargs=0,
+            action=UninstallSystemAction,
+        )
 
-    cli_parser.add_argument(
-        "--install-user",
-        help="Install Nautilus Terminal extention for the current user and exit",
-        nargs=0,
-        action=InstallUserAction,
-    )
+        cli_parser.add_argument(
+            "--install-user",
+            help="Install Nautilus Terminal extention for the current user and exit",
+            nargs=0,
+            action=InstallUserAction,
+        )
 
-    cli_parser.add_argument(
-        "--uninstall-user",
-        help="Uninstall Nautilus Terminal extention from the current user and exit.",
-        nargs=0,
-        action=UninstallUserAction,
-    )
+        cli_parser.add_argument(
+            "--uninstall-user",
+            help="Uninstall Nautilus Terminal extention from the current user and exit.",
+            nargs=0,
+            action=UninstallUserAction,
+        )
+    else:
+        cli_parser.add_argument(
+            "--install-system",
+            help=argparse.SUPPRESS,
+            nargs=0,
+            action=DisplayPackagedMessageAction,
+        )
+
+        cli_parser.add_argument(
+            "--uninstall-system",
+            help=argparse.SUPPRESS,
+            nargs=0,
+            action=DisplayPackagedMessageAction,
+        )
+
+        cli_parser.add_argument(
+            "--install-user",
+            help=argparse.SUPPRESS,
+            nargs=0,
+            action=DisplayPackagedMessageAction,
+        )
+
+        cli_parser.add_argument(
+            "--uninstall-user",
+            help=argparse.SUPPRESS,
+            nargs=0,
+            action=DisplayPackagedMessageAction,
+        )
 
     if len(args) == 0:
         cli_parser.parse_args(["--help"])
