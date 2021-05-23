@@ -332,6 +332,11 @@ Wanna support this project?
 Changelog
 ---------
 
+* **4.0.2:**
+
+  * Improve packageability (#63)
+  * Adds some documentation for packagers
+
 * **4.0.1:**
 
   * Install and compile GLib schema on user-install
