@@ -6,17 +6,39 @@ from setuptools import setup, find_packages
 from setuptools.command.install import install as _install
 
 from nautilus_terminal import VERSION
-from nautilus_terminal.install_nautilus_extension import install_system
-from nautilus_terminal.install_nautilus_extension import install_user
 
 
 class install(_install):
     def run(self):
         _install.run(self)
 
-        if os.getuid() == 0:
+        is_root_user = os.getuid() == 0
+        is_system_install = bool(self.root) or is_root_user
+        is_user_install = not is_system_install
+        data_prefix = "%s%s/share" % (
+            (self.root if self.root else ""),
+            self.install_base,
+        )
+
+        print("Installation parameters:")
+        print("  is_root_user: %s" % str(is_root_user))
+        print("  is_system_install: %s" % str(is_system_install))
+        print("  is_user_install: %s" % str(is_user_install))
+        print("  data_prefix: %s" % data_prefix)
+
+        if is_system_install:
+            os.environ["XDG_DATA_DIR"] = data_prefix
+
+            from nautilus_terminal.install_nautilus_extension import (
+                install_system,
+            )
+
             install_system()
-        else:
+        elif is_user_install:
+            from nautilus_terminal.install_nautilus_extension import (
+                install_user,
+            )
+
             install_user()
 
 
