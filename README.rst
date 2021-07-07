@@ -148,7 +148,7 @@ From sources
 
 Clone the repository and navigate to it::
 
-   git clone git@github.com:flozz/nautilus-terminal.git
+   git clone https://github.com/flozz/nautilus-terminal.git
    cd nautilus-terminal
 
 You can install Nautilus Terminal system-wide or for the current user. The
