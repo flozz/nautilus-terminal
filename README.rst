@@ -213,6 +213,9 @@ tool::
 Trouble Shooting
 ----------------
 
+Nautilus Terminal Doesn't show up
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Nautilus Terminal Doesn't show up? Here are a bunch of things to check before
 opening an issue:
 
@@ -249,6 +252,48 @@ opening an issue:
 * Try to get some logs from Nautilus::
 
         nautilus -q && nautilus
+
+
+Nautilus crashes at startup
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If Nautilus crashes at startup, the first thing to do is to get some logs. Run
+it from a terminal with the following command and check if there is something
+useful in the logs::
+
+    nautilus -q ; nautilus
+
+If you see an error similar to this one::
+
+    (org.gnome.Nautilus:9812): GLib-GIO-ERROR **: 18:42:59.373: Settings schema 'org.flozz.nautilus-terminal' does not contain a key named 'default-focus-terminal'
+
+It means that an older version of the GSettings schema is installed. Search for
+the following files on your system and removes them:
+
+* `/usr/share/glib-2.0/schemas/org.flozz.nautilus-terminal.gschema.xml`
+* `/usr/local/share/glib-2.0/schemas/org.flozz.nautilus-terminal.gschema.xml`
+* `~/.local/share/glib-2.0/schemas/org.flozz.nautilus-terminal.gschema.xml`
+
+Once done, recompile GSettings databases with the following commands (depending
+on which files you found)::
+
+    sudo glib-compile-schemas /usr/local/share/glib-2.0/schemas
+    sudo glib-compile-schemas /usr/share/glib-2.0/schemas
+    glib-compile-schemas ~/.local/share/glib-2.0/schemas/
+
+Once done, reinstall the schema with one of the following commands::
+
+   # For system-wide install (recommended)
+   sudo nautilus-terminal --install-system
+
+   # For user install
+   python3 -m nautilus_terminal --install-user
+
+Finally restart Nautilus.
+
+
+Reporting an issue
+~~~~~~~~~~~~~~~~~~
 
 If none of the above worked, please `open an issue
 <https://github.com/flozz/nautilus-terminal/issues>`_ with as much information
