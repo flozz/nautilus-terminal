@@ -270,9 +270,9 @@ If you see an error similar to this one::
 It means that an older version of the GSettings schema is installed. Search for
 the following files on your system and removes them:
 
-* `/usr/share/glib-2.0/schemas/org.flozz.nautilus-terminal.gschema.xml`
-* `/usr/local/share/glib-2.0/schemas/org.flozz.nautilus-terminal.gschema.xml`
-* `~/.local/share/glib-2.0/schemas/org.flozz.nautilus-terminal.gschema.xml`
+* ``/usr/share/glib-2.0/schemas/org.flozz.nautilus-terminal.gschema.xml``
+* ``/usr/local/share/glib-2.0/schemas/org.flozz.nautilus-terminal.gschema.xml``
+* ``~/.local/share/glib-2.0/schemas/org.flozz.nautilus-terminal.gschema.xml``
 
 Once done, recompile GSettings databases with the following commands (depending
 on which files you found)::
