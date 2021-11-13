@@ -377,6 +377,10 @@ Wanna support this project?
 Changelog
 ---------
 
+* **4.0.3:**
+
+  * Fix a typo in the GSettings schema (#73)
+
 * **4.0.2:**
 
   * Improve packageability (#63)
