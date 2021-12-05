@@ -377,6 +377,10 @@ Wanna support this project?
 Changelog
 ---------
 
+* **4.0.4:**
+
+  * Disable terminal audible bell (#66)
+
 * **4.0.3:**
 
   * Fix a typo in the GSettings schema (#73)
