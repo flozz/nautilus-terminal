@@ -286,6 +286,8 @@ class NautilusTerminal(object):
         settings_font = self._settings.get_string("custom-font")
         self._ui_terminal.set_font(Pango.FontDescription(settings_font))
 
+        self._ui_terminal.set_audible_bell(False)
+
         self._ui_terminal.connect(
             "child-exited", self._on_terminal_child_existed
         )
