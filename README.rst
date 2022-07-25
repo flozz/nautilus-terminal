@@ -292,6 +292,24 @@ Once done, reinstall the schema with one of the following commands::
 Finally restart Nautilus.
 
 
+Detect if running inside nautilus-terminal
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+To detect whether the shell is running inside nautilus-terminal, there is an environment variable
+exposed when executing the shell:
+
+   INSIDE_NAUTILUS_PYTHON=1
+
+It is useful in case you want to avoid running things inside the nautilus-terminal:
+
+   ~/.bashrc:
+
+   # Run termux only if not inside nautilus-terminal
+   if [ -z "$INSIDE_NAUTILUS_PYTHON" ]; then
+     tmux -attach
+   fi
+
+
 Reporting an issue
 ~~~~~~~~~~~~~~~~~~
 
