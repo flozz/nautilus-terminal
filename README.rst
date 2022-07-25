@@ -295,12 +295,13 @@ Finally restart Nautilus.
 Detect if running inside nautilus-terminal
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-To detect whether the shell is running inside nautilus-terminal, there is an environment variable
-exposed when executing the shell:
+To detect whether the shell is running inside nautilus-terminal, there is an
+environment variable exposed when executing the shell::
 
    INSIDE_NAUTILUS_PYTHON=1
 
-It is useful in case you want to avoid running things inside the nautilus-terminal:
+It is useful in case you want to avoid running things inside the
+nautilus-terminal::
 
    ~/.bashrc:
 
