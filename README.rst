@@ -396,11 +396,13 @@ Wanna support this project?
 Changelog
 ---------
 
-* **4.0.5:**
+* **4.0.5 / 4.0.6:**
 
   * Enforce the presence of the ``INSIDE_NAUTILUS_PYTHON`` variable to allow
     shells to detect they are running inside Nautilus Terminal (@blackdaemon,
     #77, #80).
+
+  * v4.0.6 only fix a syntax error in the README.
 
 * **4.0.4:**
 
