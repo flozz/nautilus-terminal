@@ -395,6 +395,12 @@ Wanna support this project?
 Changelog
 ---------
 
+* **4.0.5:**
+
+  * Enforce the presence of the ``INSIDE_NAUTILUS_PYTHON`` variable to allow
+    shells to detect they are running inside Nautilus Terminal (@blackdaemon,
+    #77, #80).
+
 * **4.0.4:**
 
   * Disable terminal audible bell (#66)
