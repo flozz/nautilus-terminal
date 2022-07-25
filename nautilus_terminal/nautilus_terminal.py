@@ -493,7 +493,7 @@ class NautilusTerminal(object):
             Vte.PtyFlags.DEFAULT,
             self._cwd,
             [shell],
-            ['INSIDE_NAUTILUS_PYTHON=1'],
+            ["INSIDE_NAUTILUS_PYTHON=1"],
             GLib.SpawnFlags.SEARCH_PATH,
             None,
             None,
