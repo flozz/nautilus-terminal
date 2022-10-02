@@ -310,7 +310,7 @@ class NautilusTerminal(object):
             + TERMINAL_BORDER_WIDTH * 2,
         )
 
-        # Terminal colors
+        # Terminal foreground and background colors
 
         fg_color = (255, 255, 255)
         bg_color = (0, 0, 0)
@@ -324,23 +324,43 @@ class NautilusTerminal(object):
         if color_helpers.is_color(settings_bg_color):
             bg_color = color_helpers.parse_color_string(settings_bg_color)
 
-        self._ui_terminal.set_color_foreground(
-            Gdk.RGBA(
-                fg_color[0] / 255.0,
-                fg_color[1] / 255.0,
-                fg_color[2] / 255.0,
-                1,
-            )
+        foreground = Gdk.RGBA(
+            fg_color[0] / 255.0,
+            fg_color[1] / 255.0,
+            fg_color[2] / 255.0,
+            1,
+        )
+        background = Gdk.RGBA(
+            bg_color[0] / 255.0,
+            bg_color[1] / 255.0,
+            bg_color[2] / 255.0,
+            1,
         )
 
-        self._ui_terminal.set_color_background(
-            Gdk.RGBA(
-                bg_color[0] / 255.0,
-                bg_color[1] / 255.0,
-                bg_color[2] / 255.0,
-                1,
-            )
-        )
+        # Terminal color palette
+
+        settings_color_palette = self._settings.get_strv("color-palette")
+
+        palette_colors = []
+        if any(settings_color_palette) and len(settings_color_palette) in (8, 16, 232, 256):
+            for color_code in settings_color_palette:
+                if not color_helpers.is_color(color_code):
+                    color_code = 'White'  # Invalid colors default to white
+
+                color = color_helpers.parse_color_string(color_code)
+                color_rgba = Gdk.RGBA(
+                    color[0] / 255.0,
+                    color[1] / 255.0,
+                    color[2] / 255.0,
+                    1
+                )
+                palette_colors.append(color_rgba)
+
+        self._ui_terminal.set_colors(foreground, background, palette_colors)
+
+        # Bold text as bright
+
+        self._ui_terminal.set_bold_is_bright(self._settings.get_boolean("bold-is-bright"))
 
         # File drag & drop support
 

@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
   <enum id="org.flozz.nautilus-terminal.clean-mode">
-    <value nick="Off" value="0"/>
-    <value nick="Soft" value="1"/>
-    <value nick="Hard" value="2"/>
+    <value nick="Off" value="0" />
+    <value nick="Soft" value="1" />
+    <value nick="Hard" value="2" />
   </enum>
   <schema id="org.flozz.nautilus-terminal" path="/org/flozz/nautilus-terminal/">
     <key name="default-show-terminal" type="b">
       <default>true</default>
       <summary>Is Nautilus Terminal visible in new Nautilus windows</summary>
-      <description/>
+      <description />
     </key>
     <key name="use-custom-command" type="b">
       <default>false</default>
@@ -45,6 +45,24 @@
       <default>"#ffffff"</default>
       <summary>Terminal text color</summary>
       <description>The color of the terminal text (Hexadecimal notation. E.g. "#FFFFFF", "white")</description>
+    </key>
+    <key name="color-palette" type="as">
+      <default>['', '', '', '', '', '', '', '',
+                '', '', '', '', '', '', '', '']</default>
+      <summary>Color palette of the terminal text</summary>
+      <description>
+        16 colors, the first 8 being the standard colors, and the remaining 8 their bright counterparts.
+        All colors should be specified, accepting hexadecimal values ('#FF0000') or names ('red').
+
+        Other accepted amounts of values: 8, 232, 256.
+        If no values are specified or the amount of values is wrong, default colors will be used.
+        Note that invalid colors will default to white.
+      </description>
+    </key>
+    <key name="bold-is-bright" type="b">
+      <default>false</default>
+      <summary>Whether bold colors are also bright</summary>
+      <description>If true, setting bold on the first 8 colors also switches to their bright variants.</description>
     </key>
     <key name="custom-font" type="s">
       <default>""</default>
