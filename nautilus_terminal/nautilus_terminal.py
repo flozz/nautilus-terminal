@@ -363,6 +363,43 @@ class NautilusTerminal(object):
 
         self._ui_terminal.set_colors(foreground, background, palette_colors)
 
+        # Highlight colors
+
+        foreground_hl_color = None
+        background_hl_color = None
+
+        settings_fg_hl_color = self._settings.get_string(
+            "foreground-highlight-color"
+        )
+        settings_bg_hl_color = self._settings.get_string(
+            "background-highlight-color"
+        )
+
+        if color_helpers.is_color(settings_fg_hl_color):
+            fg_hl_color = color_helpers.parse_color_string(
+                settings_fg_hl_color
+            )
+            foreground_hl_color = Gdk.RGBA(
+                fg_hl_color[0] / 255.0,
+                fg_hl_color[1] / 255.0,
+                fg_hl_color[2] / 255.0,
+                1,
+            )
+
+        if color_helpers.is_color(settings_bg_hl_color):
+            bg_hl_color = color_helpers.parse_color_string(
+                settings_bg_hl_color
+            )
+            background_hl_color = Gdk.RGBA(
+                bg_hl_color[0] / 255.0,
+                bg_hl_color[1] / 255.0,
+                bg_hl_color[2] / 255.0,
+                1,
+            )
+
+        self._ui_terminal.set_color_highlight_foreground(foreground_hl_color)
+        self._ui_terminal.set_color_highlight(background_hl_color)
+
         # Bold text as bright
 
         self._ui_terminal.set_bold_is_bright(
