@@ -398,7 +398,9 @@ Changelog
 
 * **[NEXT]** (changes on ``master`` but not released yet):
 
-  * Add option to customize the color palette (@Acervans, #81, #83)
+  * Add an option to customize the color palette (@Acervans, #81, #83)
+  * Add an option to turn bold text to brighter color (@Acervans, #83)
+  * Add an option to customize highlight background and text color (@Acervans, #84)
 
 * **4.0.5 / 4.0.6:**
 
