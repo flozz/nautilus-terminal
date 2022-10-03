@@ -342,17 +342,22 @@ class NautilusTerminal(object):
         settings_color_palette = self._settings.get_strv("color-palette")
 
         palette_colors = []
-        if any(settings_color_palette) and len(settings_color_palette) in (8, 16, 232, 256):
+        if any(settings_color_palette) and len(settings_color_palette) in (
+            8,
+            16,
+            232,
+            256,
+        ):
             for color_code in settings_color_palette:
                 if not color_helpers.is_color(color_code):
-                    color_code = 'White'  # Invalid colors default to white
+                    color_code = "White"  # Invalid colors default to white
 
                 color = color_helpers.parse_color_string(color_code)
                 color_rgba = Gdk.RGBA(
                     color[0] / 255.0,
                     color[1] / 255.0,
                     color[2] / 255.0,
-                    1
+                    1,
                 )
                 palette_colors.append(color_rgba)
 
@@ -360,7 +365,9 @@ class NautilusTerminal(object):
 
         # Bold text as bright
 
-        self._ui_terminal.set_bold_is_bright(self._settings.get_boolean("bold-is-bright"))
+        self._ui_terminal.set_bold_is_bright(
+            self._settings.get_boolean("bold-is-bright")
+        )
 
         # File drag & drop support
 
