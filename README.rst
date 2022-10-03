@@ -396,6 +396,10 @@ Wanna support this project?
 Changelog
 ---------
 
+* **[NEXT]** (changes on ``master`` but not released yet):
+
+  * Add option to customize the color palette (@Acervans, #81, #83)
+
 * **4.0.5 / 4.0.6:**
 
   * Enforce the presence of the ``INSIDE_NAUTILUS_PYTHON`` variable to allow
