@@ -46,6 +46,16 @@
       <summary>Terminal text color</summary>
       <description>The color of the terminal text (Hexadecimal notation. E.g. "#FFFFFF", "white")</description>
     </key>
+    <key name="background-highlight-color" type="s">
+      <default>""</default>
+      <summary>Terminal background highlight color</summary>
+      <description>The color of the highlighted terminal background (Hexadecimal notation. E.g. "#000000", "black")</description>
+    </key>
+    <key name="foreground-highlight-color" type="s">
+      <default>""</default>
+      <summary>Terminal text highlight color</summary>
+      <description>The color of the highlighted terminal text (Hexadecimal notation. E.g. "#FFFFFF", "white")</description>
+    </key>
     <key name="color-palette" type="as">
       <default>['', '', '', '', '', '', '', '',
                 '', '', '', '', '', '', '', '']</default>
