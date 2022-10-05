@@ -398,11 +398,15 @@ Changelog
 
 * **[NEXT]** (changes on ``master`` but not released yet):
 
+  * Nothing yet :)
+
+* **v4.1.0:**
+
   * Add an option to customize the color palette (@Acervans, #81, #83)
   * Add an option to turn bold text to brighter color (@Acervans, #83)
   * Add an option to customize highlight background and text color (@Acervans, #84)
 
-* **4.0.5 / 4.0.6:**
+* **v4.0.5 / v4.0.6:**
 
   * Enforce the presence of the ``INSIDE_NAUTILUS_PYTHON`` variable to allow
     shells to detect they are running inside Nautilus Terminal (@blackdaemon,
@@ -410,25 +414,25 @@ Changelog
 
   * v4.0.6 only fix a syntax error in the README.
 
-* **4.0.4:**
+* **v4.0.4:**
 
   * Disable terminal audible bell (#66)
 
-* **4.0.3:**
+* **v4.0.3:**
 
   * Fix a typo in the GSettings schema (#73)
 
-* **4.0.2:**
+* **v4.0.2:**
 
   * Improve packageability (#63)
   * Adds some documentation for packagers
 
-* **4.0.1:**
+* **v4.0.1:**
 
   * Install and compile GLib schema on user-install
   * Update the documentation
 
-* **4.0.0:**
+* **v4.0.0:**
 
   * Nautilus 40 support
   * New logo
@@ -441,51 +445,51 @@ Changelog
   * Adds an option to clear the terminal after each navigation (@tkachen, #55)
   * WARNING: This will be the last version to support Python 2.7!
 
-* **3.5.0:**
+* **v3.5.0:**
 
   * Fixes minimum height when the teminal is on the bottom (@tkachen, #52)
   * Allows to configure the font (@tkachen, #10, #53)
   * Drops Python 3.6 support
   * Coding style enforced using Black
 
-* **3.4.2:** Fixes the PYPI package with an up to date version of the
+* **v3.4.2:** Fixes the PYPI package with an up to date version of the
   compiled gsettings schema
-* **3.4.1:** Updates documentation and settings screenshot.
-* **3.4.0:**
+* **v3.4.1:** Updates documentation and settings screenshot.
+* **v3.4.0:**
 
   * Allows to configure the terminal toggle shortcut (#50, #43)
   * Allows to configure terminal background and text color (#32)
 
-* **3.3.0:**
+* **v3.3.0:**
 
   * New option to have the terminal at the bottom of the window (#35)
 
-* **3.2.3:**
+* **v3.2.3:**
 
   * Fixes encoding with Python 3 (#29)
 
-* **3.2.2:**
+* **v3.2.2:**
 
   * Fixes ``VteTerminal.feed_child()`` call (#12)
   * Improves child process searching (@l-deniau, #14)
 
-* **3.2.1:** Add a missing dependency in setup.py
-* **3.2.0:** Add settings to Nautilus Terminal (#3)
-* **3.1.1:**
+* **v3.2.1:** Add a missing dependency in setup.py
+* **v3.2.0:** Add settings to Nautilus Terminal (#3)
+* **v3.1.1:**
 
   * Allow user install instead of system-wide (#1)
   * Use the user’s default shell instead of the hardcoded zsh (#2)
   * Focus the terminal after drag & drop of file on it (#4)
 
-* **3.1.0:**
+* **v3.1.0:**
 
   * File drag & drop support
   * Hide the terminal in virtual emplacements (trash,…)
   * Optimizations (do not spawn the shell / no “cd” if the shell is
     not visible)
 
-* **3.0.1:** Script to convert the README to reStructuredText for PYPI
-* **3.0.0:** Initial Nautilus Terminal 3 release (early development
+* **v3.0.1:** Script to convert the README to reStructuredText for PYPI
+* **v3.0.0:** Initial Nautilus Terminal 3 release (early development
   version)
 
 
