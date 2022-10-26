@@ -1,3 +1,27 @@
+END OF LIFE NOTICE
+==================
+
+After 12 years of existence, it seems that it is the end of Nautilus Terminal.
+
+Since its version 43, Nautilus was ported to GTK 4. Its plugin APIs has changed, and the API Nautilus Terminal relied on has disappeared, so it is not possible to port it:
+
+    **LocationWidgetProvider**
+
+    The Nautilus.LocationWidgetProvider was removed without replacement. If your script requires it, you can request a new model-based API for your specific use case on the `Nautilus issue tracker <https://gitlab.gnome.org/GNOME/nautilus>`_.
+
+Nautilus Terminal was never a "first class citizen" in Nautilus: it hijacked existing APIs to slip into Nautilus. It used a lot of hacks to work around limitations and to work (you can read the comments in `nautilus_terminal.py <https://github.com/flozz/nautilus-terminal/blob/master/nautilus_terminal/nautilus_terminal.py>`_ if you're curious).
+
+I already wrote a quite long `blog post about Nautilus Terminal <https://blog.flozz.fr/2018/12/17/nautilus-terminal-lhistoire-dun-projet-complique/>`_ years ago where I stated that its future was unsure.
+
+There may be some APIs in the future to integrate a terminal in Nautilus (and if that happens, everything will have to be redeveloped from scratch), but I think that for now, it is the end of the project.
+
+A big thanks to all users and contributors of Nautilus Terminal.
+
+Original message: https://github.com/flozz/nautilus-terminal/issues/82#issuecomment-1291969366
+
+----
+
+
 Nautilus Terminal 3
 ===================
 
