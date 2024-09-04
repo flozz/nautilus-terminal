@@ -27,9 +27,9 @@ def backup_nautilus_accels(nautilus_app, nautilus_window):
                 action_prefix
             ).list_actions()
         ]:
-            NAUTILUS_ACCELS_BACKUP[
-                action
-            ] = nautilus_app.get_accels_for_action(action)
+            NAUTILUS_ACCELS_BACKUP[action] = (
+                nautilus_app.get_accels_for_action(action)
+            )
 
     # row
     # TODO get accels from the "row" group (nautilus side bar)
